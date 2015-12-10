@@ -5,35 +5,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+import com.example.makarov.photonews.R;
+
+import java.util.List;
 
 /**
  * Created by makarov on 08.12.15.
  */
 public class PhotoHistoryTagAdapter extends BaseAdapter {
 
+    private List<ImageView> mPhotos;
     private LayoutInflater mLInflater;
 
-    public PhotoHistoryTagAdapter(Context context){
+    public PhotoHistoryTagAdapter(Context context, List<ImageView> photos){
         mLInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPhotos = photos;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mPhotos.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mPhotos.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+
+        // используем созданные, но не используемые view
+        View view = convertView;
+        if (view == null) {
+            //получаем LayoutInflater для работы с layout-ресурсами
+            view = mLInflater.inflate(R.layout.item_photo_tag, parent, false);
+        }
+
+        return view;
     }
+
+    public ImageView getImageView(int position) {
+        return ((ImageView) getItem(position));
+    }
+
 }
