@@ -80,11 +80,15 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     //тут еще есть баг, в случае если переставить курсор печати
     private void banSpace(Editable s) {
+
         int length = s.length();
-        String enteredText = s.toString();
-        String lastChar = enteredText.substring(length - 1, length);
-        if (lastChar.equals(" ")) {
-            s.delete(length - 1, length);
+
+        if (length != 0) {
+            String enteredText = s.toString();
+            String lastChar = enteredText.substring(length - 1, length);
+            if (lastChar.equals(" ")) {
+                s.delete(length - 1, length);
+            }
         }
     }
 }
