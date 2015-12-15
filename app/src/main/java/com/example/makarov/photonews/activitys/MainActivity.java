@@ -41,10 +41,10 @@ public class MainActivity extends FragmentActivity {
         openFragment(newFragment, true);
     }
 
-    private void openFragment(Fragment fragment, boolean saveInBackstack) {
+    private void openFragment(Fragment fragment, boolean saveInBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.LayoutActivityMain, fragment);
-        if (saveInBackstack)
+        if (saveInBackStack)
             ft.addToBackStack(KEY_ADD_FRAGMENT_TO_BACK_STACK);
         ft.commit();
     }

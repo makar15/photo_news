@@ -9,13 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.makarov.photonews.MyApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
+import com.example.makarov.photonews.network.PostFinder;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -23,46 +21,41 @@ import java.util.List;
  */
 public class ListPhotoResultTagFragment extends Fragment {
 
-    private PhotoResultTagAdapter photoAdapter;
+    private PhotoResultTagAdapter mPhotoAdapter;
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-
-    private List<String> mUrlPhotos;
-    private String mLineTag;
-
-    public ListPhotoResultTagFragment() {
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_tag_fragment, null);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.lvPhotoResultTag);
-        mLineTag = getArgumentsBundleLineTag(getArguments());
-
-        try {
-            MyApp.getApp().getRequestService().requestPhotosTag(mLineTag);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mUrlPhotos = MyApp.getApp().getRequestService().getUrlImages();
-
         setLayoutManagerForRecyclerView();
-        setAdapterForRecyclerView();
+
+        String lineTag = getArgumentsBundleLineTag(getArguments());
+        final PostFinder postFinder = new PostFinder(lineTag);
+
+        postFinder.requestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+            @Override
+            public void onLoaded(List<String> urlImages) {
+                setAdapterForRecyclerView(urlImages);
+            }
+        });
 
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
-            public void onLoadMore(int current_page) throws MalformedURLException {
+            public void onLoadMore() {
 
-                MyApp.getApp().getRequestService().nextRequestPhotosTag(mLineTag);
-                List<String> addUrlList = MyApp.getApp().getRequestService().getUrlImages();
+                postFinder.nextRequestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+                    @Override
+                    public void onLoaded(List<String> urlImages) {
 
-                for (int i = 0; i < addUrlList.size(); i++) {
-                    mUrlPhotos.add(addUrlList.get(i));
-                }
+                        mPhotoAdapter.update(urlImages);
+                        mPhotoAdapter.notifyDataSetChanged();
+                        mLayoutManager.onItemsChanged(mRecyclerView);
+                    }
+                });
 
-                photoAdapter.notifyDataSetChanged();
             }
         });
 
@@ -75,14 +68,14 @@ public class ListPhotoResultTagFragment extends Fragment {
         initializeHistoryRecyclerView();
     }
 
-    private void setLayoutManagerForRecyclerView(){
+    private void setLayoutManagerForRecyclerView() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
-    private void setAdapterForRecyclerView(){
-        photoAdapter = new PhotoResultTagAdapter(mUrlPhotos);
-        mRecyclerView.setAdapter(photoAdapter);
+    private void setAdapterForRecyclerView(List<String> urlPhotos) {
+        mPhotoAdapter = new PhotoResultTagAdapter(urlPhotos);
+        mRecyclerView.setAdapter(mPhotoAdapter);
     }
 
     private void initializeHistoryRecyclerView() {

@@ -3,24 +3,19 @@ package com.example.makarov.photonews.adapters.scrolling;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.net.MalformedURLException;
-
 /**
  * Created by makarov on 14.12.15.
  */
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
-    private int visibleThreshold = 5;
+    private final int VISIBLE_THRESHOLD = 5;
     private int visibleItemCount, firstVisibleItem, totalItemCount;
-    private boolean loading = true;
-
-    private int previousTotal = 0;
-    private int current_page = 1;
+    private int countUpdate = 0;
 
     private LinearLayoutManager mLinearLayoutManager;
 
     public EndlessRecyclerOnScrollListener(LinearLayoutManager linearLayoutManager) {
-        this.mLinearLayoutManager = linearLayoutManager;
+        mLinearLayoutManager = linearLayoutManager;
     }
 
     @Override
@@ -32,27 +27,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         //Returns the number of items in the adapter bound to the parent RecyclerView.
         totalItemCount = mLinearLayoutManager.getItemCount();
         //Returns the adapter position of the first visible view.
-        firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+        firstVisibleItem = mLinearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
-        if (loading) {
-            if (totalItemCount > previousTotal) {
-                loading = false;
-                previousTotal = totalItemCount;
+        if (firstVisibleItem >= (totalItemCount - VISIBLE_THRESHOLD)) {
+            if (countUpdate == 0) {
+                onLoadMore();
+                countUpdate++;
             }
-        }
-
-        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-
-            try {
-                current_page++;
-                onLoadMore(current_page);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-            loading = true;
         }
     }
 
-    public abstract void onLoadMore(int current_page) throws MalformedURLException;
+    public abstract void onLoadMore();
 }

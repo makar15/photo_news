@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by makarov on 14.12.15.
+ * generates a list of photos, with updating
  */
 public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAdapter.ResultViewHolder> {
 
@@ -57,5 +58,10 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
             icon = (ImageView) v.findViewById(R.id.icon);
         }
     }
+
+    public void update(List<String> newAddList){
+        mUrlPhotos.addAll(newAddList);
+    }
+
 }
 

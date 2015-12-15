@@ -21,7 +21,6 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
     public static final String OPERATION_KEY = "operation";
 
     private EditText lineTagSearch;
-    private String mTagSearch;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,11 +39,11 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.enter_search_btn: {
-                if (!TextUtils.isEmpty(lineTagSearch.getText().toString())) {
+                String mTagSearch = lineTagSearch.getText().toString();
 
-                    mTagSearch = lineTagSearch.getText().toString();
+                if (!TextUtils.isEmpty(mTagSearch)) {
+
                     openListPhotoResultTag(mTagSearch);
-
                 }
             }
             break;
