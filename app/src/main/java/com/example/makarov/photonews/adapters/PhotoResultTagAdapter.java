@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.example.makarov.photonews.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +18,10 @@ import java.util.List;
  */
 public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAdapter.ResultViewHolder> {
 
-    private List<String> mUrlPhotos;
+    private List<String> mUrlPhotos = new ArrayList<>();
 
     public PhotoResultTagAdapter(List<String> urlPhotos) {
-        mUrlPhotos = urlPhotos;
+        mUrlPhotos.addAll(urlPhotos);
     }
 
     @Override
@@ -29,9 +30,7 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_photo_tag, parent, false);
 
-        ResultViewHolder resultViewHolder = new ResultViewHolder(view);
-
-        return resultViewHolder;
+        return new ResultViewHolder(view);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
         }
     }
 
-    public void update(List<String> newAddList){
+    public void update(List<String> newAddList) {
         mUrlPhotos.addAll(newAddList);
     }
 

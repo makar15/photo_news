@@ -24,7 +24,7 @@ public class UrlToJsonObject {
     }
 
     //получить входящий поток данных
-    public String getStreamUrl(URL url) throws IOException {
+    public String convertString(URL url) throws IOException {
         InputStream inputStream = url.openConnection().getInputStream();
         return streamToString(inputStream);
     }

@@ -28,7 +28,7 @@ public class Parsing {
         return imageJsonObject.getString("url");
     }
 
-    public void saveNextUrlAccessPhotosTag(JSONObject jsonObject) throws JSONException, IOException {
+    private void saveNextUrlAccessPhotosTag(JSONObject jsonObject) throws JSONException, IOException {
         JSONObject next_url = (JSONObject) jsonObject.get("pagination");
         nextMaxId = (String) next_url.get("next_max_tag_id");
     }

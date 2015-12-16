@@ -17,8 +17,6 @@ import java.util.List;
 public class PostFinder {
 
     private final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
-    private final String PHOTO_LOW_RESOLUTION = "low_resolution";
-    private final String PHOTO_THUMBNAIL = "thumbnail";
 
     private final String VERSION_API_URL = "https://api.instagram.com/v1";
     private final String ACCESS_TOKEN = "175770414.98d6195.7e44bb27685141c5ba834cb7dcd67625";
@@ -28,24 +26,20 @@ public class PostFinder {
     private URL mUrlSavePhotosTag;
     private String mLineTag;
 
-    private List<String> mUrlImages;
-
     public PostFinder(String lineTag) {
         mLineTag = lineTag;
-
         mParsing = new Parsing();
-        mUrlImages = new ArrayList<>();
     }
 
-    public void requestPhotosTag(final SuccessLoadedUrls successLoaded) {
+    public void requestPhotosTag(final SuccessLoadedUrls successLoadedUrls) {
         mUrlSavePhotosTag = getGenerationUrlAccessPhotosTag(mLineTag);
         new PostRequest(new PostRequest.SuccessLoadedJson() {
             @Override
             public void onLoaded(JSONObject json) {
 
-                if (successLoaded != null) {
+                if (successLoadedUrls != null) {
                     try {
-                        successLoaded.onLoaded(parseJsonToList(json));
+                        successLoadedUrls.onLoaded(parseJsonToList(json));
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
@@ -54,15 +48,15 @@ public class PostFinder {
         }).execute(mUrlSavePhotosTag);
     }
 
-    public void nextRequestPhotosTag(final SuccessLoadedUrls successLoaded) {
+    public void nextRequestPhotosTag(final SuccessLoadedUrls successLoadedUrls) {
         mUrlSavePhotosTag = getGenerationNextUrlAccessPhotosTag(mLineTag);
         new PostRequest(new PostRequest.SuccessLoadedJson() {
             @Override
             public void onLoaded(JSONObject json) {
 
-                if (successLoaded != null) {
+                if (successLoadedUrls != null) {
                     try {
-                        successLoaded.onLoaded(parseJsonToList(json));
+                        successLoadedUrls.onLoaded(parseJsonToList(json));
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
@@ -84,6 +78,7 @@ public class PostFinder {
         }
     }
 
+    //получить следующий URL для загрузки изображений по тэгу
     private URL getGenerationNextUrlAccessPhotosTag(String lineTag) {
 
         String nextUrl = VERSION_API_URL + "/tags/" + lineTag + "/media/recent/?access_token=" +
@@ -98,6 +93,8 @@ public class PostFinder {
 
     private List<String> parseJsonToList(JSONObject json) throws IOException, JSONException {
 
+        List<String> urlImages = new ArrayList<>();
+
         try {
             int count = 0;
             JSONArray mJsonArray = mParsing.getJSONObjectToJSONArray(json);
@@ -105,14 +102,14 @@ public class PostFinder {
             while (count != NUMBER_SINGLE_QUERY) {
                 String mResultJson = mParsing.getUrlImage(mJsonArray, count, PHOTO_STANDART_RESOLUTION);
 
-                mUrlImages.add(mResultJson);
+                urlImages.add(mResultJson);
                 count++;
             }
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return mUrlImages;
+        return urlImages;
     }
 
 

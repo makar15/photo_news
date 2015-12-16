@@ -42,7 +42,6 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
                 String mTagSearch = lineTagSearch.getText().toString();
 
                 if (!TextUtils.isEmpty(mTagSearch)) {
-
                     openListPhotoResultTag(mTagSearch);
                 }
             }

@@ -21,9 +21,8 @@ import java.util.List;
  */
 public class ListPhotoResultTagFragment extends Fragment {
 
-    private PhotoResultTagAdapter mPhotoAdapter;
-
     private RecyclerView mRecyclerView;
+    private PhotoResultTagAdapter mPhotoAdapter;
     private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +54,6 @@ public class ListPhotoResultTagFragment extends Fragment {
                         mLayoutManager.onItemsChanged(mRecyclerView);
                     }
                 });
-
             }
         });
 
@@ -70,6 +68,7 @@ public class ListPhotoResultTagFragment extends Fragment {
 
     private void setLayoutManagerForRecyclerView() {
         mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 

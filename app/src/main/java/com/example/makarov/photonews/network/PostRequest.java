@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
@@ -17,9 +16,6 @@ public class PostRequest extends AsyncTask<URL, Void, JSONObject> {
 
     private PostRequest.SuccessLoadedJson mSuccessLoadedJson;
     private UrlToJsonObject mUrlToJsonObject;
-
-    private HttpURLConnection urlConnection = null;
-    private JSONObject jsonObject;
 
     public PostRequest(PostRequest.SuccessLoadedJson successLoadedJson) {
 
@@ -54,10 +50,12 @@ public class PostRequest extends AsyncTask<URL, Void, JSONObject> {
 
     private JSONObject getJson(URL url) throws IOException, JSONException {
 
+        JSONObject jsonObject = null;
+
         try {
-            String response = mUrlToJsonObject.getStreamUrl(url);
+            String response = mUrlToJsonObject.convertString(url);
             jsonObject = mUrlToJsonObject.getStringToJSONObject(response);
-            mUrlToJsonObject.openHttpUrlConnection(urlConnection, url);
+            mUrlToJsonObject.openHttpUrlConnection(null, url);
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();

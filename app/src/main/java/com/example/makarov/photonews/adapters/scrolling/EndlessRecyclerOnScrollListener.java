@@ -8,10 +8,6 @@ import android.support.v7.widget.RecyclerView;
  */
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
-    private final int VISIBLE_THRESHOLD = 5;
-    private int visibleItemCount, firstVisibleItem, totalItemCount;
-    private int countUpdate = 0;
-
     private LinearLayoutManager mLinearLayoutManager;
 
     public EndlessRecyclerOnScrollListener(LinearLayoutManager linearLayoutManager) {
@@ -22,18 +18,13 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        //Return the current number of child views attached to the parent RecyclerView.
-        visibleItemCount = recyclerView.getChildCount();
         //Returns the number of items in the adapter bound to the parent RecyclerView.
-        totalItemCount = mLinearLayoutManager.getItemCount();
-        //Returns the adapter position of the first visible view.
-        firstVisibleItem = mLinearLayoutManager.findFirstCompletelyVisibleItemPosition();
+        int totalItemCount = mLinearLayoutManager.getItemCount();
+        //Returns the adapter position of the last visible view.
+        int lastVisibleItem = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
 
-        if (firstVisibleItem >= (totalItemCount - VISIBLE_THRESHOLD)) {
-            if (countUpdate == 0) {
-                onLoadMore();
-                countUpdate++;
-            }
+        if (lastVisibleItem >= totalItemCount - 1) {
+            onLoadMore();
         }
     }
 
