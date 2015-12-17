@@ -1,5 +1,7 @@
 package com.example.makarov.photonews.network;
 
+import com.example.makarov.photonews.models.PhotoNewsPost;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +18,9 @@ import java.util.List;
  */
 public class PostFinder {
 
-    private final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
-
     private final String VERSION_API_URL = "https://api.instagram.com/v1";
     private final String ACCESS_TOKEN = "175770414.98d6195.7e44bb27685141c5ba834cb7dcd67625";
-    private final int NUMBER_SINGLE_QUERY = 10;
+    private final int NUMBER_SINGLE_QUERY = 20;
 
     private final Parsing mParsing;
     private URL mUrlSavePhotosTag;
@@ -91,30 +91,34 @@ public class PostFinder {
         }
     }
 
-    private List<String> parseJsonToList(JSONObject json) throws IOException, JSONException {
+    private List<PhotoNewsPost> parseJsonToList(JSONObject json) throws IOException, JSONException {
 
-        List<String> urlImages = new ArrayList<>();
+        List<PhotoNewsPost> photoNews = new ArrayList<>();
 
         try {
             int count = 0;
             JSONArray mJsonArray = mParsing.getJSONObjectToJSONArray(json);
 
             while (count != NUMBER_SINGLE_QUERY) {
-                String mResultJson = mParsing.getUrlImage(mJsonArray, count, PHOTO_STANDART_RESOLUTION);
+                String urlImage = mParsing.getUrlImage(mJsonArray, count);
+                String author = mParsing.getAuthor(mJsonArray, count);
+                int countLikes = mParsing.getCountLikes(mJsonArray, count);
 
-                urlImages.add(mResultJson);
+                PhotoNewsPost photoNewsPost = new PhotoNewsPost(author, urlImage, countLikes);
+                photoNews.add(photoNewsPost);
+
                 count++;
             }
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return urlImages;
+        return photoNews;
     }
 
 
     public interface SuccessLoadedUrls {
 
-        void onLoaded(List<String> urlImages);
+        void onLoaded(List<PhotoNewsPost> photoNews);
     }
 }

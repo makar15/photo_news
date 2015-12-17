@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,10 +20,10 @@ import java.util.List;
  */
 public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAdapter.ResultViewHolder> {
 
-    private List<String> mUrlPhotos = new ArrayList<>();
+    private List<PhotoNewsPost> mPhotoNews = new ArrayList<>();
 
-    public PhotoResultTagAdapter(List<String> urlPhotos) {
-        mUrlPhotos.addAll(urlPhotos);
+    public PhotoResultTagAdapter(List<PhotoNewsPost> urlPhotos) {
+        mPhotoNews.addAll(urlPhotos);
     }
 
     @Override
@@ -36,30 +38,41 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
 
-        String item = mUrlPhotos.get(position);
+        String item = mPhotoNews.get(position).getUrlAddress();
         Picasso.with(holder.itemView.getContext())
                 .load(item)
                 .into(holder.icon);
+
+        holder.author.setText(mPhotoNews.get(position).getAuthor());
+        holder.countLikes.setText(String.valueOf(mPhotoNews.get(position).getCountLikes()));
+
     }
 
     @Override
     public int getItemCount() {
-        return mUrlPhotos.size();
+        return mPhotoNews.size();
     }
 
     public static class ResultViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView icon;
+        public ImageView like;
+        public TextView author;
+        public TextView countLikes;
 
         public ResultViewHolder(View v) {
             super(v);
 
             icon = (ImageView) v.findViewById(R.id.icon);
+            like = (ImageView) v.findViewById(R.id.like);
+            author = (TextView) v.findViewById(R.id.author);
+            countLikes = (TextView) v.findViewById(R.id.count_likes);
+
         }
     }
 
-    public void update(List<String> newAddList) {
-        mUrlPhotos.addAll(newAddList);
+    public void update(List<PhotoNewsPost> newPhotoNews) {
+        mPhotoNews.addAll(newPhotoNews);
     }
 
 }

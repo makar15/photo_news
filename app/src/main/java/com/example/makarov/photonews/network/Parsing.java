@@ -12,6 +12,8 @@ import java.io.IOException;
 //getNextPage -должен вернуть адрес след страницы и его запомнить в постфайндере
 public class Parsing {
 
+    private final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
+
     private String nextMaxId;
 
     //преобразование строку в JSONArray
@@ -21,11 +23,23 @@ public class Parsing {
     }
 
     //получить URL картинки из JSON
-    public String getUrlImage(JSONArray jsonArray, int indexImage, String resolution) throws JSONException {
+    public String getUrlImage(JSONArray jsonArray, int indexImage) throws JSONException {
         JSONObject imageJsonObject = jsonArray.getJSONObject(indexImage)
-                .getJSONObject("images").getJSONObject(resolution);
+                .getJSONObject("images").getJSONObject(PHOTO_STANDART_RESOLUTION);
         //TODO check NullPointerException imageJsonObject
         return imageJsonObject.getString("url");
+    }
+
+    public String getAuthor(JSONArray jsonArray, int indexImage) throws JSONException {
+        JSONObject authorJSONObject = jsonArray.getJSONObject(indexImage)
+                .getJSONObject("user");
+        return authorJSONObject.getString("username");
+    }
+
+    public int getCountLikes(JSONArray jsonArray, int indexImage) throws JSONException {
+        JSONObject countLikesJSONObject = jsonArray.getJSONObject(indexImage)
+                .getJSONObject("likes");
+        return countLikesJSONObject.getInt("count");
     }
 
     private void saveNextUrlAccessPhotosTag(JSONObject jsonObject) throws JSONException, IOException {

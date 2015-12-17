@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
+import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinder;
 
 import java.util.List;
@@ -36,8 +37,8 @@ public class ListPhotoResultTagFragment extends Fragment {
 
         postFinder.requestPhotosTag(new PostFinder.SuccessLoadedUrls() {
             @Override
-            public void onLoaded(List<String> urlImages) {
-                setAdapterForRecyclerView(urlImages);
+            public void onLoaded(List<PhotoNewsPost> photoNews) {
+                setAdapterForRecyclerView(photoNews);
             }
         });
 
@@ -47,9 +48,9 @@ public class ListPhotoResultTagFragment extends Fragment {
 
                 postFinder.nextRequestPhotosTag(new PostFinder.SuccessLoadedUrls() {
                     @Override
-                    public void onLoaded(List<String> urlImages) {
+                    public void onLoaded(List<PhotoNewsPost> photoNews) {
 
-                        mPhotoAdapter.update(urlImages);
+                        mPhotoAdapter.update(photoNews);
                         mPhotoAdapter.notifyDataSetChanged();
                         mLayoutManager.onItemsChanged(mRecyclerView);
                     }
@@ -72,8 +73,8 @@ public class ListPhotoResultTagFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
-    private void setAdapterForRecyclerView(List<String> urlPhotos) {
-        mPhotoAdapter = new PhotoResultTagAdapter(urlPhotos);
+    private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
+        mPhotoAdapter = new PhotoResultTagAdapter(photoNews);
         mRecyclerView.setAdapter(mPhotoAdapter);
     }
 

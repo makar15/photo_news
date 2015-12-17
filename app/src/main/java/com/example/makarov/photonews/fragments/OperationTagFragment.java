@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.activitys.MainActivity;
+import com.example.makarov.photonews.database.TagDataBaseHelper;
+import com.example.makarov.photonews.database.TagDbAdapter;
 
 /**
  * Created by makarov on 10.12.15.
@@ -29,6 +32,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         lineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
         v.findViewById(R.id.sign_tag);
         v.findViewById(R.id.enter_search_btn).setOnClickListener(this);
+        v.findViewById(R.id.add_tag_btn).setOnClickListener(this);
 
         lineTagSearch.addTextChangedListener(textWatcherBanSpace);
 
@@ -37,9 +41,10 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        String mTagSearch = lineTagSearch.getText().toString();
+
         switch (v.getId()) {
             case R.id.enter_search_btn: {
-                String mTagSearch = lineTagSearch.getText().toString();
 
                 if (!TextUtils.isEmpty(mTagSearch)) {
                     openListPhotoResultTag(mTagSearch);
@@ -47,7 +52,15 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
             }
             break;
 
-            //еще будет кнопка добавления этого тэга в список тэгов
+            case R.id.add_tag_btn: {
+
+                if (!TextUtils.isEmpty(mTagSearch)) {
+                    //add tag database
+                    PhotoNewsApp.getApp().getTagDbAdapter().open();
+                }
+            }
+            break;
+
             default:
                 break;
         }

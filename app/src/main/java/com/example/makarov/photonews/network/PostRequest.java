@@ -17,6 +17,8 @@ public class PostRequest extends AsyncTask<URL, Void, JSONObject> {
     private PostRequest.SuccessLoadedJson mSuccessLoadedJson;
     private UrlToJsonObject mUrlToJsonObject;
 
+    private JSONObject jsonObject;
+
     public PostRequest(PostRequest.SuccessLoadedJson successLoadedJson) {
 
         mSuccessLoadedJson = successLoadedJson;
@@ -50,10 +52,9 @@ public class PostRequest extends AsyncTask<URL, Void, JSONObject> {
 
     private JSONObject getJson(URL url) throws IOException, JSONException {
 
-        JSONObject jsonObject = null;
-
         try {
             String response = mUrlToJsonObject.convertString(url);
+            //TODO verification meta code 200 || jsonObject = null
             jsonObject = mUrlToJsonObject.getStringToJSONObject(response);
             mUrlToJsonObject.openHttpUrlConnection(null, url);
 

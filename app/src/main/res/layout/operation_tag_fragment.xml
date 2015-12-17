@@ -54,10 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
-                android:layout_weight="5">
+                android:layout_weight="4">
 
                 <Button
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="search"
                     android:id="@+id/enter_search_btn"
@@ -67,5 +67,24 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="add"
+                android:id="@+id/add_tag_btn"
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+                android:padding="4dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

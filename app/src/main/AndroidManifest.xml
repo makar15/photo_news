@@ -9,7 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name=".InstagramApp">
+        android:name=".PhotoNewsApp">
         <activity
             android:name=".activitys.MainActivity"
             android:label="@string/app_name" >
