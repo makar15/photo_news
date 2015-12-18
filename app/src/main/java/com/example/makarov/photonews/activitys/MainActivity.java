@@ -9,6 +9,7 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.fragments.ListPhotoHistoryTagFragment;
 import com.example.makarov.photonews.fragments.ListPhotoResultTagFragment;
 import com.example.makarov.photonews.fragments.OperationTagFragment;
+import com.example.makarov.photonews.fragments.TagsListFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -19,7 +20,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        openBaseFragment(new OperationTagFragment());
+        openBaseFragment(new TagsListFragment());
 
     }
 

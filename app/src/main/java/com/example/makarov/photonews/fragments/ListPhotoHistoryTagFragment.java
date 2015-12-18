@@ -24,7 +24,7 @@ public class ListPhotoHistoryTagFragment extends Fragment {
 
         mLineTag = getArgumentsBundleLineTag(getArguments());
 
-        lvPhotoHistoryTag = (ListView) v.findViewById(R.id.lvPhotoHistoryTag);
+        lvPhotoHistoryTag = (ListView) v.findViewById(R.id.lv_photo_history_tag);
 
         return v;
     }

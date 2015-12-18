@@ -29,7 +29,7 @@ public class ListPhotoResultTagFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_tag_fragment, null);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.lvPhotoResultTag);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_result_tag);
         setLayoutManagerForRecyclerView();
 
         String lineTag = getArgumentsBundleLineTag(getArguments());

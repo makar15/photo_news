@@ -9,6 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:id="@+id/lvPhotoResultTag" />
+        android:id="@+id/lv_photo_result_tag" />
 
 </android.support.v4.widget.SwipeRefreshLayout>

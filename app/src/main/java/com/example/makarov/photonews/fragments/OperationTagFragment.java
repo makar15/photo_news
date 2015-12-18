@@ -13,8 +13,6 @@ import android.widget.EditText;
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.activitys.MainActivity;
-import com.example.makarov.photonews.database.TagDataBaseHelper;
-import com.example.makarov.photonews.database.TagDbAdapter;
 
 /**
  * Created by makarov on 10.12.15.
@@ -55,8 +53,8 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
             case R.id.add_tag_btn: {
 
                 if (!TextUtils.isEmpty(mTagSearch)) {
-                    //add tag database
                     PhotoNewsApp.getApp().getTagDbAdapter().open();
+                    PhotoNewsApp.getApp().getTagDbAdapter().createTag(mTagSearch);
                 }
             }
             break;

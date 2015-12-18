@@ -1,14 +1,12 @@
 package com.example.makarov.photonews.database;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 /**
  * Created by makarov on 16.12.15.
- *
  */
 public class TagDataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
@@ -25,16 +23,6 @@ public class TagDataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     public TagDataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    public TagDataBaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                          int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
-    }
-
-    public TagDataBaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                          int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
     }
 
     @Override

@@ -10,7 +10,6 @@ import android.util.Log;
 
 /**
  * Created by makarov on 17.12.15.
- *
  */
 public class TagDbAdapter {
 
@@ -54,18 +53,20 @@ public class TagDbAdapter {
     }
 
     public Cursor fetchAllTag() {
-        return mDatabase.query(TagDataBaseHelper.DATABASE_TABLE, new String[] { BaseColumns._ID,
-                        TagDataBaseHelper.TAG_NAME_COLUMN}, null, null, null, null, null);
+        return mDatabase.query(TagDataBaseHelper.DATABASE_TABLE, new String[]{BaseColumns._ID,
+                TagDataBaseHelper.TAG_NAME_COLUMN}, null, null, null, null, null);
     }
 
     public Cursor fetchTag(long rowId) throws SQLException {
-        Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE, new String[] {
-                        BaseColumns._ID },
+        Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE, new String[]{
+                        BaseColumns._ID},
                 BaseColumns._ID + "=" + rowId, null, null, null, null, null);
 
         if (cursor != null) {
-            cursor.moveToFirst();
-            Log.d(LOG_TAG, "0 rows");
+            if (!cursor.moveToFirst()) ;
+            {
+                Log.d(LOG_TAG, "0 rows");
+            }
         }
         return cursor;
     }
