@@ -17,9 +17,11 @@ import java.util.List;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     private List<String> mTags = new ArrayList<>();
+    private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
 
-    public TagAdapter(List<String> tags) {
+    public TagAdapter(List<String> tags, OnClickOpenPhotoNews onClickOpenPhotoNews) {
         mTags = tags;
+        mOnClickOpenPhotoNews = onClickOpenPhotoNews;
     }
 
     @Override
@@ -31,14 +33,24 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(TagViewHolder holder, int position) {
+    public void onBindViewHolder(TagViewHolder holder, final int position) {
 
         holder.nameTag.setText(mTags.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClickOpenPhotoNews.onClick(getItem(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return mTags.size();
+    }
+
+    public String getItem(int position) {
+        return mTags.get(position);
     }
 
     public static class TagViewHolder extends RecyclerView.ViewHolder {
@@ -49,7 +61,11 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
             super(v);
 
             nameTag = (TextView) v.findViewById(R.id.name_tag);
-
         }
     }
+
+    public interface OnClickOpenPhotoNews {
+        void onClick(String tempClickItem);
+    }
+
 }

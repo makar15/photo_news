@@ -2,31 +2,85 @@ package com.example.makarov.photonews.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
+import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
+import com.example.makarov.photonews.models.PhotoNewsPost;
+import com.example.makarov.photonews.network.PostFinder;
+
+import java.util.List;
 
 /**
  * Created by makarov on 08.12.15.
  */
 public class ListPhotoHistoryTagFragment extends Fragment {
 
-    private ListView lvPhotoHistoryTag;
+    private RecyclerView mRecyclerView;
+    private PhotoResultTagAdapter mPhotoAdapter;
+    private LinearLayoutManager mLayoutManager;
 
-    private String mLineTag;
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_history_tag_fragment, null);
 
-        mLineTag = getArgumentsBundleLineTag(getArguments());
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_history_tag);
+        setLayoutManagerForRecyclerView();
 
-        lvPhotoHistoryTag = (ListView) v.findViewById(R.id.lv_photo_history_tag);
+        String lineTag = getArgumentsBundleLineTag(getArguments());
+        final PostFinder postFinder = new PostFinder(lineTag);
+
+        postFinder.requestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+            @Override
+            public void onLoaded(List<PhotoNewsPost> photoNews) {
+                setAdapterForRecyclerView(photoNews);
+            }
+        });
+
+        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore() {
+
+                postFinder.nextRequestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+                    @Override
+                    public void onLoaded(List<PhotoNewsPost> photoNews) {
+
+                        mPhotoAdapter.update(photoNews);
+                        mPhotoAdapter.notifyDataSetChanged();
+                        mLayoutManager.onItemsChanged(mRecyclerView);
+                    }
+                });
+            }
+        });
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initializeHistoryRecyclerView();
+    }
+
+    private void setLayoutManagerForRecyclerView() {
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
+
+    private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
+        mPhotoAdapter = new PhotoResultTagAdapter(photoNews);
+        mRecyclerView.setAdapter(mPhotoAdapter);
+    }
+
+    private void initializeHistoryRecyclerView() {
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     private String getArgumentsBundleLineTag(Bundle savedInstanceState) {

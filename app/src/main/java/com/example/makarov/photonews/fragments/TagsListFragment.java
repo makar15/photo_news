@@ -48,15 +48,13 @@ public class TagsListFragment extends Fragment {
             }
         });
 
-        setAdapterForRecyclerView(getTagsHistory());
-
         return v;
     }
 
     public void openListPhotoHistoryTag(String lineTag) {
         Bundle bundle = new Bundle();
         bundle.putString(TagsListFragment.TAGS_LIST_KEY, lineTag);
-        ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
+        ((MainActivity) getActivity()).openListPhotoHistoryTagFragment(bundle);
     }
 
     public void openOperationTag(String key) {
@@ -71,6 +69,13 @@ public class TagsListFragment extends Fragment {
         initializeHistoryRecyclerView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setAdapterForRecyclerView(getTagsHistory());
+    }
+
     private void setLayoutManagerForRecyclerView() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -78,7 +83,12 @@ public class TagsListFragment extends Fragment {
     }
 
     private void setAdapterForRecyclerView(List<String> tags) {
-        mTagAdapter = new TagAdapter(tags);
+        mTagAdapter = new TagAdapter(tags, new TagAdapter.OnClickOpenPhotoNews() {
+            @Override
+            public void onClick(String clickLineTag) {
+                openListPhotoHistoryTag(clickLineTag);
+            }
+        });
         mRecyclerView.setAdapter(mTagAdapter);
     }
 
@@ -88,10 +98,9 @@ public class TagsListFragment extends Fragment {
     }
 
     private List<String> getTagsHistory() {
-        PhotoNewsApp.getApp().getTagDbAdapter().open();
         List<String> tags = new ArrayList<>();
+        Cursor cursor = PhotoNewsApp.getApp().getTagDbAdapter().open().fetchAllTag();
 
-        Cursor cursor = PhotoNewsApp.getApp().getTagDbAdapter().fetchAllTag();
         if (cursor != null) {
             if (cursor.moveToFirst()) {
 

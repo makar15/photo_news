@@ -53,8 +53,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
             case R.id.add_tag_btn: {
 
                 if (!TextUtils.isEmpty(mTagSearch)) {
-                    PhotoNewsApp.getApp().getTagDbAdapter().open();
-                    PhotoNewsApp.getApp().getTagDbAdapter().createTag(mTagSearch);
+                    PhotoNewsApp.getApp().getTagDbAdapter().open().createTag(mTagSearch);
                 }
             }
             break;
