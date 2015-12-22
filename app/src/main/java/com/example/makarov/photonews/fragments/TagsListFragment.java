@@ -48,6 +48,8 @@ public class TagsListFragment extends Fragment {
             }
         });
 
+        setAdapterForRecyclerView(getTagsHistory());
+
         return v;
     }
 
@@ -67,13 +69,6 @@ public class TagsListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializeHistoryRecyclerView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        setAdapterForRecyclerView(getTagsHistory());
     }
 
     private void setLayoutManagerForRecyclerView() {
@@ -108,10 +103,10 @@ public class TagsListFragment extends Fragment {
                 do {
                     tags.add(cursor.getString(nameTagColumnIndex));
                 } while (cursor.moveToNext());
+            } else {
+                Log.d(LOG_TAG, "0 rows");
             }
             cursor.close();
-        } else {
-            Log.d(LOG_TAG, "0 rows");
         }
 
         return tags;

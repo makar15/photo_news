@@ -14,6 +14,9 @@ import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinder;
+import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
@@ -27,18 +30,23 @@ public class ListPhotoResultTagFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.list_photo_result_tag_fragment, null);
+        View v = inflater.inflate(R.layout.list_photo_history_tag_fragment, null);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_result_tag);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_history_tag);
         setLayoutManagerForRecyclerView();
 
         String lineTag = getArgumentsBundleLineTag(getArguments());
         final PostFinder postFinder = new PostFinder(lineTag);
 
-        postFinder.requestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+        postFinder.requestPhotosTag(new RequestListener<PhotoNewsList>() {
             @Override
-            public void onLoaded(List<PhotoNewsPost> photoNews) {
-                setAdapterForRecyclerView(photoNews);
+            public void onRequestFailure(SpiceException spiceException) {
+
+            }
+
+            @Override
+            public void onRequestSuccess(PhotoNewsList photoNews) {
+                setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
             }
         });
 
@@ -46,13 +54,15 @@ public class ListPhotoResultTagFragment extends Fragment {
             @Override
             public void onLoadMore() {
 
-                postFinder.nextRequestPhotosTag(new PostFinder.SuccessLoadedUrls() {
+                postFinder.nextRequestPhotosTag(new RequestListener<PhotoNewsList>() {
                     @Override
-                    public void onLoaded(List<PhotoNewsPost> photoNews) {
+                    public void onRequestFailure(SpiceException spiceException) {
 
-                        mPhotoAdapter.update(photoNews);
-                        mPhotoAdapter.notifyDataSetChanged();
-                        mLayoutManager.onItemsChanged(mRecyclerView);
+                    }
+
+                    @Override
+                    public void onRequestSuccess(PhotoNewsList photoNews) {
+                        mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
                     }
                 });
             }
@@ -68,8 +78,7 @@ public class ListPhotoResultTagFragment extends Fragment {
     }
 
     private void setLayoutManagerForRecyclerView() {
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 

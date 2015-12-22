@@ -72,7 +72,14 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
     }
 
     public void update(List<PhotoNewsPost> newPhotoNews) {
-        mPhotoNews.addAll(newPhotoNews);
+        for (PhotoNewsPost tempPhotoItem : newPhotoNews) {
+            addItem(tempPhotoItem);
+        }
+        notifyItemRangeChanged(0, mPhotoNews.size());
+    }
+
+    public void addItem(PhotoNewsPost photoNewsPost) {
+        mPhotoNews.add(photoNewsPost);
     }
 
 }
