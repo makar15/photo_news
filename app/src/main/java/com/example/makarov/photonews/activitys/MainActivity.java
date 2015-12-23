@@ -21,7 +21,6 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         openBaseFragment(new TagsListFragment());
-
     }
 
     public void openOperationTagFragment(Bundle bundle) {

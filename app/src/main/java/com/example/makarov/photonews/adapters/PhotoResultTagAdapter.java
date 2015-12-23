@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.makarov.photonews.ImageTarget;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.squareup.picasso.Picasso;
@@ -46,6 +47,9 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
         holder.author.setText(mPhotoNews.get(position).getAuthor());
         holder.countLikes.setText(String.valueOf(mPhotoNews.get(position).getCountLikes()));
 
+        Picasso.with(holder.itemView.getContext())
+                .load(item)
+                .into(new ImageTarget(position));
     }
 
     @Override
