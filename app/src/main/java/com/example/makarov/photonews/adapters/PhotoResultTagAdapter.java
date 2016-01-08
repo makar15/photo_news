@@ -46,10 +46,10 @@ public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAd
 
         holder.author.setText(mPhotoNews.get(position).getAuthor());
         holder.countLikes.setText(String.valueOf(mPhotoNews.get(position).getCountLikes()));
-
+/*
         Picasso.with(holder.itemView.getContext())
                 .load(item)
-                .into(new ImageTarget(position));
+                .into(new ImageTarget(position));*/
     }
 
     @Override

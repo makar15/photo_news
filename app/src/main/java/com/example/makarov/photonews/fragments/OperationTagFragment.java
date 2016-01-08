@@ -30,6 +30,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         lineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
         v.findViewById(R.id.sign_tag);
         v.findViewById(R.id.enter_search_btn).setOnClickListener(this);
+        v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
         v.findViewById(R.id.add_tag_btn).setOnClickListener(this);
 
         lineTagSearch.addTextChangedListener(textWatcherBanSpace);
@@ -43,10 +44,14 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.enter_search_btn: {
-
                 if (!TextUtils.isEmpty(mTagSearch)) {
                     openListPhotoResultTag(mTagSearch);
                 }
+            }
+            break;
+
+            case R.id.search_by_location_btn: {
+                openGoogleMap();
             }
             break;
 
@@ -67,6 +72,12 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         Bundle bundle = new Bundle();
         bundle.putString(OperationTagFragment.OPERATION_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
+    }
+
+    public void openGoogleMap() {
+        Bundle bundle = new Bundle();
+        bundle.putString(OperationTagFragment.OPERATION_KEY, null);
+        ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
     }
 
     private TextWatcher textWatcherBanSpace = new TextWatcher() {

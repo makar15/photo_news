@@ -5,8 +5,9 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.makarov.photonews"
-        minSdkVersion 21
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -37,9 +38,8 @@ dependencies {
 
     compile 'com.squareup.picasso:picasso:2.5.2'
 
-    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:support-v4:23.0.1'
-
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
     compile 'com.google.code.gson:gson:2.3'
@@ -47,7 +47,8 @@ dependencies {
 
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
 
-    compile 'com.android.support:recyclerview-v7:21.0.3'
-    compile 'com.android.support:cardview-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
 
+    compile 'com.google.android.gms:play-services:8.1.0'
 }

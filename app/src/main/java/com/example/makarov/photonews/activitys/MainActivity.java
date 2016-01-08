@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.fragments.GoogleMapFragment;
 import com.example.makarov.photonews.fragments.ListPhotoHistoryTagFragment;
 import com.example.makarov.photonews.fragments.ListPhotoResultTagFragment;
 import com.example.makarov.photonews.fragments.OperationTagFragment;
@@ -37,6 +38,12 @@ public class MainActivity extends FragmentActivity {
 
     public void openListPhotoResultTagFragment(Bundle bundle) {
         Fragment newFragment = new ListPhotoResultTagFragment();
+        newFragment.setArguments(bundle);
+        openFragment(newFragment, true);
+    }
+
+    public void  openGoogleMapFragment(Bundle bundle){
+        Fragment newFragment = new GoogleMapFragment();
         newFragment.setArguments(bundle);
         openFragment(newFragment, true);
     }

@@ -58,13 +58,12 @@ public class TagDbAdapter {
     }
 
     public Cursor fetchTag(long rowId) throws SQLException {
-        Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE, new String[]{
-                        BaseColumns._ID},
-                BaseColumns._ID + "=" + rowId, null, null, null, null, null);
+        Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE,
+                new String[]{BaseColumns._ID}, BaseColumns._ID + "=" + rowId,
+                null, null, null, null, null);
 
         if (cursor != null) {
-            if (!cursor.moveToFirst()) ;
-            {
+            if (!cursor.moveToFirst()){
                 Log.d(LOG_TAG, "0 rows");
             }
         }
