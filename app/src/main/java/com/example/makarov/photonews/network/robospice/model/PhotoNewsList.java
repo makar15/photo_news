@@ -5,9 +5,6 @@ import com.example.makarov.photonews.models.PhotoNewsPost;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by makarov on 22.12.15.
- */
 public class PhotoNewsList {
 
     List<PhotoNewsPost> mPhotoNewsPosts;

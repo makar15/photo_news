@@ -10,9 +10,6 @@ import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.FileOutputStream;
 
-/**
- * Created by makarov on 23.12.15.
- */
 public class ImageTarget implements Target {
 
     private int mNameSaveImg;

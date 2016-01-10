@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-/**
- * Created by makarov on 17.12.15.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class TagDbAdapter {
 
     private Context mContext;
@@ -52,12 +52,30 @@ public class TagDbAdapter {
                 delete(TagDataBaseHelper.DATABASE_TABLE, BaseColumns._ID + "=" + rowId, null) > 0;
     }
 
-    public Cursor fetchAllTag() {
-        return mDatabase.query(TagDataBaseHelper.DATABASE_TABLE, new String[]{BaseColumns._ID,
+    public List<String> getAllTags() {
+        Cursor cursor = mDatabase.query(TagDataBaseHelper.DATABASE_TABLE, new String[]{BaseColumns._ID,
                 TagDataBaseHelper.TAG_NAME_COLUMN}, null, null, null, null, null);
+
+        List<String> tags = new ArrayList<>();
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+
+                int nameTagColumnIndex = cursor.getColumnIndex(TagDataBaseHelper.TAG_NAME_COLUMN);
+                do {
+                    tags.add(cursor.getString(nameTagColumnIndex));
+                } while (cursor.moveToNext());
+            } else {
+                Log.d(LOG_TAG, "0 rows");
+            }
+            cursor.close();
+        }
+
+        return tags;
+
     }
 
-    public Cursor fetchTag(long rowId) throws SQLException {
+    public Cursor getTag(long rowId) throws SQLException {
         Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE,
                 new String[]{BaseColumns._ID}, BaseColumns._ID + "=" + rowId,
                 null, null, null, null, null);

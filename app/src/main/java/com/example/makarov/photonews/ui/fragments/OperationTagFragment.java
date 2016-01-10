@@ -14,9 +14,6 @@ import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
-/**
- * Created by makarov on 10.12.15.
- */
 public class OperationTagFragment extends Fragment implements View.OnClickListener {
 
     public static final String OPERATION_KEY = "operation";

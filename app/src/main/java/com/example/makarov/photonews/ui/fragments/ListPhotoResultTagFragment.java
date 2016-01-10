@@ -20,9 +20,6 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
-/**
- * Created by makarov on 08.12.15.
- */
 public class ListPhotoResultTagFragment extends Fragment {
 
     private RecyclerView mRecyclerView;

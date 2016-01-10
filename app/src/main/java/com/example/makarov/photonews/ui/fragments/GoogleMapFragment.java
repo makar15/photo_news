@@ -28,9 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by makarov on 03.01.16.
- */
 public class GoogleMapFragment extends Fragment implements View.OnClickListener {
 
     public static final String GOOGLE_MAP_KEY = "google_map";
@@ -45,6 +42,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
+
 
         MapsInitializer.initialize(getContext());
 

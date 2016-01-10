@@ -16,9 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-/**
- * Created by makarov on 21.12.15.
- */
 public class PhotoNewsSpiceService extends SpringAndroidSpiceService {
 
     @Override

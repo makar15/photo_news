@@ -1,8 +1,4 @@
-package com.example.makarov.photonews.network;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+package com.example.makarov.photonews.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,26 +7,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by makarov on 15.12.15.
- */
-public class UrlToJsonObject {
+public class StreamUtils {
 
     //открыть соединения для получения потока данных
-    public void openHttpUrlConnection(HttpURLConnection urlConnection, URL url) throws IOException {
+    public static void openHttpUrlConnection(HttpURLConnection urlConnection, URL url) throws IOException {
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
         urlConnection.connect();
     }
 
     //получить входящий поток данных
-    public String convertString(URL url) throws IOException {
+    public static String urlToString(URL url) throws IOException {
         InputStream inputStream = url.openConnection().getInputStream();
         return streamToString(inputStream);
     }
 
     //преобразовать поток в строку
-    private String streamToString(InputStream is) throws IOException {
+    private static String streamToString(InputStream is) throws IOException {
         String str = "";
 
         if (is != null) {
@@ -54,9 +47,4 @@ public class UrlToJsonObject {
         return str;
     }
 
-    //преобразование строку в JSONObject
-    public JSONObject getStringToJSONObject(String response) throws JSONException, IOException {
-        JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
-        return jsonObject;
-    }
 }

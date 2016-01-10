@@ -13,16 +13,9 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.PhotoNewsPost;
-import com.example.makarov.photonews.network.PostFinderLocation;
-import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
-/**
- * Created by makarov on 09.01.16.
- */
 public class ListPhotoResultLocationFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -37,35 +30,12 @@ public class ListPhotoResultLocationFragment extends Fragment {
         setLayoutManagerForRecyclerView();
 
         double[] pointLocation = getArgumentsBundleLocation(getArguments());
-        final PostFinderLocation postFinderLocation = new PostFinderLocation(pointLocation);
 
-        postFinderLocation.requestPhotosLocation(new RequestListener<PhotoNewsList>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-
-            }
-
-            @Override
-            public void onRequestSuccess(PhotoNewsList photoNews) {
-                setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
-            }
-        });
 
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore() {
 
-                postFinderLocation.nextRequestPhotosLocation(new RequestListener<PhotoNewsList>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-
-                    }
-
-                    @Override
-                    public void onRequestSuccess(PhotoNewsList photoNews) {
-                        mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
-                    }
-                });
             }
         });
 

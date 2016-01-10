@@ -1,8 +1,5 @@
 package com.example.makarov.photonews.models;
 
-/**
- * Created by makarov on 16.12.15.
- */
 public class PhotoNewsPost {
 
     private String mAuthor;

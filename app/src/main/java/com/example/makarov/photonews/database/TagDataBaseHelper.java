@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-/**
- * Created by makarov on 16.12.15.
- */
 public class TagDataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     private static final String DATABASE_NAME = "data_base_photo_news";

@@ -11,9 +11,6 @@ import com.example.makarov.photonews.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by makarov on 17.12.15.
- */
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     private List<String> mTags = new ArrayList<>();

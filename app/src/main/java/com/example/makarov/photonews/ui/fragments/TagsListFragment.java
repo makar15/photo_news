@@ -1,12 +1,10 @@
 package com.example.makarov.photonews.ui.fragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,19 +14,14 @@ import android.widget.Button;
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.TagAdapter;
-import com.example.makarov.photonews.database.TagDataBaseHelper;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by makarov on 08.12.15.
- */
 public class TagsListFragment extends Fragment {
 
     public static final String TAGS_LIST_KEY = "tags_list";
-    private final String LOG_TAG = "myLogs";
+    private final String TAG = "myLogs";
 
     private RecyclerView mRecyclerView;
     private TagAdapter mTagAdapter;
@@ -48,7 +41,8 @@ public class TagsListFragment extends Fragment {
             }
         });
 
-        setAdapterForRecyclerView(getTagsHistory());
+        List<String> tags = PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags();
+        setAdapterForRecyclerView(tags);
 
         return v;
     }
@@ -90,26 +84,6 @@ public class TagsListFragment extends Fragment {
     private void initializeHistoryRecyclerView() {
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    private List<String> getTagsHistory() {
-        List<String> tags = new ArrayList<>();
-        Cursor cursor = PhotoNewsApp.getApp().getTagDbAdapter().open().fetchAllTag();
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-
-                int nameTagColumnIndex = cursor.getColumnIndex(TagDataBaseHelper.TAG_NAME_COLUMN);
-                do {
-                    tags.add(cursor.getString(nameTagColumnIndex));
-                } while (cursor.moveToNext());
-            } else {
-                Log.d(LOG_TAG, "0 rows");
-            }
-            cursor.close();
-        }
-
-        return tags;
     }
 
     @Override

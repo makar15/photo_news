@@ -1,15 +1,14 @@
 package com.example.makarov.photonews;
 
-import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.network.robospice.PhotoNewsSpiceService;
 import com.octo.android.robospice.SpiceManager;
 
-/**
- * Created by makarov on 11.12.15.
- */
-public class PhotoNewsApp extends Application {
+public class PhotoNewsApp extends MultiDexApplication {
 
     private static PhotoNewsApp app;
     private TagDbAdapter mTagDbAdapter;
@@ -18,12 +17,18 @@ public class PhotoNewsApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         app = this;
         mTagDbAdapter = new TagDbAdapter(this);
         mSpiceManager = new SpiceManager(PhotoNewsSpiceService.class);
         mSpiceManager.start(this);
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 
     public static PhotoNewsApp getApp() {
         return app;
