@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.activitys;
+package com.example.makarov.photonews.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.fragments.GoogleMapFragment;
-import com.example.makarov.photonews.fragments.ListPhotoHistoryTagFragment;
-import com.example.makarov.photonews.fragments.ListPhotoResultTagFragment;
-import com.example.makarov.photonews.fragments.OperationTagFragment;
-import com.example.makarov.photonews.fragments.TagsListFragment;
+import com.example.makarov.photonews.ui.fragments.GoogleMapFragment;
+import com.example.makarov.photonews.ui.fragments.ListPhotoHistoryTagFragment;
+import com.example.makarov.photonews.ui.fragments.ListPhotoResultLocationFragment;
+import com.example.makarov.photonews.ui.fragments.ListPhotoResultTagFragment;
+import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
+import com.example.makarov.photonews.ui.fragments.TagsListFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -42,7 +43,13 @@ public class MainActivity extends FragmentActivity {
         openFragment(newFragment, true);
     }
 
-    public void  openGoogleMapFragment(Bundle bundle){
+    public void openListPhotoResultLocationFragment(Bundle bundle) {
+        Fragment newFragment = new ListPhotoResultLocationFragment();
+        newFragment.setArguments(bundle);
+        openFragment(newFragment, true);
+    }
+
+    public void openGoogleMapFragment(Bundle bundle) {
         Fragment newFragment = new GoogleMapFragment();
         newFragment.setArguments(bundle);
         openFragment(newFragment, true);

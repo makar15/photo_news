@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.fragments;
+package com.example.makarov.photonews.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +13,7 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.PhotoNewsPost;
-import com.example.makarov.photonews.network.PostFinder;
+import com.example.makarov.photonews.network.PostFinderLocation;
 import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -21,24 +21,25 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.util.List;
 
 /**
- * Created by makarov on 08.12.15.
+ * Created by makarov on 09.01.16.
  */
-public class ListPhotoHistoryTagFragment extends Fragment {
+public class ListPhotoResultLocationFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
+    //TODO change name PhotoResultTagAdapter for PhotoResultAdapter
     private PhotoResultTagAdapter mPhotoAdapter;
     private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.list_photo_history_tag_fragment, null);
+        View v = inflater.inflate(R.layout.list_photo_result_tag_fragment, null);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_history_tag);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_result_tag);
         setLayoutManagerForRecyclerView();
 
-        String lineTag = getArgumentsBundleLineTag(getArguments());
-        final PostFinder postFinder = new PostFinder(lineTag);
+        double[] pointLocation = getArgumentsBundleLocation(getArguments());
+        final PostFinderLocation postFinderLocation = new PostFinderLocation(pointLocation);
 
-        postFinder.requestPhotosTag(new RequestListener<PhotoNewsList>() {
+        postFinderLocation.requestPhotosLocation(new RequestListener<PhotoNewsList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
@@ -54,7 +55,7 @@ public class ListPhotoHistoryTagFragment extends Fragment {
             @Override
             public void onLoadMore() {
 
-                postFinder.nextRequestPhotosTag(new RequestListener<PhotoNewsList>() {
+                postFinderLocation.nextRequestPhotosLocation(new RequestListener<PhotoNewsList>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 
@@ -92,12 +93,12 @@ public class ListPhotoHistoryTagFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private String getArgumentsBundleLineTag(Bundle savedInstanceState) {
+    private double[] getArgumentsBundleLocation(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             return null;
-        if (!savedInstanceState.containsKey(TagsListFragment.TAGS_LIST_KEY))
+        if (!savedInstanceState.containsKey(GoogleMapFragment.GOOGLE_MAP_KEY))
             return null;
-        return savedInstanceState.getString(TagsListFragment.TAGS_LIST_KEY);
+        return savedInstanceState.getDoubleArray(GoogleMapFragment.GOOGLE_MAP_KEY);
 
     }
 }

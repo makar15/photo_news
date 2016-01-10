@@ -63,7 +63,7 @@ public class TagDbAdapter {
                 null, null, null, null, null);
 
         if (cursor != null) {
-            if (!cursor.moveToFirst()){
+            if (!cursor.moveToFirst()) {
                 Log.d(LOG_TAG, "0 rows");
             }
         }

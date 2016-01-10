@@ -33,7 +33,7 @@
             android:value="AIzaSyCblYYMzG7T0kJuI_iyVZZvi4tEqnS4fy0" />
 
         <activity
-            android:name=".activitys.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

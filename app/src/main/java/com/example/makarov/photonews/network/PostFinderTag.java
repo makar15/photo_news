@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * Created by makarov on 21.12.15.
  */
-public class PostFinder {
+public class PostFinderTag {
 
     private final String VERSION_API_URL = "https://api.instagram.com/v1";
     private final String ACCESS_TOKEN = "175770414.98d6195.7e44bb27685141c5ba834cb7dcd67625";
@@ -23,7 +23,7 @@ public class PostFinder {
 
     private PhotoNewsSpiceRequest postRequest;
 
-    public PostFinder(String lineTag) {
+    public PostFinderTag(String lineTag) {
         mLineTag = lineTag;
         mParsing = new Parsing();
     }

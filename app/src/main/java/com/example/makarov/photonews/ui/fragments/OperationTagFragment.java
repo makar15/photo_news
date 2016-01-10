@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.fragments;
+package com.example.makarov.photonews.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.activitys.MainActivity;
+import com.example.makarov.photonews.ui.activity.MainActivity;
 
 /**
  * Created by makarov on 10.12.15.
@@ -97,7 +97,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         }
     };
 
-    //тут еще есть баг, в случае если переставить курсор печати
+    //TODO , bag - change point cursor mouse
     private void banSpace(Editable s) {
 
         int length = s.length();

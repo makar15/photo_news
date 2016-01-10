@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.ImageTarget;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.squareup.picasso.Picasso;

@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.fragments;
+package com.example.makarov.photonews.ui.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import android.widget.Button;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.activitys.MainActivity;
 import com.example.makarov.photonews.adapters.TagAdapter;
 import com.example.makarov.photonews.database.TagDataBaseHelper;
+import com.example.makarov.photonews.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
