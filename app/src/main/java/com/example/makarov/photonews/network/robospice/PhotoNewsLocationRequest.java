@@ -7,6 +7,7 @@ import com.example.makarov.photonews.utils.JsonUtils;
 import com.example.makarov.photonews.utils.StreamUtils;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,8 +33,8 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
             StreamUtils.openHttpUrlConnection(null, mUrl);
             String response = StreamUtils.urlToString(mUrl);
             JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
-            //saveNextUrl(jsonObject);
 
+            saveNextUrl(jsonObject);
             return new Parsing().jsonToPhotoNews(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -41,10 +42,14 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
         }
     }
 
-    private void saveNextUrlPhotos(JSONObject jsonObject) {
+    private void saveNextUrl(JSONObject jsonObject) {
         try {
-            JSONObject nextUrl = (JSONObject) jsonObject.get("pagination");
-            mNextPageUrlSaver.setUrl((String) nextUrl.get("next_max_tag_id"));
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            int countItem = jsonArray.length();
+
+            JSONObject lastJsonObject = jsonArray.getJSONObject(countItem - 1);
+
+            mNextPageUrlSaver.setUrl(lastJsonObject.getString("created_time"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

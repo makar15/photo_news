@@ -22,7 +22,7 @@ public class UrlInstaUtils {
     public static URL getUrlPhotosSearch(Address address) {
 
         String url = Constants.VERSION_API_URL + "/media/search?" + "lat="
-                + address.getLatitude() + "&lng=" + address.getLongitude() + "&distance=5000" +
+                + address.getLatitude() + "&lng=" + address.getLongitude() + "&distance=2500" +
                 "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             return new URL(url);

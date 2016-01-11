@@ -1,5 +1,6 @@
 package com.example.makarov.photonews.network;
 
+import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.utils.Constants;
 
 import java.net.MalformedURLException;
@@ -7,18 +8,22 @@ import java.net.URL;
 
 public class NextPageUrlSaverLocation implements NextPageUrlSaver {
 
-    private String mUrl;
+    private String mCreatedTime;
+    private Address mAddress;
 
-    public void setUrl(String url) {
-        mUrl = url;
+    public NextPageUrlSaverLocation(Address address) {
+        mAddress = address;
+    }
+
+    public void setUrl(String createdTime) {
+        mCreatedTime = createdTime;
     }
 
     public URL getUrl() {
 
-        //https://api.instagram.com/v1/locations/50576751/media/recent?access_token=175770414.98d6195.7e44bb27685141c5ba834cb7dcd67625
-
-        String nextUrl = Constants.VERSION_API_URL + "/locations/" + "/media/recent/?access_token=" +
-                Constants.ACCESS_TOKEN + "&max_tag_id=" + mUrl;
+        String nextUrl = Constants.VERSION_API_URL + "/media/search?" + "lat="
+                + mAddress.getLatitude() + "&lng=" + mAddress.getLongitude() + "&distance=2500" +
+                "&max_timestamp=" + mCreatedTime + "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             return new URL(nextUrl);
         } catch (MalformedURLException e) {

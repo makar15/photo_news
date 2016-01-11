@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
+import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinderLocation;
@@ -47,6 +48,26 @@ public class ListPhotoResultLocationFragment extends Fragment {
                 if (photoNews != null) {
                     setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
                 }
+            }
+        });
+
+        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore() {
+
+                postFinderLocation.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+
+                    }
+
+                    @Override
+                    public void onRequestSuccess(PhotoNewsList photoNews) {
+                        if (photoNews != null) {
+                            mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
+                        }
+                    }
+                });
             }
         });
 

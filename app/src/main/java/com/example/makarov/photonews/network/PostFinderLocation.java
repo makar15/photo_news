@@ -12,7 +12,7 @@ import java.net.URL;
 
 public class PostFinderLocation implements PostFinder {
 
-    private URL mUrlSavePhotosTag;
+    private URL mUrlSavePhotosSearch;
     private Address mAddress;
 
     private PhotoNewsLocationRequest mPostRequestImage;
@@ -20,20 +20,20 @@ public class PostFinderLocation implements PostFinder {
 
     public PostFinderLocation(Address address) {
         mAddress = address;
-        mNextPageUrlSaver = new NextPageUrlSaverLocation();
+        mNextPageUrlSaver = new NextPageUrlSaverLocation(mAddress);
     }
 
     public void requestPhotos(RequestListener<PhotoNewsList> requestListener) {
-        mUrlSavePhotosTag = UrlInstaUtils.getUrlPhotosSearch(mAddress);
-        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
+        mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mAddress);
+        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
         PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
                 DurationInMillis.ONE_MINUTE, requestListener);
     }
 
     public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
-        mUrlSavePhotosTag = mNextPageUrlSaver.getUrl();
-        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
+        mUrlSavePhotosSearch = mNextPageUrlSaver.getUrl();
+        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
         PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
                 DurationInMillis.ONE_MINUTE, requestListener);
