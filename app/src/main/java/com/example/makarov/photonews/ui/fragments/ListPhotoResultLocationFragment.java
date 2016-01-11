@@ -44,7 +44,9 @@ public class ListPhotoResultLocationFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(PhotoNewsList photoNews) {
-                setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
+                if (photoNews != null) {
+                    setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
+                }
             }
         });
 

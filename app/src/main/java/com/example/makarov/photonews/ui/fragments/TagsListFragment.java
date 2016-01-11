@@ -7,9 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
@@ -18,7 +16,7 @@ import com.example.makarov.photonews.ui.activity.MainActivity;
 
 import java.util.List;
 
-public class TagsListFragment extends Fragment {
+public class TagsListFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAGS_LIST_KEY = "tags_list";
 
@@ -30,20 +28,34 @@ public class TagsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tags_list_fragment, null);
 
+        v.findViewById(R.id.search_by_tag_btn).setOnClickListener(this);
+        v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.lvTags);
         setLayoutManagerForRecyclerView();
-
-        Button searchBtn = (Button) v.findViewById(R.id.enter_search_btn);
-        searchBtn.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                openOperationTag(null);
-            }
-        });
 
         List<String> tags = PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags();
         setAdapterForRecyclerView(tags);
 
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_by_tag_btn: {
+                openOperationTag();
+            }
+            break;
+
+            case R.id.search_by_location_btn: {
+                openGoogleMap();
+            }
+            break;
+
+            default:
+                break;
+        }
     }
 
     public void openListPhotoHistoryTag(String lineTag) {
@@ -52,10 +64,16 @@ public class TagsListFragment extends Fragment {
         ((MainActivity) getActivity()).openListPhotoHistoryTagFragment(bundle);
     }
 
-    public void openOperationTag(String key) {
+    public void openOperationTag() {
         Bundle bundle = new Bundle();
-        bundle.putString(TagsListFragment.TAGS_LIST_KEY, key);
+        bundle.putString(TagsListFragment.TAGS_LIST_KEY, null);
         ((MainActivity) getActivity()).openOperationTagFragment(bundle);
+    }
+
+    public void openGoogleMap() {
+        Bundle bundle = new Bundle();
+        bundle.putString(OperationTagFragment.OPERATION_KEY, null);
+        ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
     }
 
     @Override

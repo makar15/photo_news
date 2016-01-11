@@ -75,17 +75,21 @@ public class TagDbAdapter {
 
     }
 
-    public Cursor getTag(long rowId) throws SQLException {
+    public String getTag(long rowId) throws SQLException {
         Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE,
                 new String[]{BaseColumns._ID}, BaseColumns._ID + "=" + rowId,
                 null, null, null, null, null);
 
+        String tag = null;
         if (cursor != null) {
-            if (!cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
+                tag = cursor.getString(cursor.getColumnIndex(TagDataBaseHelper.TAG_NAME_COLUMN));
+            } else {
                 Log.d(LOG_TAG, "0 rows");
             }
         }
-        return cursor;
+
+        return tag;
     }
 
     private ContentValues createContentValues(String tagName) {

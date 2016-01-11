@@ -43,7 +43,9 @@ public class ListPhotoResultTagFragment extends Fragment {
 
             @Override
             public void onRequestSuccess(PhotoNewsList photoNews) {
-                setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
+                if (photoNews != null) {
+                    setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
+                }
             }
         });
 
@@ -59,7 +61,9 @@ public class ListPhotoResultTagFragment extends Fragment {
 
                     @Override
                     public void onRequestSuccess(PhotoNewsList photoNews) {
-                        mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
+                        if (photoNews != null) {
+                            mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
+                        }
                     }
                 });
             }

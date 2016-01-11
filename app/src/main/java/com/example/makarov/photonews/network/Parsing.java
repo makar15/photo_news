@@ -17,7 +17,6 @@ public class Parsing {
     private String getUrlImage(JSONArray jsonArray, int indexImage) throws JSONException {
         JSONObject imageJsonObject = jsonArray.getJSONObject(indexImage)
                 .getJSONObject("images").getJSONObject(PHOTO_STANDART_RESOLUTION);
-        //TODO check NullPointerException imageJsonObject
         return imageJsonObject.getString("url");
     }
 
@@ -39,7 +38,7 @@ public class Parsing {
 
         try {
             JSONArray mJsonArray = json.getJSONArray("data");
-            int NUMBER_SINGLE_QUERY = 50;
+            int NUMBER_SINGLE_QUERY = 20;
             int count = 0;
 
             while (count != NUMBER_SINGLE_QUERY) {

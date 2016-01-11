@@ -29,19 +29,19 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
     public PhotoNewsList loadDataFromNetwork() throws Exception {
 
         try {
-            String responseMedia = StreamUtils.urlToString(mUrl);
-            JSONObject jsonObjectLocation = JsonUtils.getStringToJSONObject(responseMedia);
-            //saveNextUrlAccessPhotosTag(jsonObjectLocation);
+            StreamUtils.openHttpUrlConnection(null, mUrl);
+            String response = StreamUtils.urlToString(mUrl);
+            JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
+            //saveNextUrl(jsonObject);
 
-            return new Parsing().jsonToPhotoNews(jsonObjectLocation);
-
+            return new Parsing().jsonToPhotoNews(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private void saveNextUrlAccessPhotosTag(JSONObject jsonObject) {
+    private void saveNextUrlPhotos(JSONObject jsonObject) {
         try {
             JSONObject nextUrl = (JSONObject) jsonObject.get("pagination");
             mNextPageUrlSaver.setUrl((String) nextUrl.get("next_max_tag_id"));

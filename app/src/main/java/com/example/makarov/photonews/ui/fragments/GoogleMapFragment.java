@@ -70,6 +70,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
+                //TODO bag , long click ocean, NOT Geocoder
                 Geocoder geocoder = new Geocoder(getContext());
                 List<Address> list;
                 try {

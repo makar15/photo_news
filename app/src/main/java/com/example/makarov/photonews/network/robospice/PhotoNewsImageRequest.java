@@ -26,14 +26,14 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
     }
 
     @Override
-    public PhotoNewsList loadDataFromNetwork() throws Exception {
+    public PhotoNewsList loadDataFromNetwork() throws JSONException, IOException {
 
         try {
+            StreamUtils.openHttpUrlConnection(null, mUrl);
             String response = StreamUtils.urlToString(mUrl);
             JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
-            StreamUtils.openHttpUrlConnection(null, mUrl);
 
-            saveNextUrlPhotosTag(jsonObject);
+            saveNextUrl(jsonObject);
             return new Parsing().jsonToPhotoNews(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
         }
     }
 
-    private void saveNextUrlPhotosTag(JSONObject jsonObject) throws JSONException, IOException {
+    private void saveNextUrl(JSONObject jsonObject) throws JSONException, IOException {
         JSONObject next_url = (JSONObject) jsonObject.get("pagination");
         mNextPageUrlSaver.setUrl((String) next_url.get("next_max_tag_id"));
     }

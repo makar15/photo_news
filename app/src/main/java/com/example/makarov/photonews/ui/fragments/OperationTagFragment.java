@@ -27,7 +27,6 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         mLineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
         v.findViewById(R.id.sign_tag);
         v.findViewById(R.id.enter_search_btn).setOnClickListener(this);
-        v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
         v.findViewById(R.id.add_tag_btn).setOnClickListener(this);
 
         mLineTagSearch.addTextChangedListener(textWatcherBanSpace);
@@ -44,11 +43,6 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
                 if (!TextUtils.isEmpty(mTagSearch)) {
                     openListPhotoResultTag(mTagSearch);
                 }
-            }
-            break;
-
-            case R.id.search_by_location_btn: {
-                openGoogleMap();
             }
             break;
 
@@ -71,12 +65,6 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 
-    public void openGoogleMap() {
-        Bundle bundle = new Bundle();
-        bundle.putString(OperationTagFragment.OPERATION_KEY, null);
-        ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
-    }
-
     private TextWatcher textWatcherBanSpace = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -94,16 +82,17 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         }
     };
 
-    //TODO , bag - change point cursor mouse
     private void banSpace(Editable s) {
 
         int length = s.length();
 
         if (length != 0) {
             String enteredText = s.toString();
-            String lastChar = enteredText.substring(length - 1, length);
-            if (lastChar.equals(" ")) {
-                s.delete(length - 1, length);
+            char[] charArray = enteredText.toCharArray();
+            for (int i = 0; i < length; i++) {
+                if (charArray[i] == ' ') {
+                    s.delete(i, i + 1);
+                }
             }
         }
     }

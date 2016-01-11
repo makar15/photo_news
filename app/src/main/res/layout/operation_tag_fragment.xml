@@ -55,24 +55,6 @@
                         android:minWidth="96dp" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_weight="1">
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="search by location"
-                        android:id="@+id/search_by_location_btn"
-                        android:textColor="@android:color/black"
-                        android:textSize="10dp"
-                        android:padding="4dp" />
-
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
