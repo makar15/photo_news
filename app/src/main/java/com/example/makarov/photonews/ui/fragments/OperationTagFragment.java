@@ -18,26 +18,26 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     public static final String OPERATION_KEY = "operation";
 
-    private EditText lineTagSearch;
+    private EditText mLineTagSearch;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.operation_tag_fragment, null);
 
-        lineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
+        mLineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
         v.findViewById(R.id.sign_tag);
         v.findViewById(R.id.enter_search_btn).setOnClickListener(this);
         v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
         v.findViewById(R.id.add_tag_btn).setOnClickListener(this);
 
-        lineTagSearch.addTextChangedListener(textWatcherBanSpace);
+        mLineTagSearch.addTextChangedListener(textWatcherBanSpace);
 
         return v;
     }
 
     @Override
     public void onClick(View v) {
-        String mTagSearch = lineTagSearch.getText().toString();
+        String mTagSearch = mLineTagSearch.getText().toString();
 
         switch (v.getId()) {
             case R.id.enter_search_btn: {

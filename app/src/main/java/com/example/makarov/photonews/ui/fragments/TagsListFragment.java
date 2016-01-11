@@ -21,7 +21,6 @@ import java.util.List;
 public class TagsListFragment extends Fragment {
 
     public static final String TAGS_LIST_KEY = "tags_list";
-    private final String TAG = "myLogs";
 
     private RecyclerView mRecyclerView;
     private TagAdapter mTagAdapter;

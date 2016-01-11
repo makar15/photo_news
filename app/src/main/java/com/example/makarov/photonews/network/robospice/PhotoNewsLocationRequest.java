@@ -13,12 +13,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 
-public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsList> {
+public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNewsList> {
 
     private URL mUrl;
     private NextPageUrlSaver mNextPageUrlSaver;
 
-    public PhotoNewsImageRequest(URL url, NextPageUrlSaver nextPageUrlSaver) {
+    public PhotoNewsLocationRequest(URL url, NextPageUrlSaver nextPageUrlSaver) {
         super(PhotoNewsList.class);
 
         mUrl = url;
@@ -29,21 +29,25 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
     public PhotoNewsList loadDataFromNetwork() throws Exception {
 
         try {
-            String response = StreamUtils.urlToString(mUrl);
-            JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
-            StreamUtils.openHttpUrlConnection(null, mUrl);
+            String responseMedia = StreamUtils.urlToString(mUrl);
+            JSONObject jsonObjectLocation = JsonUtils.getStringToJSONObject(responseMedia);
+            //saveNextUrlAccessPhotosTag(jsonObjectLocation);
 
-            saveNextUrlPhotosTag(jsonObject);
-            return new Parsing().jsonToPhotoNews(jsonObject);
+            return new Parsing().jsonToPhotoNews(jsonObjectLocation);
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private void saveNextUrlPhotosTag(JSONObject jsonObject) throws JSONException, IOException {
-        JSONObject next_url = (JSONObject) jsonObject.get("pagination");
-        mNextPageUrlSaver.setUrl((String) next_url.get("next_max_tag_id"));
+    private void saveNextUrlAccessPhotosTag(JSONObject jsonObject) {
+        try {
+            JSONObject nextUrl = (JSONObject) jsonObject.get("pagination");
+            mNextPageUrlSaver.setUrl((String) nextUrl.get("next_max_tag_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String createCacheKey() {

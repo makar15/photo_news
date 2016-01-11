@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
+import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinderTag;
@@ -23,7 +23,7 @@ import java.util.List;
 public class ListPhotoHistoryTagFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private PhotoResultTagAdapter mPhotoAdapter;
+    private PhotoResultAdapter mPhotoAdapter;
     private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class ListPhotoHistoryTagFragment extends Fragment {
         String lineTag = getArgumentsBundleLineTag(getArguments());
         final PostFinderTag postFinderTag = new PostFinderTag(lineTag);
 
-        postFinderTag.requestPhotosTag(new RequestListener<PhotoNewsList>() {
+        postFinderTag.requestPhotos(new RequestListener<PhotoNewsList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
@@ -51,7 +51,7 @@ public class ListPhotoHistoryTagFragment extends Fragment {
             @Override
             public void onLoadMore() {
 
-                postFinderTag.nextRequestPhotosTag(new RequestListener<PhotoNewsList>() {
+                postFinderTag.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 
@@ -80,7 +80,7 @@ public class ListPhotoHistoryTagFragment extends Fragment {
     }
 
     private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
-        mPhotoAdapter = new PhotoResultTagAdapter(photoNews);
+        mPhotoAdapter = new PhotoResultAdapter(photoNews);
         mRecyclerView.setAdapter(mPhotoAdapter);
     }
 

@@ -15,14 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by makarov on 14.12.15.
  * generates a list of photos, with updating
  */
-public class PhotoResultTagAdapter extends RecyclerView.Adapter<PhotoResultTagAdapter.ResultViewHolder> {
+public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.ResultViewHolder> {
 
     private List<PhotoNewsPost> mPhotoNews = new ArrayList<>();
 
-    public PhotoResultTagAdapter(List<PhotoNewsPost> urlPhotos) {
+    public PhotoResultAdapter(List<PhotoNewsPost> urlPhotos) {
         mPhotoNews.addAll(urlPhotos);
     }
 

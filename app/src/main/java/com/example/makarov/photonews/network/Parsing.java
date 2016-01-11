@@ -39,7 +39,7 @@ public class Parsing {
 
         try {
             JSONArray mJsonArray = json.getJSONArray("data");
-            int NUMBER_SINGLE_QUERY = 20;
+            int NUMBER_SINGLE_QUERY = 50;
             int count = 0;
 
             while (count != NUMBER_SINGLE_QUERY) {

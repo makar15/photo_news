@@ -10,17 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.PhotoResultTagAdapter;
-import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
+import com.example.makarov.photonews.adapters.PhotoResultAdapter;
+import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.PhotoNewsPost;
+import com.example.makarov.photonews.network.PostFinderLocation;
+import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
 public class ListPhotoResultLocationFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    //TODO change name PhotoResultTagAdapter for PhotoResultAdapter
-    private PhotoResultTagAdapter mPhotoAdapter;
+    private PhotoResultAdapter mPhotoAdapter;
     private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,12 +33,18 @@ public class ListPhotoResultLocationFragment extends Fragment {
         setLayoutManagerForRecyclerView();
 
         double[] pointLocation = getArgumentsBundleLocation(getArguments());
+        Address address = new Address(pointLocation[0], pointLocation[1]);
+        final PostFinderLocation postFinderLocation = new PostFinderLocation(address);
 
-
-        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+        postFinderLocation.requestPhotos(new RequestListener<PhotoNewsList>() {
             @Override
-            public void onLoadMore() {
+            public void onRequestFailure(SpiceException spiceException) {
 
+            }
+
+            @Override
+            public void onRequestSuccess(PhotoNewsList photoNews) {
+                setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
             }
         });
 
@@ -54,7 +63,7 @@ public class ListPhotoResultLocationFragment extends Fragment {
     }
 
     private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
-        mPhotoAdapter = new PhotoResultTagAdapter(photoNews);
+        mPhotoAdapter = new PhotoResultAdapter(photoNews);
         mRecyclerView.setAdapter(mPhotoAdapter);
     }
 

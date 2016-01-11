@@ -37,7 +37,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
     private GoogleMap mMap;
     private Marker mMarker;
-    private Address address;
+    private Address mAddress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,12 +78,12 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
                     return;
                 }
 
-                address = list.get(0);
+                mAddress = list.get(0);
                 if (mMarker != null) {
                     mMarker.remove();
                 }
                 MarkerOptions options = new MarkerOptions()
-                        .title(address.getLocality())
+                        .title(mAddress.getLocality())
                         .position(new LatLng(latLng.latitude, latLng.longitude));
 
                 mMarker = mMap.addMarker(options);
@@ -110,7 +110,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
             case R.id.open_photo_btn: {
                 if (mMarker != null) {
-                    openListPhotoResultLocation(address);
+                    openListPhotoResultLocation(mAddress);
                 }
             }
             break;
@@ -125,10 +125,10 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> list = geocoder.getFromLocationName(location, 1);
 
-        address = list.get(0);
+        mAddress = list.get(0);
 
-        String locality = address.getLocality();
-        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+        String locality = mAddress.getLocality();
+        LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
 
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         mMap.moveCamera(update);
@@ -139,7 +139,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .title(locality)
-                .position(new LatLng(address.getLatitude(), address.getLongitude()));
+                .position(new LatLng(mAddress.getLatitude(), mAddress.getLongitude()));
 
         mMarker = mMap.addMarker(markerOptions);
 

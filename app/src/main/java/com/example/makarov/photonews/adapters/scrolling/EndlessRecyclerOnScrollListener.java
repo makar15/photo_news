@@ -3,9 +3,6 @@ package com.example.makarov.photonews.adapters.scrolling;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-/**
- * Created by makarov on 14.12.15.
- */
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
     private LinearLayoutManager mLinearLayoutManager;
