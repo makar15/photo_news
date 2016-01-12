@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -49,6 +50,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         mLineNameLocation = (EditText) v.findViewById(R.id.line_name_location);
         v.findViewById(R.id.search_location_btn).setOnClickListener(this);
         v.findViewById(R.id.open_photo_btn).setOnClickListener(this);
+        v.findViewById(R.id.add_location_btn).setOnClickListener(this);
 
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();
@@ -83,6 +85,9 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
                     removeExistingMarker();
                     initMarker();
+                } else {
+                    Toast.makeText(getContext(), "address is not found in Google maps",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -112,6 +117,14 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
             }
             break;
 
+            case R.id.add_location_btn: {
+
+                if (mMarker != null) {
+                    //PhotoNewsApp.getApp().getTagDbAdapter().open().createTag(mTagSearch);
+                }
+            }
+            break;
+
             default:
                 break;
         }
@@ -122,15 +135,18 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> list = geocoder.getFromLocationName(location, 1);
 
-        if(!list.isEmpty()) {
+        if (!list.isEmpty()) {
             mAddress = list.get(0);
 
             LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 12);
             mMap.moveCamera(update);
 
             removeExistingMarker();
             initMarker();
+        } else {
+            Toast.makeText(getContext(), "address is not found in Google maps",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

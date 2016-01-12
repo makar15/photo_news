@@ -50,7 +50,7 @@ public class ListPhotoResultLocationFragment extends Fragment {
                 }
             }
         });
-
+//TODO , bug!, search by location -> scroll RecyclerView -> copy( last + 1) == last item PhotoNews
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore() {

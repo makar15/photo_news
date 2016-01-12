@@ -11,7 +11,7 @@ import com.example.makarov.photonews.ui.fragments.ListPhotoHistoryTagFragment;
 import com.example.makarov.photonews.ui.fragments.ListPhotoResultLocationFragment;
 import com.example.makarov.photonews.ui.fragments.ListPhotoResultTagFragment;
 import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
-import com.example.makarov.photonews.ui.fragments.TagsListFragment;
+import com.example.makarov.photonews.ui.fragments.SubscriptionsListFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -22,7 +22,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        openBaseFragment(new TagsListFragment());
+        openBaseFragment(new SubscriptionsListFragment());
     }
 
     public void openOperationTagFragment(Bundle bundle) {
@@ -57,7 +57,7 @@ public class MainActivity extends FragmentActivity {
 
     private void openFragment(Fragment fragment, boolean saveInBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.LayoutActivityMain, fragment);
+        ft.replace(R.id.layout_activity_main, fragment);
         if (saveInBackStack)
             ft.addToBackStack(KEY_ADD_FRAGMENT_TO_BACK_STACK);
         ft.commit();
@@ -65,6 +65,6 @@ public class MainActivity extends FragmentActivity {
 
     private void openBaseFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.LayoutActivityMain, fragment).commit();
+        ft.add(R.id.layout_activity_main, fragment).commit();
     }
 }

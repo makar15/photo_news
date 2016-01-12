@@ -96,9 +96,9 @@ public class ListPhotoHistoryTagFragment extends Fragment {
     private String getArgumentsBundleLineTag(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             return null;
-        if (!savedInstanceState.containsKey(TagsListFragment.TAGS_LIST_KEY))
+        if (!savedInstanceState.containsKey(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY))
             return null;
-        return savedInstanceState.getString(TagsListFragment.TAGS_LIST_KEY);
+        return savedInstanceState.getString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY);
 
     }
 }

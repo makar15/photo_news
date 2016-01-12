@@ -11,31 +11,29 @@ import android.view.ViewGroup;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.TagAdapter;
+import com.example.makarov.photonews.adapters.AdapterSubscriptions;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
 import java.util.List;
 
-public class TagsListFragment extends Fragment implements View.OnClickListener {
+public class SubscriptionsListFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAGS_LIST_KEY = "tags_list";
+    public static final String SUBSCRIPTIONS_LIST_KEY = "subscriptions_list";
 
-    private RecyclerView mRecyclerView;
-    private TagAdapter mTagAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private RecyclerView mLvSubscriptions;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tags_list_fragment, null);
+        View v = inflater.inflate(R.layout.subscriptions_list_fragment, null);
 
         v.findViewById(R.id.search_by_tag_btn).setOnClickListener(this);
         v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.lvTags);
+        mLvSubscriptions = (RecyclerView) v.findViewById(R.id.lv_subscriptions);
         setLayoutManagerForRecyclerView();
 
-        List<String> tags = PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags();
-        setAdapterForRecyclerView(tags);
+        List<String> photoNews = PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags();
+        setAdapterForRecyclerView(photoNews);
 
         return v;
     }
@@ -60,13 +58,13 @@ public class TagsListFragment extends Fragment implements View.OnClickListener {
 
     public void openListPhotoHistoryTag(String lineTag) {
         Bundle bundle = new Bundle();
-        bundle.putString(TagsListFragment.TAGS_LIST_KEY, lineTag);
+        bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoHistoryTagFragment(bundle);
     }
 
     public void openOperationTag() {
         Bundle bundle = new Bundle();
-        bundle.putString(TagsListFragment.TAGS_LIST_KEY, null);
+        bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, null);
         ((MainActivity) getActivity()).openOperationTagFragment(bundle);
     }
 
@@ -83,24 +81,25 @@ public class TagsListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setLayoutManagerForRecyclerView() {
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mLvSubscriptions.setLayoutManager(mLayoutManager);
     }
 
     private void setAdapterForRecyclerView(List<String> tags) {
-        mTagAdapter = new TagAdapter(tags, new TagAdapter.OnClickOpenPhotoNews() {
+        AdapterSubscriptions mSubscriptionsAdapter =
+                new AdapterSubscriptions(tags, new AdapterSubscriptions.OnClickOpenPhotoNews() {
             @Override
             public void onClick(String clickLineTag) {
                 openListPhotoHistoryTag(clickLineTag);
             }
         });
-        mRecyclerView.setAdapter(mTagAdapter);
+        mLvSubscriptions.setAdapter(mSubscriptionsAdapter);
     }
 
     private void initializeHistoryRecyclerView() {
-        mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mLvSubscriptions.setHasFixedSize(false);
+        mLvSubscriptions.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override

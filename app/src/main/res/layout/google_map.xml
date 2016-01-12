@@ -18,7 +18,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:layout_width="100dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:id="@+id/line_name_location"
             android:layout_gravity="center_horizontal" />
@@ -26,14 +26,23 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Go"
             android:id="@+id/search_location_btn" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="open photo"
+            android:layout_weight="1"
+            android:text="open"
             android:id="@+id/open_photo_btn" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="add"
+            android:id="@+id/add_location_btn" />
 
     </LinearLayout>
 

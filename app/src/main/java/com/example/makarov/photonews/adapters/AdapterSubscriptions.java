@@ -11,12 +11,12 @@ import com.example.makarov.photonews.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
+public class AdapterSubscriptions extends RecyclerView.Adapter<AdapterSubscriptions.TagViewHolder> {
 
     private List<String> mTags = new ArrayList<>();
     private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
 
-    public TagAdapter(List<String> tags, OnClickOpenPhotoNews onClickOpenPhotoNews) {
+    public AdapterSubscriptions(List<String> tags, OnClickOpenPhotoNews onClickOpenPhotoNews) {
         mTags = tags;
         mOnClickOpenPhotoNews = onClickOpenPhotoNews;
     }
