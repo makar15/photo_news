@@ -43,7 +43,6 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
 
-
         MapsInitializer.initialize(getContext());
 
         mMapView = (MapView) v.findViewById(R.id.map);
@@ -70,7 +69,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                //TODO bag , long click ocean, NOT Geocoder
+
                 Geocoder geocoder = new Geocoder(getContext());
                 List<Address> list;
                 try {
@@ -79,15 +78,12 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
                     return;
                 }
 
-                mAddress = list.get(0);
-                if (mMarker != null) {
-                    mMarker.remove();
-                }
-                MarkerOptions options = new MarkerOptions()
-                        .title(mAddress.getLocality())
-                        .position(new LatLng(latLng.latitude, latLng.longitude));
+                if (!list.isEmpty()) {
+                    mAddress = list.get(0);
 
-                mMarker = mMap.addMarker(options);
+                    removeExistingMarker();
+                    initMarker();
+                }
             }
         });
     }
@@ -126,24 +122,16 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> list = geocoder.getFromLocationName(location, 1);
 
-        mAddress = list.get(0);
+        if(!list.isEmpty()) {
+            mAddress = list.get(0);
 
-        String locality = mAddress.getLocality();
-        LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
+            LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+            mMap.moveCamera(update);
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-        mMap.moveCamera(update);
-
-        if (mMarker != null) {
-            mMarker.remove();
+            removeExistingMarker();
+            initMarker();
         }
-
-        MarkerOptions markerOptions = new MarkerOptions()
-                .title(locality)
-                .position(new LatLng(mAddress.getLatitude(), mAddress.getLongitude()));
-
-        mMarker = mMap.addMarker(markerOptions);
-
     }
 
     public void openListPhotoResultLocation(Address addressLocation) {
@@ -166,6 +154,20 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         } else {
             final int RQS_GooglePlayServices = 1;
             GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), RQS_GooglePlayServices);
+        }
+    }
+
+    public void initMarker() {
+        MarkerOptions markerOptions = new MarkerOptions()
+                .title(mAddress.getLocality())
+                .position(new LatLng(mAddress.getLatitude(), mAddress.getLongitude()));
+
+        mMarker = mMap.addMarker(markerOptions);
+    }
+
+    public void removeExistingMarker() {
+        if (mMarker != null) {
+            mMarker.remove();
         }
     }
 
