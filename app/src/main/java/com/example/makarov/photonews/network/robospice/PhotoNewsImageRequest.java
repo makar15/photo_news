@@ -43,7 +43,7 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
 
     private void saveNextUrl(JSONObject jsonObject) throws JSONException, IOException {
         JSONObject next_url = (JSONObject) jsonObject.get("pagination");
-        mNextPageUrlSaver.setUrl((String) next_url.get("next_max_tag_id"));
+        mNextPageUrlSaver.setUrl(next_url.getString("next_url"));
     }
 
     public String createCacheKey() {

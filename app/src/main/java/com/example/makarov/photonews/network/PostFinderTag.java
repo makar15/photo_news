@@ -19,7 +19,7 @@ public class PostFinderTag implements PostFinder {
 
     public PostFinderTag(String lineTag) {
         mLineTag = lineTag;
-        mNextPageUrlSaver = new NextPageUrlSaverTag(mLineTag);
+        mNextPageUrlSaver = new NextPageUrlSaverTag();
     }
 
     public void requestPhotos(RequestListener<PhotoNewsList> requestListener) {
