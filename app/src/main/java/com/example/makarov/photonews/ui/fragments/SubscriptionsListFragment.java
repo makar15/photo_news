@@ -32,7 +32,9 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         mLvSubscriptions = (RecyclerView) v.findViewById(R.id.lv_subscriptions);
         setLayoutManagerForRecyclerView();
 
+        //TODO temporarily
         List<String> photoNews = PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags();
+        photoNews.addAll(PhotoNewsApp.getApp().getLocationDbAdapter().open().getAllLocations());
         setAdapterForRecyclerView(photoNews);
 
         return v;
@@ -56,19 +58,19 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         }
     }
 
-    public void openListPhotoHistoryTag(String lineTag) {
+    private void openListPhotoHistoryTag(String lineTag) {
         Bundle bundle = new Bundle();
         bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoHistoryTagFragment(bundle);
     }
 
-    public void openOperationTag() {
+    private void openOperationTag() {
         Bundle bundle = new Bundle();
         bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, null);
         ((MainActivity) getActivity()).openOperationTagFragment(bundle);
     }
 
-    public void openGoogleMap() {
+    private void openGoogleMap() {
         Bundle bundle = new Bundle();
         bundle.putString(OperationTagFragment.OPERATION_KEY, null);
         ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
@@ -107,5 +109,6 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         super.onDestroy();
 
         PhotoNewsApp.getApp().getTagDbAdapter().close();
+        PhotoNewsApp.getApp().getLocationDbAdapter().close();
     }
 }

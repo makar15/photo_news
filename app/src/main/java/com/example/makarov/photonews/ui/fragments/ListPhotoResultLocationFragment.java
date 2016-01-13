@@ -33,8 +33,7 @@ public class ListPhotoResultLocationFragment extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_result_tag);
         setLayoutManagerForRecyclerView();
 
-        double[] pointLocation = getArgumentsBundleLocation(getArguments());
-        Address address = new Address(pointLocation[0], pointLocation[1]);
+        Address address = getArgumentsBundleLocation(getArguments());
         final PostFinderLocation postFinderLocation = new PostFinderLocation(address);
 
         postFinderLocation.requestPhotos(new RequestListener<PhotoNewsList>() {
@@ -50,7 +49,7 @@ public class ListPhotoResultLocationFragment extends Fragment {
                 }
             }
         });
-//TODO , bug!, search by location -> scroll RecyclerView -> copy( last + 1) == last item PhotoNews
+        //TODO , bug!, search by location -> scroll RecyclerView -> copy( last + 1) == last item PhotoNews
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore() {
@@ -95,12 +94,12 @@ public class ListPhotoResultLocationFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private double[] getArgumentsBundleLocation(Bundle savedInstanceState) {
+    private Address getArgumentsBundleLocation(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             return null;
         if (!savedInstanceState.containsKey(GoogleMapFragment.GOOGLE_MAP_KEY))
             return null;
-        return savedInstanceState.getDoubleArray(GoogleMapFragment.GOOGLE_MAP_KEY);
+        return savedInstanceState.getParcelable(GoogleMapFragment.GOOGLE_MAP_KEY);
 
     }
 }

@@ -59,7 +59,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void openListPhotoResultTag(String lineTag) {
+    private void openListPhotoResultTag(String lineTag) {
         Bundle bundle = new Bundle();
         bundle.putString(OperationTagFragment.OPERATION_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);

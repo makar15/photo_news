@@ -112,15 +112,14 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
             case R.id.open_photo_btn: {
                 if (mMarker != null) {
-                    openListPhotoResultLocation(mAddress);
+                    openListPhotoResultLocation(initDbAddress());
                 }
             }
             break;
 
             case R.id.add_location_btn: {
-
                 if (mMarker != null) {
-                    //PhotoNewsApp.getApp().getTagDbAdapter().open().createTag(mTagSearch);
+                    PhotoNewsApp.getApp().getLocationDbAdapter().open().createLocation(initDbAddress());
                 }
             }
             break;
@@ -130,7 +129,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void findLocation(String location) throws IOException {
+    private void findLocation(String location) throws IOException {
 
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> list = geocoder.getFromLocationName(location, 1);
@@ -150,10 +149,9 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void openListPhotoResultLocation(Address addressLocation) {
-        double[] pointLocation = {addressLocation.getLatitude(), addressLocation.getLongitude()};
+    private void openListPhotoResultLocation(com.example.makarov.photonews.models.Address address) {
         Bundle bundle = new Bundle();
-        bundle.putDoubleArray(GoogleMapFragment.GOOGLE_MAP_KEY, pointLocation);
+        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, address);
         ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
     }
 
@@ -173,7 +171,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void initMarker() {
+    private void initMarker() {
         MarkerOptions markerOptions = new MarkerOptions()
                 .title(mAddress.getLocality())
                 .position(new LatLng(mAddress.getLatitude(), mAddress.getLongitude()));
@@ -181,10 +179,16 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         mMarker = mMap.addMarker(markerOptions);
     }
 
-    public void removeExistingMarker() {
+    private void removeExistingMarker() {
         if (mMarker != null) {
             mMarker.remove();
         }
+    }
+
+    private com.example.makarov.photonews.models.Address initDbAddress() {
+        return new com.example.makarov.photonews.models.Address(mAddress.getLatitude(),
+                mAddress.getLongitude(), mAddress.getCountryName(),
+                mAddress.getLocality(), mAddress.getThoroughfare());
     }
 
     @Override

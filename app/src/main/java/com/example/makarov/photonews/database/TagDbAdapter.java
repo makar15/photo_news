@@ -15,7 +15,7 @@ public class TagDbAdapter {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
-    private TagDataBaseHelper mDbHelper;
+    private DataBaseHelper mDbHelper;
 
     final String LOG_TAG = "myLogs";
 
@@ -24,8 +24,8 @@ public class TagDbAdapter {
     }
 
     public TagDbAdapter open() throws SQLException {
-        mDbHelper = new TagDataBaseHelper(mContext);
-        mDatabase = mDbHelper.getWritableDatabase();
+        mDbHelper = new DataBaseHelper(mContext);
+        mDatabase = mDbHelper.getReadableDatabase();
 
         return this;
     }
@@ -37,31 +37,31 @@ public class TagDbAdapter {
     public long createTag(String tagName) {
         ContentValues initialValues = createContentValues(tagName);
 
-        return mDatabase.insert(TagDataBaseHelper.DATABASE_TABLE, null, initialValues);
+        return mDatabase.insert(DataBaseHelper.TABLE_TAGS, null, initialValues);
     }
 
     public boolean updateTag(long rowId, String tagName) {
         ContentValues updateValues = createContentValues(tagName);
 
-        return mDatabase.update(TagDataBaseHelper.DATABASE_TABLE, updateValues, BaseColumns._ID + "="
+        return mDatabase.update(DataBaseHelper.TABLE_TAGS, updateValues, BaseColumns._ID + "="
                 + rowId, null) > 0;
     }
 
     public boolean deleteTag(long rowId) {
         return mDatabase.
-                delete(TagDataBaseHelper.DATABASE_TABLE, BaseColumns._ID + "=" + rowId, null) > 0;
+                delete(DataBaseHelper.TABLE_TAGS, BaseColumns._ID + "=" + rowId, null) > 0;
     }
 
     public List<String> getAllTags() {
-        Cursor cursor = mDatabase.query(TagDataBaseHelper.DATABASE_TABLE, new String[]{BaseColumns._ID,
-                TagDataBaseHelper.TAG_NAME_COLUMN}, null, null, null, null, null);
+        Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_TAGS, new String[]{BaseColumns._ID,
+                DataBaseHelper.TAG_NAME_COLUMN}, null, null, null, null, null);
 
         List<String> tags = new ArrayList<>();
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
 
-                int nameTagColumnIndex = cursor.getColumnIndex(TagDataBaseHelper.TAG_NAME_COLUMN);
+                int nameTagColumnIndex = cursor.getColumnIndex(DataBaseHelper.TAG_NAME_COLUMN);
                 do {
                     tags.add(cursor.getString(nameTagColumnIndex));
                 } while (cursor.moveToNext());
@@ -76,14 +76,14 @@ public class TagDbAdapter {
     }
 
     public String getTag(long rowId) throws SQLException {
-        Cursor cursor = mDatabase.query(true, TagDataBaseHelper.DATABASE_TABLE,
+        Cursor cursor = mDatabase.query(true, DataBaseHelper.TABLE_TAGS,
                 new String[]{BaseColumns._ID}, BaseColumns._ID + "=" + rowId,
                 null, null, null, null, null);
 
         String tag = null;
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                tag = cursor.getString(cursor.getColumnIndex(TagDataBaseHelper.TAG_NAME_COLUMN));
+                tag = cursor.getString(cursor.getColumnIndex(DataBaseHelper.TAG_NAME_COLUMN));
             } else {
                 Log.d(LOG_TAG, "0 rows");
             }
@@ -94,7 +94,7 @@ public class TagDbAdapter {
 
     private ContentValues createContentValues(String tagName) {
         ContentValues values = new ContentValues();
-        values.put(TagDataBaseHelper.TAG_NAME_COLUMN, tagName);
+        values.put(DataBaseHelper.TAG_NAME_COLUMN, tagName);
 
         return values;
     }
