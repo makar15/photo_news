@@ -22,6 +22,8 @@ import java.util.List;
 
 public class ListPhotoResultTagFragment extends Fragment {
 
+    public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
+
     private RecyclerView mRecyclerView;
     private PhotoResultAdapter mPhotoAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -96,9 +98,9 @@ public class ListPhotoResultTagFragment extends Fragment {
     private String getArgumentsBundleLineTag(Bundle savedInstanceState) {
         if (savedInstanceState == null)
             return null;
-        if (!savedInstanceState.containsKey(OperationTagFragment.OPERATION_KEY))
+        if (!savedInstanceState.containsKey(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY))
             return null;
-        return savedInstanceState.getString(OperationTagFragment.OPERATION_KEY);
+        return savedInstanceState.getString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY);
 
     }
 }

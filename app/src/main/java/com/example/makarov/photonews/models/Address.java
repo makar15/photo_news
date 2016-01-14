@@ -3,20 +3,23 @@ package com.example.makarov.photonews.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Address implements Parcelable {
+public class Address implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
     private final String mCountryName;
     private final String mLocality;
     private final String mThoroughfare;
+    private final long mDate;
 
-    public Address(double latitude, double longitude, String countryName, String locality, String thoroughfare) {
+    public Address(double latitude, double longitude, String countryName,
+                   String locality, String thoroughfare, long date) {
         mLatitude = latitude;
         mLongitude = longitude;
         mCountryName = countryName;
         mLocality = locality;
         mThoroughfare = thoroughfare;
+        mDate = date;
     }
 
     protected Address(Parcel in) {
@@ -25,6 +28,7 @@ public class Address implements Parcelable {
         mCountryName = in.readString();
         mLocality = in.readString();
         mThoroughfare = in.readString();
+        mDate = in.readLong();
     }
 
     public static final Creator<Address> CREATOR = new Creator<Address>() {
@@ -59,6 +63,10 @@ public class Address implements Parcelable {
         return mThoroughfare;
     }
 
+    public long getDate() {
+        return mDate;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -71,5 +79,6 @@ public class Address implements Parcelable {
         dest.writeString(mCountryName);
         dest.writeString(mLocality);
         dest.writeString(mThoroughfare);
+        dest.writeLong(mDate);
     }
 }

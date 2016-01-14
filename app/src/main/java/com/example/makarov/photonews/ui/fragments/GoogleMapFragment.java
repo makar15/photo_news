@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class GoogleMapFragment extends Fragment implements View.OnClickListener {
@@ -112,14 +113,15 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
             case R.id.open_photo_btn: {
                 if (mMarker != null) {
-                    openListPhotoResultLocation(initDbAddress());
+                    openListPhotoResultLocation(initDbModelAddress());
                 }
             }
             break;
 
             case R.id.add_location_btn: {
                 if (mMarker != null) {
-                    PhotoNewsApp.getApp().getLocationDbAdapter().open().createLocation(initDbAddress());
+                    PhotoNewsApp.getApp().getLocationDbAdapter()
+                            .open().addLocation(initDbModelAddress());
                 }
             }
             break;
@@ -185,10 +187,10 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private com.example.makarov.photonews.models.Address initDbAddress() {
+    private com.example.makarov.photonews.models.Address initDbModelAddress() {
         return new com.example.makarov.photonews.models.Address(mAddress.getLatitude(),
                 mAddress.getLongitude(), mAddress.getCountryName(),
-                mAddress.getLocality(), mAddress.getThoroughfare());
+                mAddress.getLocality(), mAddress.getThoroughfare(), new Date().getTime());
     }
 
     @Override

@@ -11,22 +11,30 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_TAGS = "tags";
+
     public static final String TAG_NAME_COLUMN = "tag_name";
     public static final String DATE_ADD_TAG_COLUMN = "date_add_tag";
 
     public static final String TABLE_LOCATIONS = "locations";
-    public static final String LOCATION_NAME_COLUMN = "location_name";
+
+    public static final String COUNTRY_NAME_COLUMN = "country_name";
+    public static final String LOCALITY_COLUMN = "locality";
+    public static final String THOROUGHFARE_COLUMN = "thoroughfare";
     public static final String DATE_ADD_LOCATION_COLUMN = "date_add_location";
+    public static final String LATITUDE_COLUMN = "latitude";
+    public static final String LONGITUDE_COLUMN = "longitude";
 
     private static final String DATABASE_CREATE_SCRIPT_TAGS = "create table "
             + TABLE_TAGS + " (" + BaseColumns._ID
             + " integer primary key autoincrement, " + TAG_NAME_COLUMN
-            + " text not null unique" + ");";
+            + " text not null unique, " + DATE_ADD_TAG_COLUMN + " integer" + ");";
 
     private static final String DATABASE_CREATE_SCRIPT_LOCATIONS = "create table "
             + TABLE_LOCATIONS + " (" + BaseColumns._ID
-            + " integer primary key autoincrement, " + LOCATION_NAME_COLUMN
-            + " text not null unique" + ");";
+            + " integer primary key autoincrement, " + LOCALITY_COLUMN
+            + " text, " + COUNTRY_NAME_COLUMN + " text, "
+            + THOROUGHFARE_COLUMN + " text, " + DATE_ADD_LOCATION_COLUMN + " integer,"
+            + LATITUDE_COLUMN + " integer," + LONGITUDE_COLUMN + " integer" + ");";
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

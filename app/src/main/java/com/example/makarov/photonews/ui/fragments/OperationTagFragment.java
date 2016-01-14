@@ -12,7 +12,10 @@ import android.widget.EditText;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+
+import java.util.Date;
 
 public class OperationTagFragment extends Fragment implements View.OnClickListener {
 
@@ -49,7 +52,8 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
             case R.id.add_tag_btn: {
 
                 if (!TextUtils.isEmpty(mTagSearch)) {
-                    PhotoNewsApp.getApp().getTagDbAdapter().open().createTag(mTagSearch);
+                    PhotoNewsApp.getApp().getTagDbAdapter().open()
+                            .addTag(new Tag(mTagSearch, new Date().getTime()));
                 }
             }
             break;
@@ -61,7 +65,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     private void openListPhotoResultTag(String lineTag) {
         Bundle bundle = new Bundle();
-        bundle.putString(OperationTagFragment.OPERATION_KEY, lineTag);
+        bundle.putString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 

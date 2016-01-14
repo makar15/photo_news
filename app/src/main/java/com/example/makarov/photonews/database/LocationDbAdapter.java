@@ -36,7 +36,7 @@ public class LocationDbAdapter {
         mDbHelper.close();
     }
 
-    public long createLocation(Address address) {
+    public long addLocation(Address address) {
         ContentValues initialValues = createContentValues(address);
 
         return mDatabase.insert(DataBaseHelper.TABLE_LOCATIONS, null, initialValues);
@@ -54,49 +54,56 @@ public class LocationDbAdapter {
                 delete(DataBaseHelper.TABLE_LOCATIONS, BaseColumns._ID + "=" + rowId, null) > 0;
     }
 
-    public List<String> getAllLocations() {
+    public List<Address> getAllLocations() {
         Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_LOCATIONS, new String[]{BaseColumns._ID,
-                DataBaseHelper.LOCATION_NAME_COLUMN}, null, null, null, null, null);
+                        DataBaseHelper.COUNTRY_NAME_COLUMN, DataBaseHelper.LOCALITY_COLUMN,
+                        DataBaseHelper.THOROUGHFARE_COLUMN, DataBaseHelper.DATE_ADD_LOCATION_COLUMN,
+                        DataBaseHelper.LATITUDE_COLUMN, DataBaseHelper.LONGITUDE_COLUMN},
+                null, null, null, null, null);
 
-        List<String> locations = new ArrayList<>();
+        List<Address> locations = new ArrayList<>();
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-
-                int nameLocationColumnIndex = cursor.getColumnIndex(DataBaseHelper.LOCATION_NAME_COLUMN);
                 do {
-                    locations.add(cursor.getString(nameLocationColumnIndex));
+                    locations.add(getLocation(cursor));
+
                 } while (cursor.moveToNext());
             } else {
                 Log.d(LOG_TAG, "0 rows");
             }
             cursor.close();
         }
-
         return locations;
-
     }
 
-    public String getLocation(long rowId) throws SQLException {
-        Cursor cursor = mDatabase.query(true, DataBaseHelper.TABLE_LOCATIONS,
-                new String[]{BaseColumns._ID}, BaseColumns._ID + "=" + rowId,
-                null, null, null, null, null);
+    public Address getLocation(Cursor cursor) {
 
-        String location = null;
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                location = cursor.getString(cursor.getColumnIndex(DataBaseHelper.LOCATION_NAME_COLUMN));
-            } else {
-                Log.d(LOG_TAG, "0 rows");
-            }
-        }
+        String countryName = cursor.getString
+                (cursor.getColumnIndex(DataBaseHelper.COUNTRY_NAME_COLUMN));
+        String locality = cursor.getString
+                (cursor.getColumnIndex(DataBaseHelper.LOCALITY_COLUMN));
+        String thoroughfare = cursor.getString
+                (cursor.getColumnIndex(DataBaseHelper.THOROUGHFARE_COLUMN));
+        long date = cursor.getLong
+                (cursor.getColumnIndex(DataBaseHelper.DATE_ADD_LOCATION_COLUMN));
+        double latitude = cursor.getDouble
+                (cursor.getColumnIndex(DataBaseHelper.LATITUDE_COLUMN));
+        double longitude = cursor.getDouble
+                (cursor.getColumnIndex(DataBaseHelper.LONGITUDE_COLUMN));
 
-        return location;
+        return new Address(latitude, longitude,
+                countryName, locality, thoroughfare, date);
     }
 
     private ContentValues createContentValues(Address address) {
         ContentValues values = new ContentValues();
-        values.put(DataBaseHelper.LOCATION_NAME_COLUMN, address.getLatitude());
+        values.put(DataBaseHelper.COUNTRY_NAME_COLUMN, address.getCountryName());
+        values.put(DataBaseHelper.LOCALITY_COLUMN, address.getLocality());
+        values.put(DataBaseHelper.THOROUGHFARE_COLUMN, address.getThoroughfare());
+        values.put(DataBaseHelper.DATE_ADD_LOCATION_COLUMN, address.getDate());
+        values.put(DataBaseHelper.LATITUDE_COLUMN, address.getLatitude());
+        values.put(DataBaseHelper.LONGITUDE_COLUMN, address.getLongitude());
 
         return values;
     }
