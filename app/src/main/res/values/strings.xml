@@ -4,4 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="message_text">Enter your new name</string>
+    <string name="change">change</string>
+    <string name="cancel">cancel</string>
+
 </resources>

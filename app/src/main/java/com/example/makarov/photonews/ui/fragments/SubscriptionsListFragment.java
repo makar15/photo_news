@@ -16,6 +16,8 @@ import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
+import com.example.makarov.photonews.utils.CreateDialogUtils;
 import com.example.makarov.photonews.utils.sorting.FastSort;
 
 import java.util.ArrayList;
@@ -108,7 +110,12 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
                         openClickInstanceOfSubscription(clickSubscription);
                     }
-                });
+                }, new AdapterSubscriptions.OnClickChangeNameLocation() {
+            @Override
+            public void onClick(Address tempClickItem) {
+                openDialogChangeNameLocation(tempClickItem);
+            }
+        });
         mLvSubscriptions.setAdapter(mSubscriptionsAdapter);
     }
 
@@ -118,6 +125,11 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         } else if (clickSubscription instanceof Address) {
             openListPhotoResultLocation((Address) clickSubscription);
         }
+    }
+
+    private void openDialogChangeNameLocation(Address address) {
+        CreateDialogUtils createDialog = new CreateDialogUtils(getActivity().getFragmentManager());
+        createDialog.createDialog(new ChangeNameLocationDialog(address));
     }
 
     private void initializeHistoryRecyclerView() {

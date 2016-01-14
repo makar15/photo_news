@@ -42,11 +42,12 @@ public class LocationDbAdapter {
         return mDatabase.insert(DataBaseHelper.TABLE_LOCATIONS, null, initialValues);
     }
 
-    public void updateLocation(Address address) {
+    public boolean updateLocation(Address address) {
         ContentValues updateValues = createContentValues(address);
 
-        //return mDatabase.update(DataBaseHelper.TABLE_LOCATIONS, updateValues, BaseColumns._ID + "="
-          //      + address, null) > 0;
+        return mDatabase.update(DataBaseHelper.TABLE_LOCATIONS, updateValues,
+                DataBaseHelper.DATE_ADD_LOCATION_COLUMN + " = ? ",
+                new String[]{Long.toString(address.getDate())}) > 0;
     }
 
     public boolean deleteLocation(Address address) {

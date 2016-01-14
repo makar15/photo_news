@@ -7,9 +7,9 @@ public class Address implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
-    private final String mCountryName;
-    private final String mLocality;
-    private final String mThoroughfare;
+    private String mCountryName;
+    private String mLocality;
+    private String mThoroughfare;
     private final long mDate;
 
     public Address(double latitude, double longitude, String countryName,
@@ -42,6 +42,18 @@ public class Address implements Parcelable, Subscription {
             return new Address[size];
         }
     };
+
+    public void setCountryName(String countryName) {
+        mCountryName = countryName;
+    }
+
+    public void setLocality(String locality) {
+        mLocality = locality;
+    }
+
+    public void setThoroughfare(String thoroughfare) {
+        mThoroughfare = thoroughfare;
+    }
 
     public double getLongitude() {
         return mLongitude;

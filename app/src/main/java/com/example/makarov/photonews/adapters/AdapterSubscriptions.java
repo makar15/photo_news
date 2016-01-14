@@ -23,11 +23,14 @@ public class AdapterSubscriptions
 
     private List<Subscription> mSubscriptions = new ArrayList<>();
     private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
+    private OnClickChangeNameLocation mOnClickChangeNameLocation;
 
     public AdapterSubscriptions(List<Subscription> subscriptions,
-                                OnClickOpenPhotoNews onClickOpenPhotoNews) {
+                                OnClickOpenPhotoNews onClickOpenPhotoNews,
+                                OnClickChangeNameLocation onClickChangeNameLocation) {
         mSubscriptions = subscriptions;
         mOnClickOpenPhotoNews = onClickOpenPhotoNews;
+        mOnClickChangeNameLocation = onClickChangeNameLocation;
     }
 
     @Override
@@ -150,7 +153,7 @@ public class AdapterSubscriptions
         }
 
         private void changeNameLocation() {
-            //return PhotoNewsApp.getApp().getLocationDbAdapter().open().updateLocation(mAddress);
+            mOnClickChangeNameLocation.onClick(mAddress);
         }
 
         @Override
@@ -176,6 +179,10 @@ public class AdapterSubscriptions
 
     public interface OnClickOpenPhotoNews {
         void onClick(Subscription tempClickItem);
+    }
+
+    public interface OnClickChangeNameLocation {
+        void onClick(Address tempClickItem);
     }
 
 }

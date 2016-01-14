@@ -42,11 +42,12 @@ public class TagDbAdapter {
         return mDatabase.insert(DataBaseHelper.TABLE_TAGS, null, initialValues);
     }
 
-    public boolean updateTag(long rowId, Tag tag) {
+    public boolean updateTag(Tag tag) {
         ContentValues updateValues = createContentValues(tag);
 
-        return mDatabase.update(DataBaseHelper.TABLE_TAGS, updateValues, BaseColumns._ID + "="
-                + rowId, null) > 0;
+        return mDatabase.update(DataBaseHelper.TABLE_TAGS, updateValues,
+                DataBaseHelper.DATE_ADD_TAG_COLUMN + " = ? ",
+                new String[]{Long.toString(tag.getDate())}) > 0;
     }
 
     public boolean deleteTag(Tag tag) {
