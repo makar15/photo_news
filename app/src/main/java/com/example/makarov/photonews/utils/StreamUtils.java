@@ -10,7 +10,8 @@ import java.net.URL;
 public class StreamUtils {
 
     //открыть соединения для получения потока данных
-    public static boolean openHttpUrlConnection(HttpURLConnection urlConnection, URL url) throws IOException {
+    public static boolean openHttpUrlConnection(HttpURLConnection urlConnection,
+                                                URL url) throws IOException {
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
         urlConnection.connect();

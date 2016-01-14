@@ -27,16 +27,16 @@ public class PostFinderLocation implements PostFinder {
         mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mAddress);
         mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, requestListener);
+        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
     public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
         mUrlSavePhotosSearch = mNextPageUrlSaver.getUrl();
         mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, requestListener);
+        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
 }

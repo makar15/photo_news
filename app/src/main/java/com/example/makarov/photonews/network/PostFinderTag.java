@@ -26,16 +26,16 @@ public class PostFinderTag implements PostFinder {
         mUrlSavePhotosTag = UrlInstaUtils.getUrlPhotosTag(mLineTag);
         mPostRequestImage = new PhotoNewsImageRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, requestListener);
+        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
     public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
         mUrlSavePhotosTag = mNextPageUrlSaver.getUrl();
         mPostRequestImage = new PhotoNewsImageRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage, mPostRequestImage.createCacheKey(),
-                DurationInMillis.ONE_MINUTE, requestListener);
+        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
 }

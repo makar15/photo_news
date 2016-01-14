@@ -49,9 +49,10 @@ public class TagDbAdapter {
                 + rowId, null) > 0;
     }
 
-    public boolean deleteTag(long rowId) {
-        return mDatabase.
-                delete(DataBaseHelper.TABLE_TAGS, BaseColumns._ID + "=" + rowId, null) > 0;
+    public boolean deleteTag(Tag tag) {
+        return mDatabase.delete(DataBaseHelper.TABLE_TAGS,
+                DataBaseHelper.DATE_ADD_TAG_COLUMN + " = ? ",
+                new String[]{Long.toString(tag.getDate())}) > 0;
     }
 
     public List<Tag> getAllTags() {
@@ -75,7 +76,7 @@ public class TagDbAdapter {
         return tags;
     }
 
-    public Tag getTag(Cursor cursor) throws SQLException {
+    private Tag getTag(Cursor cursor) throws SQLException {
         String tagName = cursor.getString
                 (cursor.getColumnIndex(DataBaseHelper.TAG_NAME_COLUMN));
         long date = cursor.getLong

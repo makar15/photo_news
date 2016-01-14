@@ -49,6 +49,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_TAGS);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_LOCATIONS);
         onCreate(db);
     }
 }

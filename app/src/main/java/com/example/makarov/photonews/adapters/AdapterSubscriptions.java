@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.Subscription;
@@ -75,7 +76,7 @@ public class AdapterSubscriptions
         return mSubscriptions.size();
     }
 
-    public Subscription getItem(int position) {
+    private Subscription getItem(int position) {
         return mSubscriptions.get(position);
     }
 
@@ -87,40 +88,89 @@ public class AdapterSubscriptions
         public abstract void setDataOnView(int position);
     }
 
-    public class TagViewHolder extends SubscriptionViewHolder {
+    public class TagViewHolder extends SubscriptionViewHolder implements View.OnClickListener {
 
-        public TextView mNameTag;
+        private TextView mNameTag;
+        private Tag mTag;
 
         public TagViewHolder(View v) {
             super(v);
 
             mNameTag = (TextView) v.findViewById(R.id.name_tag);
+            v.findViewById(R.id.delete_tag_btn).setOnClickListener(this);
         }
 
         @Override
         public void setDataOnView(int position) {
-            Tag tag = (Tag) mSubscriptions.get(position);
+            mTag = (Tag) mSubscriptions.get(position);
 
-            this.mNameTag.setText(tag.getNameTag());
+            this.mNameTag.setText(mTag.getNameTag());
+        }
+
+        private void deleteTag() {
+            PhotoNewsApp.getApp().getTagDbAdapter().open().deleteTag(mTag);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.delete_tag_btn: {
+                    deleteTag();
+                    PhotoNewsApp.getApp().getTagDbAdapter().close();
+                }
+                default:
+                    break;
+            }
         }
     }
 
-    public class LocationViewHolder extends SubscriptionViewHolder {
+    public class LocationViewHolder extends SubscriptionViewHolder implements View.OnClickListener {
 
-        public TextView mNameLocation;
+        private TextView mNameLocation;
+        private Address mAddress;
 
         public LocationViewHolder(View v) {
             super(v);
 
             mNameLocation = (TextView) v.findViewById(R.id.name_location);
+            v.findViewById(R.id.delete_location_btn).setOnClickListener(this);
+            v.findViewById(R.id.change_name_location_btn).setOnClickListener(this);
         }
 
         @Override
         public void setDataOnView(int position) {
-            Address address = (Address) mSubscriptions.get(position);
+            mAddress = (Address) mSubscriptions.get(position);
 
-            this.mNameLocation.setText(address.getCountryName() + ", "
-                    + address.getLocality() + ", " + address.getThoroughfare());
+            this.mNameLocation.setText(mAddress.getCountryName() + ", "
+                    + mAddress.getLocality() + ", " + mAddress.getThoroughfare());
+        }
+
+        private boolean deleteLocation() {
+            return PhotoNewsApp.getApp().getLocationDbAdapter().open().deleteLocation(mAddress);
+        }
+
+        private void changeNameLocation() {
+            //return PhotoNewsApp.getApp().getLocationDbAdapter().open().updateLocation(mAddress);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.delete_location_btn: {
+                    deleteLocation();
+                    PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                }
+                break;
+
+                case R.id.change_name_location_btn: {
+                    changeNameLocation();
+                    PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                }
+                break;
+
+                default:
+                    break;
+            }
         }
     }
 

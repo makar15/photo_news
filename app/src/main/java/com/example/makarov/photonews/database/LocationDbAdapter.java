@@ -42,16 +42,17 @@ public class LocationDbAdapter {
         return mDatabase.insert(DataBaseHelper.TABLE_LOCATIONS, null, initialValues);
     }
 
-    public boolean updateLocation(long rowId, Address address) {
+    public void updateLocation(Address address) {
         ContentValues updateValues = createContentValues(address);
 
-        return mDatabase.update(DataBaseHelper.TABLE_LOCATIONS, updateValues, BaseColumns._ID + "="
-                + rowId, null) > 0;
+        //return mDatabase.update(DataBaseHelper.TABLE_LOCATIONS, updateValues, BaseColumns._ID + "="
+          //      + address, null) > 0;
     }
 
-    public boolean deleteLocation(long rowId) {
-        return mDatabase.
-                delete(DataBaseHelper.TABLE_LOCATIONS, BaseColumns._ID + "=" + rowId, null) > 0;
+    public boolean deleteLocation(Address address) {
+        return mDatabase.delete(DataBaseHelper.TABLE_LOCATIONS,
+                DataBaseHelper.DATE_ADD_LOCATION_COLUMN + " = ? ",
+                new String[]{Long.toString(address.getDate())}) > 0;
     }
 
     public List<Address> getAllLocations() {
@@ -77,7 +78,7 @@ public class LocationDbAdapter {
         return locations;
     }
 
-    public Address getLocation(Cursor cursor) {
+    private Address getLocation(Cursor cursor) {
 
         String countryName = cursor.getString
                 (cursor.getColumnIndex(DataBaseHelper.COUNTRY_NAME_COLUMN));
