@@ -1,5 +1,6 @@
 package com.example.makarov.photonews.adapters;
 
+import android.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
+import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
+import com.example.makarov.photonews.utils.CreateDialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +25,13 @@ public class AdapterSubscriptions
     private final int TYPE_HOLDER_LOCATION = 1;
 
     private List<Subscription> mSubscriptions = new ArrayList<>();
-    private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
-    private OnClickChangeNameLocation mOnClickChangeNameLocation;
 
-    public AdapterSubscriptions(List<Subscription> subscriptions,
-                                OnClickOpenPhotoNews onClickOpenPhotoNews,
-                                OnClickChangeNameLocation onClickChangeNameLocation) {
+    private FragmentManager mFragmentManager;
+    private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
+
+    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager) {
+        mFragmentManager = manager;
         mSubscriptions = subscriptions;
-        mOnClickOpenPhotoNews = onClickOpenPhotoNews;
-        mOnClickChangeNameLocation = onClickChangeNameLocation;
     }
 
     @Override
@@ -83,6 +84,10 @@ public class AdapterSubscriptions
         return mSubscriptions.get(position);
     }
 
+    public void setOnClickOpenPhotoNews(OnClickOpenPhotoNews onClickOpenPhotoNews) {
+        mOnClickOpenPhotoNews = onClickOpenPhotoNews;
+    }
+
     public abstract class SubscriptionViewHolder extends RecyclerView.ViewHolder {
         public SubscriptionViewHolder(View itemView) {
             super(itemView);
@@ -107,11 +112,13 @@ public class AdapterSubscriptions
         public void setDataOnView(int position) {
             mTag = (Tag) mSubscriptions.get(position);
 
-            this.mNameTag.setText(mTag.getNameTag());
+            this.mNameTag.setText(mTag.getName());
         }
 
-        private void deleteTag() {
-            PhotoNewsApp.getApp().getTagDbAdapter().open().deleteTag(mTag);
+        private boolean deleteTag() {
+            mSubscriptions.remove(mTag);
+            AdapterSubscriptions.this.notifyDataSetChanged();
+            return PhotoNewsApp.getApp().getTagDbAdapter().open().deleteTag(mTag);
         }
 
         @Override
@@ -144,15 +151,19 @@ public class AdapterSubscriptions
         public void setDataOnView(int position) {
             mAddress = (Address) mSubscriptions.get(position);
 
-            this.mNameLocation.setText(mAddress.getNameLocation());
+            this.mNameLocation.setText(mAddress.getName());
         }
 
         private boolean deleteLocation() {
+            mSubscriptions.remove(mAddress);
+            AdapterSubscriptions.this.notifyDataSetChanged();
             return PhotoNewsApp.getApp().getLocationDbAdapter().open().deleteLocation(mAddress);
         }
 
-        private void changeNameLocation() {
-            mOnClickChangeNameLocation.onClick(mAddress);
+        private void openDialogChangeNameLocation(Address address) {
+            CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
+            createDialog.createDialog(new ChangeNameLocationDialog
+                    (address, AdapterSubscriptions.this));
         }
 
         @Override
@@ -165,7 +176,7 @@ public class AdapterSubscriptions
                 break;
 
                 case R.id.change_name_location_btn: {
-                    changeNameLocation();
+                    openDialogChangeNameLocation(mAddress);
                     PhotoNewsApp.getApp().getLocationDbAdapter().close();
                 }
                 break;
@@ -178,10 +189,6 @@ public class AdapterSubscriptions
 
     public interface OnClickOpenPhotoNews {
         void onClick(Subscription tempClickItem);
-    }
-
-    public interface OnClickChangeNameLocation {
-        void onClick(Address tempClickItem);
     }
 
 }

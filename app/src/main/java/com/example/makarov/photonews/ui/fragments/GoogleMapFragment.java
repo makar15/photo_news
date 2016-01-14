@@ -193,25 +193,19 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
                 mAddress.getLocality(), mAddress.getThoroughfare(), new Date().getTime());
     }
 
+    private String getNullableString(String string){
+        return string != null ? string + ", " : "";
+    }
+
     private String getInitNameLocation() {
         String countryName, locality, thoroughfare;
-        if (mAddress.getCountryName() != null) {
-            countryName = mAddress.getCountryName() + ", ";
-        } else {
-            countryName = "";
-        }
-        if (mAddress.getLocality() != null) {
-            locality = mAddress.getLocality() + ", ";
-        } else {
-            locality = "";
-        }
-        if (mAddress.getThoroughfare() != null) {
-            thoroughfare = mAddress.getThoroughfare();
-        } else {
-            thoroughfare = "";
-        }
 
-        return countryName + locality + thoroughfare;
+        countryName = getNullableString(mAddress.getCountryName());
+        locality = getNullableString(mAddress.getLocality());
+        thoroughfare = getNullableString(mAddress.getThoroughfare());
+
+        String result = countryName + locality + thoroughfare;
+        return result.substring(0, result.length() - 2);
     }
 
     @Override

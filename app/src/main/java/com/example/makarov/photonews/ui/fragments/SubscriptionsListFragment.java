@@ -16,9 +16,7 @@ import com.example.makarov.photonews.models.Address;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
-import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
-import com.example.makarov.photonews.utils.CreateDialogUtils;
-import com.example.makarov.photonews.utils.sorting.FastSort;
+import com.example.makarov.photonews.utils.FastSort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +66,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
     private void openListPhotoResultTag(Tag tag) {
         Bundle bundle = new Bundle();
-        bundle.putString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY, tag.getNameTag());
+        bundle.putString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 
@@ -104,16 +102,12 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
     private void setAdapterForRecyclerView(List<Subscription> subscriptions) {
         AdapterSubscriptions mSubscriptionsAdapter = new AdapterSubscriptions(subscriptions,
-                new AdapterSubscriptions.OnClickOpenPhotoNews() {
-                    @Override
-                    public void onClick(Subscription clickSubscription) {
+                getActivity().getFragmentManager());
 
-                        openClickInstanceOfSubscription(clickSubscription);
-                    }
-                }, new AdapterSubscriptions.OnClickChangeNameLocation() {
+        mSubscriptionsAdapter.setOnClickOpenPhotoNews(new AdapterSubscriptions.OnClickOpenPhotoNews() {
             @Override
-            public void onClick(Address tempClickItem) {
-                openDialogChangeNameLocation(tempClickItem);
+            public void onClick(Subscription clickSubscription) {
+                openClickInstanceOfSubscription(clickSubscription);
             }
         });
         mLvSubscriptions.setAdapter(mSubscriptionsAdapter);
@@ -125,11 +119,6 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         } else if (clickSubscription instanceof Address) {
             openListPhotoResultLocation((Address) clickSubscription);
         }
-    }
-
-    private void openDialogChangeNameLocation(Address address) {
-        CreateDialogUtils createDialog = new CreateDialogUtils(getActivity().getFragmentManager());
-        createDialog.createDialog(new ChangeNameLocationDialog(address));
     }
 
     private void initializeHistoryRecyclerView() {

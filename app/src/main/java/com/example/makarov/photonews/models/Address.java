@@ -7,15 +7,15 @@ public class Address implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
-    private String mNameLocation;
+    private String mName;
     private final String mCountryName;
     private final String mLocality;
     private final String mThoroughfare;
     private final long mDate;
 
-    public Address(String nameLocation, double latitude, double longitude, String countryName,
+    public Address(String name, double latitude, double longitude, String countryName,
                    String locality, String thoroughfare, long date) {
-        mNameLocation = nameLocation;
+        mName = name;
         mLatitude = latitude;
         mLongitude = longitude;
         mCountryName = countryName;
@@ -27,7 +27,7 @@ public class Address implements Parcelable, Subscription {
     protected Address(Parcel in) {
         mLatitude = in.readDouble();
         mLongitude = in.readDouble();
-        mNameLocation = in.readString();
+        mName = in.readString();
         mCountryName = in.readString();
         mLocality = in.readString();
         mThoroughfare = in.readString();
@@ -46,8 +46,8 @@ public class Address implements Parcelable, Subscription {
         }
     };
 
-    public void setNameLocation(String nameLocation) {
-        mNameLocation = nameLocation;
+    public void setName(String name) {
+        mName = name;
     }
 
     public double getLongitude() {
@@ -58,8 +58,8 @@ public class Address implements Parcelable, Subscription {
         return mLatitude;
     }
 
-    public String getNameLocation() {
-        return mNameLocation;
+    public String getName() {
+        return mName;
     }
 
     public String getCountryName() {
@@ -87,7 +87,7 @@ public class Address implements Parcelable, Subscription {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(mLatitude);
         dest.writeDouble(mLongitude);
-        dest.writeString(mNameLocation);
+        dest.writeString(mName);
         dest.writeString(mCountryName);
         dest.writeString(mLocality);
         dest.writeString(mThoroughfare);

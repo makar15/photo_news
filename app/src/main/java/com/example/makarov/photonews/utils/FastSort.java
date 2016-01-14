@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.utils.sorting;
+package com.example.makarov.photonews.utils;
 
 import com.example.makarov.photonews.models.Subscription;
 
@@ -14,10 +14,12 @@ public class FastSort {
         int op = i - (i - j) / 2;
 
         while (i < j) {
-            while ((i < op) && (subscriptions.get(i).getDate() <= subscriptions.get(op).getDate()))
+            while ((i < op) && (subscriptions.get(i).getDate() <= subscriptions.get(op).getDate())) {
                 i += 1;
-            while ((j > op) && (subscriptions.get(j).getDate() >= subscriptions.get(op).getDate()))
+            }
+            while ((j > op) && (subscriptions.get(j).getDate() >= subscriptions.get(op).getDate())) {
                 j -= 1;
+            }
 
             if (i < j) {
 

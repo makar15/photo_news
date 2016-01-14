@@ -12,16 +12,18 @@ import android.widget.TextView;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.adapters.AdapterSubscriptions;
 import com.example.makarov.photonews.models.Address;
 
 public class ChangeNameLocationDialog extends DialogFragment implements View.OnClickListener {
 
     private Address mAddress;
     private EditText mEtNewNameLocation;
-    private TextView mNameLocation;
+    private AdapterSubscriptions mAdapterSubscriptions;
 
-    public ChangeNameLocationDialog(Address address) {
+    public ChangeNameLocationDialog(Address address, AdapterSubscriptions adapter) {
         mAddress = address;
+        mAdapterSubscriptions = adapter;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,11 +32,11 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
         View v = inflater.inflate(R.layout.change_name_location_dialog, null);
 
         mEtNewNameLocation = (EditText) v.findViewById(R.id.et_new_name_location);
-        mNameLocation = (TextView) v.findViewById(R.id.tv_name_location);
+        TextView mNameLocation = (TextView) v.findViewById(R.id.tv_name_location);
         v.findViewById(R.id.btn_cancel).setOnClickListener(this);
         v.findViewById(R.id.btn_change).setOnClickListener(this);
 
-        mNameLocation.setText(mAddress.getNameLocation());
+        mNameLocation.setText(mAddress.getName());
 
         this.setCancelable(false);
         return v;
@@ -52,9 +54,10 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
 
             case R.id.btn_change: {
                 if (!TextUtils.isEmpty(mNewNameLocation)) {
-                    mAddress.setNameLocation(mNewNameLocation);
+                    mAddress.setName(mNewNameLocation);
                     PhotoNewsApp.getApp().getLocationDbAdapter().open().updateLocation(mAddress);
                     PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                    mAdapterSubscriptions.notifyDataSetChanged();
                     dismiss();
                 }
             }

@@ -58,10 +58,10 @@ public class LocationDbAdapter {
 
     public List<Address> getAllLocations() {
         Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_LOCATIONS, new String[]{BaseColumns._ID,
-                        DataBaseHelper.NAME_LOCATION_COLUMN, DataBaseHelper.COUNTRY_NAME_COLUMN,
-                        DataBaseHelper.LOCALITY_COLUMN, DataBaseHelper.THOROUGHFARE_COLUMN,
-                        DataBaseHelper.DATE_ADD_LOCATION_COLUMN, DataBaseHelper.LATITUDE_COLUMN,
-                        DataBaseHelper.LONGITUDE_COLUMN}, null, null, null, null, null);
+                DataBaseHelper.NAME_LOCATION_COLUMN, DataBaseHelper.COUNTRY_NAME_COLUMN,
+                DataBaseHelper.LOCALITY_COLUMN, DataBaseHelper.THOROUGHFARE_COLUMN,
+                DataBaseHelper.DATE_ADD_LOCATION_COLUMN, DataBaseHelper.LATITUDE_COLUMN,
+                DataBaseHelper.LONGITUDE_COLUMN}, null, null, null, null, null);
 
         List<Address> locations = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public class LocationDbAdapter {
 
     private ContentValues createContentValues(Address address) {
         ContentValues values = new ContentValues();
-        values.put(DataBaseHelper.NAME_LOCATION_COLUMN, address.getNameLocation());
+        values.put(DataBaseHelper.NAME_LOCATION_COLUMN, address.getName());
         values.put(DataBaseHelper.COUNTRY_NAME_COLUMN, address.getCountryName());
         values.put(DataBaseHelper.LOCALITY_COLUMN, address.getLocality());
         values.put(DataBaseHelper.THOROUGHFARE_COLUMN, address.getThoroughfare());

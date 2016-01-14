@@ -88,7 +88,7 @@ public class TagDbAdapter {
 
     private ContentValues createContentValues(Tag tag) {
         ContentValues values = new ContentValues();
-        values.put(DataBaseHelper.TAG_NAME_COLUMN, tag.getNameTag());
+        values.put(DataBaseHelper.TAG_NAME_COLUMN, tag.getName());
         values.put(DataBaseHelper.DATE_ADD_TAG_COLUMN, tag.getDate());
 
         return values;

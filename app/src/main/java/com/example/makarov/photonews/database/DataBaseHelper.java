@@ -32,7 +32,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     private static final String DATABASE_CREATE_SCRIPT_LOCATIONS = "create table "
             + TABLE_LOCATIONS + " (" + BaseColumns._ID + " integer primary key autoincrement, "
-            + NAME_LOCATION_COLUMN + " text, "
+            + NAME_LOCATION_COLUMN + " text unique, "
             + LOCALITY_COLUMN + " text, " + COUNTRY_NAME_COLUMN + " text, "
             + THOROUGHFARE_COLUMN + " text, " + DATE_ADD_LOCATION_COLUMN + " integer,"
             + LATITUDE_COLUMN + " integer," + LONGITUDE_COLUMN + " integer" + ");";
