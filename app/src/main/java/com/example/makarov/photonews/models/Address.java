@@ -7,13 +7,15 @@ public class Address implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
-    private String mCountryName;
-    private String mLocality;
-    private String mThoroughfare;
+    private String mNameLocation;
+    private final String mCountryName;
+    private final String mLocality;
+    private final String mThoroughfare;
     private final long mDate;
 
-    public Address(double latitude, double longitude, String countryName,
+    public Address(String nameLocation, double latitude, double longitude, String countryName,
                    String locality, String thoroughfare, long date) {
+        mNameLocation = nameLocation;
         mLatitude = latitude;
         mLongitude = longitude;
         mCountryName = countryName;
@@ -25,6 +27,7 @@ public class Address implements Parcelable, Subscription {
     protected Address(Parcel in) {
         mLatitude = in.readDouble();
         mLongitude = in.readDouble();
+        mNameLocation = in.readString();
         mCountryName = in.readString();
         mLocality = in.readString();
         mThoroughfare = in.readString();
@@ -43,16 +46,8 @@ public class Address implements Parcelable, Subscription {
         }
     };
 
-    public void setCountryName(String countryName) {
-        mCountryName = countryName;
-    }
-
-    public void setLocality(String locality) {
-        mLocality = locality;
-    }
-
-    public void setThoroughfare(String thoroughfare) {
-        mThoroughfare = thoroughfare;
+    public void setNameLocation(String nameLocation) {
+        mNameLocation = nameLocation;
     }
 
     public double getLongitude() {
@@ -61,6 +56,10 @@ public class Address implements Parcelable, Subscription {
 
     public double getLatitude() {
         return mLatitude;
+    }
+
+    public String getNameLocation() {
+        return mNameLocation;
     }
 
     public String getCountryName() {
@@ -88,6 +87,7 @@ public class Address implements Parcelable, Subscription {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(mLatitude);
         dest.writeDouble(mLongitude);
+        dest.writeString(mNameLocation);
         dest.writeString(mCountryName);
         dest.writeString(mLocality);
         dest.writeString(mThoroughfare);

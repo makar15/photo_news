@@ -34,8 +34,7 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
         v.findViewById(R.id.btn_cancel).setOnClickListener(this);
         v.findViewById(R.id.btn_change).setOnClickListener(this);
 
-        mNameLocation.setText(mAddress.getCountryName() +
-                mAddress.getLocality() + mAddress.getThoroughfare());
+        mNameLocation.setText(mAddress.getNameLocation());
 
         this.setCancelable(false);
         return v;
@@ -53,9 +52,7 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
 
             case R.id.btn_change: {
                 if (!TextUtils.isEmpty(mNewNameLocation)) {
-                    mAddress.setCountryName("");
-                    mAddress.setLocality(mNewNameLocation);
-                    mAddress.setThoroughfare("");
+                    mAddress.setNameLocation(mNewNameLocation);
                     PhotoNewsApp.getApp().getLocationDbAdapter().open().updateLocation(mAddress);
                     PhotoNewsApp.getApp().getLocationDbAdapter().close();
                     dismiss();

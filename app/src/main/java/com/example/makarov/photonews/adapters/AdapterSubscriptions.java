@@ -144,8 +144,7 @@ public class AdapterSubscriptions
         public void setDataOnView(int position) {
             mAddress = (Address) mSubscriptions.get(position);
 
-            this.mNameLocation.setText(mAddress.getCountryName() + ", "
-                    + mAddress.getLocality() + ", " + mAddress.getThoroughfare());
+            this.mNameLocation.setText(mAddress.getNameLocation());
         }
 
         private boolean deleteLocation() {

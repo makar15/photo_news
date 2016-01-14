@@ -188,9 +188,30 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
     }
 
     private com.example.makarov.photonews.models.Address initDbModelAddress() {
-        return new com.example.makarov.photonews.models.Address(mAddress.getLatitude(),
-                mAddress.getLongitude(), mAddress.getCountryName(),
+        return new com.example.makarov.photonews.models.Address(getInitNameLocation(),
+                mAddress.getLatitude(), mAddress.getLongitude(), mAddress.getCountryName(),
                 mAddress.getLocality(), mAddress.getThoroughfare(), new Date().getTime());
+    }
+
+    private String getInitNameLocation() {
+        String countryName, locality, thoroughfare;
+        if (mAddress.getCountryName() != null) {
+            countryName = mAddress.getCountryName() + ", ";
+        } else {
+            countryName = "";
+        }
+        if (mAddress.getLocality() != null) {
+            locality = mAddress.getLocality() + ", ";
+        } else {
+            locality = "";
+        }
+        if (mAddress.getThoroughfare() != null) {
+            thoroughfare = mAddress.getThoroughfare();
+        } else {
+            thoroughfare = "";
+        }
+
+        return countryName + locality + thoroughfare;
     }
 
     @Override
