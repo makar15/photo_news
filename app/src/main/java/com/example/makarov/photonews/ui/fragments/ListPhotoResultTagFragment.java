@@ -2,19 +2,19 @@ package com.example.makarov.photonews.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
-import com.example.makarov.photonews.adapters.scrolling.EndlessRecyclerOnScrollListener;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinderTag;
 import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -24,14 +24,13 @@ public class ListPhotoResultTagFragment extends Fragment {
 
     public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
 
-    private RecyclerView mRecyclerView;
+    private SuperRecyclerView mSuperRecyclerView;
     private PhotoResultAdapter mPhotoAdapter;
-    private LinearLayoutManager mLayoutManager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.list_photo_result_tag_fragment, null);
+        View v = inflater.inflate(R.layout.list_photo_result_fragment, null);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.lv_photo_result_tag);
+        mSuperRecyclerView = (SuperRecyclerView) v.findViewById(R.id.lv_photo_result);
         setLayoutManagerForRecyclerView();
 
         String lineTag = getArgumentsBundleLineTag(getArguments());
@@ -51,9 +50,9 @@ public class ListPhotoResultTagFragment extends Fragment {
             }
         });
 
-        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+        mSuperRecyclerView.setupMoreListener(new OnMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
 
                 postFinderTag.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
                     @Override
@@ -69,30 +68,25 @@ public class ListPhotoResultTagFragment extends Fragment {
                     }
                 });
             }
-        });
+        }, 10);
 
         return v;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initializeHistoryRecyclerView();
-    }
-
     private void setLayoutManagerForRecyclerView() {
-        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false);
+        mSuperRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
-        mPhotoAdapter = new PhotoResultAdapter(photoNews);
-        mRecyclerView.setAdapter(mPhotoAdapter);
-    }
-
-    private void initializeHistoryRecyclerView() {
-        mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (photoNews.isEmpty()) {
+            Toast.makeText(getContext(), "not PHOTO",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            mPhotoAdapter = new PhotoResultAdapter(photoNews);
+            mSuperRecyclerView.setAdapter(mPhotoAdapter);
+        }
     }
 
     private String getArgumentsBundleLineTag(Bundle savedInstanceState) {
