@@ -7,11 +7,12 @@ public class Address implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
-    private String mName;
     private final String mCountryName;
     private final String mLocality;
     private final String mThoroughfare;
     private final long mDate;
+
+    private String mName;
 
     public Address(String name, double latitude, double longitude, String countryName,
                    String locality, String thoroughfare, long date) {

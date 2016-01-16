@@ -37,14 +37,14 @@ public class Parsing {
         PhotoNewsList photoNews = new PhotoNewsList();
 
         try {
-            JSONArray mJsonArray = json.getJSONArray("data");
+            JSONArray jsonArray = json.getJSONArray("data");
             int NUMBER_SINGLE_QUERY = 20;
             int count = 0;
 
             while (count != NUMBER_SINGLE_QUERY) {
-                String urlImage = getUrlImage(mJsonArray, count);
-                String author = getAuthor(mJsonArray, count);
-                int countLikes = getCountLikes(mJsonArray, count);
+                String urlImage = getUrlImage(jsonArray, count);
+                String author = getAuthor(jsonArray, count);
+                int countLikes = getCountLikes(jsonArray, count);
 
                 PhotoNewsPost photoNewsPost = new PhotoNewsPost(author, urlImage, countLikes);
                 photoNews.getPhotoNewsPosts().add(photoNewsPost);

@@ -79,6 +79,7 @@ public class LocationDbAdapter {
         return locations;
     }
 
+    //TODO method public Address getOneLocation() ??
     private Address getLocation(Cursor cursor) {
 
         String nameLocation = cursor.getString

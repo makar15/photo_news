@@ -37,10 +37,10 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         mLvSubscriptions = (RecyclerView) v.findViewById(R.id.lv_subscriptions);
         setLayoutManagerForRecyclerView();
 
-        List<Subscription> dbSubscription = getListDbSubscription();
+        List<Subscription> subscriptionsDb = getSubscriptionsDb();
 
-        if (dbSubscription != null) {
-            setAdapterForRecyclerView(getSortedListDbSubscription(dbSubscription));
+        if (subscriptionsDb != null) {
+            setAdapterForRecyclerView(getSortedSubscriptionsDb(subscriptionsDb));
         }
 
         return v;
@@ -95,22 +95,22 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
     }
 
     private void setLayoutManagerForRecyclerView() {
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mLvSubscriptions.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLvSubscriptions.setLayoutManager(layoutManager);
     }
 
     private void setAdapterForRecyclerView(List<Subscription> subscriptions) {
-        AdapterSubscriptions mSubscriptionsAdapter = new AdapterSubscriptions(subscriptions,
+        AdapterSubscriptions subscriptionsAdapter = new AdapterSubscriptions(subscriptions,
                 getActivity().getFragmentManager());
 
-        mSubscriptionsAdapter.setOnClickOpenPhotoNews(new AdapterSubscriptions.OnClickOpenPhotoNews() {
+        subscriptionsAdapter.setOnClickOpenPhotoNews(new AdapterSubscriptions.OnClickOpenPhotoNews() {
             @Override
             public void onClick(Subscription clickSubscription) {
                 openClickInstanceOfSubscription(clickSubscription);
             }
         });
-        mLvSubscriptions.setAdapter(mSubscriptionsAdapter);
+        mLvSubscriptions.setAdapter(subscriptionsAdapter);
     }
 
     private void openClickInstanceOfSubscription(Subscription clickSubscription) {
@@ -126,7 +126,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         mLvSubscriptions.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private List<Subscription> getListDbSubscription() {
+    private List<Subscription> getSubscriptionsDb() {
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptions.addAll(PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags());
         subscriptions.addAll(PhotoNewsApp.getApp().getLocationDbAdapter().open().getAllLocations());
@@ -138,7 +138,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         }
     }
 
-    private List<Subscription> getSortedListDbSubscription(List<Subscription> subscriptions) {
+    private List<Subscription> getSortedSubscriptionsDb(List<Subscription> subscriptions) {
 
         return FastSort.sort(subscriptions, 0, subscriptions.size() - 1);
     }

@@ -11,7 +11,7 @@ import com.octo.android.robospice.SpiceManager;
 
 public class PhotoNewsApp extends MultiDexApplication {
 
-    private static PhotoNewsApp app;
+    private static PhotoNewsApp mApp;
     private TagDbAdapter mTagDbAdapter;
     private LocationDbAdapter mLocationDbAdapter;
     private SpiceManager mSpiceManager;
@@ -19,7 +19,7 @@ public class PhotoNewsApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
+        mApp = this;
         mTagDbAdapter = new TagDbAdapter(this);
         mLocationDbAdapter = new LocationDbAdapter(this);
         mSpiceManager = new SpiceManager(PhotoNewsSpiceService.class);
@@ -34,7 +34,7 @@ public class PhotoNewsApp extends MultiDexApplication {
 
 
     public static PhotoNewsApp getApp() {
-        return app;
+        return mApp;
     }
 
     public TagDbAdapter getTagDbAdapter() {

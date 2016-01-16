@@ -21,6 +21,7 @@ public class UrlInstaUtils {
 
     public static URL getUrlPhotosSearch(Address address) {
 
+        //TODO create control distance variable
         String url = Constants.VERSION_API_URL + "/media/search?" + "lat="
                 + address.getLatitude() + "&lng=" + address.getLongitude() + "&distance=2500" +
                 "&access_token=" + Constants.ACCESS_TOKEN;

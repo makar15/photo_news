@@ -39,21 +39,21 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        String mTagSearch = mLineTagSearch.getText().toString();
+        String tagSearch = mLineTagSearch.getText().toString();
 
         switch (v.getId()) {
             case R.id.enter_search_btn: {
-                if (!TextUtils.isEmpty(mTagSearch)) {
-                    openListPhotoResultTag(mTagSearch);
+                if (!TextUtils.isEmpty(tagSearch)) {
+                    openListPhotoResultTag(tagSearch);
                 }
             }
             break;
 
             case R.id.add_tag_btn: {
 
-                if (!TextUtils.isEmpty(mTagSearch)) {
+                if (!TextUtils.isEmpty(tagSearch)) {
                     PhotoNewsApp.getApp().getTagDbAdapter().open()
-                            .addTag(new Tag(mTagSearch, new Date().getTime()));
+                            .addTag(new Tag(tagSearch, new Date().getTime()));
                 }
             }
             break;

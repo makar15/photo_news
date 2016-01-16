@@ -22,13 +22,15 @@ public class FastSort {
             }
 
             if (i < j) {
-
                 Subscription temp = subscriptions.get(i);
 
                 subscriptions.set(i, subscriptions.get(j));
                 subscriptions.set(j, temp);
-                if (i == op) op = j;
-                else if (j == op) op = i;
+                if (i == op) {
+                    op = j;
+                } else if (j == op) {
+                    op = i;
+                }
             }
         }
         sort(subscriptions, start, op);

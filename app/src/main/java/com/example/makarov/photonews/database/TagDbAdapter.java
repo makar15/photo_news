@@ -77,6 +77,7 @@ public class TagDbAdapter {
         return tags;
     }
 
+    //TODO method public Tag getOneTag() ??
     private Tag getTag(Cursor cursor) throws SQLException {
         String tagName = cursor.getString
                 (cursor.getColumnIndex(DataBaseHelper.TAG_NAME_COLUMN));

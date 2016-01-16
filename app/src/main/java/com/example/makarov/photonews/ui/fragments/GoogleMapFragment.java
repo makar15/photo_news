@@ -193,7 +193,7 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
                 mAddress.getLocality(), mAddress.getThoroughfare(), new Date().getTime());
     }
 
-    private String getNullableString(String string){
+    private String getNullableString(String string) {
         return string != null ? string + ", " : "";
     }
 
