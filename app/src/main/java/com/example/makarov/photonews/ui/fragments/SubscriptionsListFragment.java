@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
-import com.example.makarov.photonews.models.Address;
+import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
@@ -38,10 +38,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         setLayoutManagerForRecyclerView();
 
         List<Subscription> subscriptionsDb = getSubscriptionsDb();
-
-        if (subscriptionsDb != null) {
-            setAdapterForRecyclerView(getSortedSubscriptionsDb(subscriptionsDb));
-        }
+        setAdapterForRecyclerView(getSortedSubscriptionsDb(subscriptionsDb));
 
         return v;
     }
@@ -66,13 +63,13 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
     private void openListPhotoResultTag(Tag tag) {
         Bundle bundle = new Bundle();
-        bundle.putString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
+        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 
-    private void openListPhotoResultLocation(com.example.makarov.photonews.models.Address address) {
+    private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, address);
+        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, location);
         ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
     }
 
@@ -116,8 +113,8 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
     private void openClickInstanceOfSubscription(Subscription clickSubscription) {
         if (clickSubscription instanceof Tag) {
             openListPhotoResultTag(((Tag) clickSubscription));
-        } else if (clickSubscription instanceof Address) {
-            openListPhotoResultLocation((Address) clickSubscription);
+        } else if (clickSubscription instanceof Location) {
+            openListPhotoResultLocation((Location) clickSubscription);
         }
     }
 
@@ -130,16 +127,10 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptions.addAll(PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags());
         subscriptions.addAll(PhotoNewsApp.getApp().getLocationDbAdapter().open().getAllLocations());
-
-        if (subscriptions.isEmpty()) {
-            return null;
-        } else {
-            return subscriptions;
-        }
+        return subscriptions;
     }
 
     private List<Subscription> getSortedSubscriptionsDb(List<Subscription> subscriptions) {
-
         return FastSort.sort(subscriptions, 0, subscriptions.size() - 1);
     }
 

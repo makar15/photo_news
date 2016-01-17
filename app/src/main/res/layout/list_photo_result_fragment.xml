@@ -1,18 +1,10 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_photo_result"
+<com.malinskiy.superrecyclerview.SuperRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lv_photo_result"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.malinskiy.superrecyclerview.SuperRecyclerView
-        android:id="@+id/lv_photo_result"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_empty="@layout/emptyview"
-        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
-        app:recyclerClipToPadding="false"
-        app:recyclerPadding="16dp"
-        app:scrollbarStyle="insideInset"/>
-
-</android.support.v4.widget.SwipeRefreshLayout>
+    android:layout_height="match_parent"
+    app:layout_empty="@layout/emptyview"
+    app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
+    app:recyclerClipToPadding="false"
+    app:recyclerPadding="16dp"
+    app:scrollbarStyle="insideInset"/>

@@ -47,9 +47,10 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
             JSONArray jsonArray = jsonObject.getJSONArray("data");
             int countItem = jsonArray.length();
 
-            JSONObject lastJsonObject = jsonArray.getJSONObject(countItem - 1);
-
-            mNextPageUrlSaver.setUrl(lastJsonObject.getString("created_time"));
+            if (countItem > 1) {
+                JSONObject lastJsonObject = jsonArray.getJSONObject(countItem - 1);
+                mNextPageUrlSaver.setUrl(lastJsonObject.getString("created_time"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -38,8 +38,13 @@ public class Parsing {
 
         try {
             JSONArray jsonArray = json.getJSONArray("data");
+            int sizeArray = jsonArray.length();
             int NUMBER_SINGLE_QUERY = 20;
             int count = 0;
+
+            if (sizeArray < NUMBER_SINGLE_QUERY) {
+                NUMBER_SINGLE_QUERY = sizeArray;
+            }
 
             while (count != NUMBER_SINGLE_QUERY) {
                 String urlImage = getUrlImage(jsonArray, count);

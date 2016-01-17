@@ -3,7 +3,7 @@ package com.example.makarov.photonews.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Address implements Parcelable, Subscription {
+public class Location implements Parcelable, Subscription {
 
     private final double mLatitude;
     private final double mLongitude;
@@ -14,8 +14,8 @@ public class Address implements Parcelable, Subscription {
 
     private String mName;
 
-    public Address(String name, double latitude, double longitude, String countryName,
-                   String locality, String thoroughfare, long date) {
+    public Location(String name, double latitude, double longitude, String countryName,
+                    String locality, String thoroughfare, long date) {
         mName = name;
         mLatitude = latitude;
         mLongitude = longitude;
@@ -25,7 +25,7 @@ public class Address implements Parcelable, Subscription {
         mDate = date;
     }
 
-    protected Address(Parcel in) {
+    protected Location(Parcel in) {
         mLatitude = in.readDouble();
         mLongitude = in.readDouble();
         mName = in.readString();
@@ -35,15 +35,15 @@ public class Address implements Parcelable, Subscription {
         mDate = in.readLong();
     }
 
-    public static final Creator<Address> CREATOR = new Creator<Address>() {
+    public static final Creator<Location> CREATOR = new Creator<Location>() {
         @Override
-        public Address createFromParcel(Parcel in) {
-            return new Address(in);
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
         }
 
         @Override
-        public Address[] newArray(int size) {
-            return new Address[size];
+        public Location[] newArray(int size) {
+            return new Location[size];
         }
     };
 

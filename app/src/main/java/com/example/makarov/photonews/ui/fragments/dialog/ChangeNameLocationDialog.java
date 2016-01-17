@@ -13,16 +13,16 @@ import android.widget.TextView;
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
-import com.example.makarov.photonews.models.Address;
+import com.example.makarov.photonews.models.Location;
 
 public class ChangeNameLocationDialog extends DialogFragment implements View.OnClickListener {
 
-    private Address mAddress;
+    private Location mLocation;
     private EditText mEtNewNameLocation;
     private AdapterSubscriptions mAdapterSubscriptions;
 
-    public ChangeNameLocationDialog(Address address, AdapterSubscriptions adapter) {
-        mAddress = address;
+    public ChangeNameLocationDialog(Location location, AdapterSubscriptions adapter) {
+        mLocation = location;
         mAdapterSubscriptions = adapter;
     }
 
@@ -32,11 +32,11 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
         View v = inflater.inflate(R.layout.change_name_location_dialog, null);
 
         mEtNewNameLocation = (EditText) v.findViewById(R.id.et_new_name_location);
-        TextView mNameLocation = (TextView) v.findViewById(R.id.tv_name_location);
+        TextView nameLocation = (TextView) v.findViewById(R.id.tv_name_location);
         v.findViewById(R.id.btn_cancel).setOnClickListener(this);
         v.findViewById(R.id.btn_change).setOnClickListener(this);
 
-        mNameLocation.setText(mAddress.getName());
+        nameLocation.setText(mLocation.getName());
 
         this.setCancelable(false);
         return v;
@@ -54,8 +54,8 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
 
             case R.id.btn_change: {
                 if (!TextUtils.isEmpty(mNewNameLocation)) {
-                    mAddress.setName(mNewNameLocation);
-                    PhotoNewsApp.getApp().getLocationDbAdapter().open().updateLocation(mAddress);
+                    mLocation.setName(mNewNameLocation);
+                    PhotoNewsApp.getApp().getLocationDbAdapter().open().update(mLocation);
                     PhotoNewsApp.getApp().getLocationDbAdapter().close();
                     mAdapterSubscriptions.notifyDataSetChanged();
                     dismiss();

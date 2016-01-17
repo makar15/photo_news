@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.models.Address;
+import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
@@ -118,7 +118,7 @@ public class AdapterSubscriptions
         private boolean deleteTag() {
             mSubscriptions.remove(mTag);
             AdapterSubscriptions.this.notifyDataSetChanged();
-            return PhotoNewsApp.getApp().getTagDbAdapter().open().deleteTag(mTag);
+            return PhotoNewsApp.getApp().getTagDbAdapter().open().delete(mTag);
         }
 
         @Override
@@ -137,7 +137,7 @@ public class AdapterSubscriptions
     public class LocationViewHolder extends SubscriptionViewHolder implements View.OnClickListener {
 
         private TextView mNameLocation;
-        private Address mAddress;
+        private Location mLocation;
 
         public LocationViewHolder(View v) {
             super(v);
@@ -149,21 +149,21 @@ public class AdapterSubscriptions
 
         @Override
         public void setDataOnView(int position) {
-            mAddress = (Address) mSubscriptions.get(position);
+            mLocation = (Location) mSubscriptions.get(position);
 
-            this.mNameLocation.setText(mAddress.getName());
+            this.mNameLocation.setText(mLocation.getName());
         }
 
         private boolean deleteLocation() {
-            mSubscriptions.remove(mAddress);
+            mSubscriptions.remove(mLocation);
             AdapterSubscriptions.this.notifyDataSetChanged();
-            return PhotoNewsApp.getApp().getLocationDbAdapter().open().deleteLocation(mAddress);
+            return PhotoNewsApp.getApp().getLocationDbAdapter().open().delete(mLocation);
         }
 
-        private void openDialogChangeNameLocation(Address address) {
+        private void openDialogChangeNameLocation(Location location) {
             CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
             createDialog.createDialog(new ChangeNameLocationDialog
-                    (address, AdapterSubscriptions.this));
+                    (location, AdapterSubscriptions.this));
         }
 
         @Override
@@ -176,7 +176,7 @@ public class AdapterSubscriptions
                 break;
 
                 case R.id.change_name_location_btn: {
-                    openDialogChangeNameLocation(mAddress);
+                    openDialogChangeNameLocation(mLocation);
                     PhotoNewsApp.getApp().getLocationDbAdapter().close();
                 }
                 break;

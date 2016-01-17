@@ -1,6 +1,6 @@
 package com.example.makarov.photonews.utils;
 
-import com.example.makarov.photonews.models.Address;
+import com.example.makarov.photonews.models.Location;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,11 +19,11 @@ public class UrlInstaUtils {
         }
     }
 
-    public static URL getUrlPhotosSearch(Address address) {
+    public static URL getUrlPhotosSearch(Location location) {
 
         //TODO create control distance variable
         String url = Constants.VERSION_API_URL + "/media/search?" + "lat="
-                + address.getLatitude() + "&lng=" + address.getLongitude() + "&distance=2500" +
+                + location.getLatitude() + "&lng=" + location.getLongitude() + "&distance=2500" +
                 "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             return new URL(url);

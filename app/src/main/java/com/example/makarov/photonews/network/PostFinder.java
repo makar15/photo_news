@@ -8,4 +8,6 @@ public interface PostFinder {
     void requestPhotos(RequestListener<PhotoNewsList> requestListener);
 
     void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener);
+
+    boolean isNextLoading();
 }

@@ -1,7 +1,7 @@
 package com.example.makarov.photonews.network;
 
 import com.example.makarov.photonews.PhotoNewsApp;
-import com.example.makarov.photonews.models.Address;
+import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.robospice.PhotoNewsLocationRequest;
 import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
 import com.example.makarov.photonews.utils.UrlInstaUtils;
@@ -13,18 +13,19 @@ import java.net.URL;
 public class PostFinderLocation implements PostFinder {
 
     private URL mUrlSavePhotosSearch;
-    private Address mAddress;
+    private Location mLocation;
+    private boolean mNextLoading = true;
 
     private PhotoNewsLocationRequest mPostRequestImage;
     private NextPageUrlSaver mNextPageUrlSaver;
 
-    public PostFinderLocation(Address address) {
-        mAddress = address;
-        mNextPageUrlSaver = new NextPageUrlSaverLocation(mAddress);
+    public PostFinderLocation(Location location) {
+        mLocation = location;
+        mNextPageUrlSaver = new NextPageUrlSaverLocation(mLocation);
     }
 
     public void requestPhotos(RequestListener<PhotoNewsList> requestListener) {
-        mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mAddress);
+        mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mLocation);
         mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
         PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
@@ -32,11 +33,24 @@ public class PostFinderLocation implements PostFinder {
     }
 
     public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
-        mUrlSavePhotosSearch = mNextPageUrlSaver.getUrl();
-        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
-                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
+        URL nextUrl = mNextPageUrlSaver.getUrl();
+
+        if (nextUrl != null && !mUrlSavePhotosSearch.getQuery().equals(nextUrl.getQuery())) {
+            mUrlSavePhotosSearch = nextUrl;
+            mPostRequestImage =
+                    new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
+
+            PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                    mPostRequestImage.createCacheKey(),
+                    DurationInMillis.ONE_MINUTE, requestListener);
+            return;
+        }
+
+        mNextLoading = false;
     }
 
+    public boolean isNextLoading() {
+        return mNextLoading;
+    }
 }

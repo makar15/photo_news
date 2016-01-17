@@ -1,37 +1,37 @@
-<android.support.v4.widget.SwipeRefreshLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/swipe_subscriptions"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <Button
+            android:id="@+id/search_by_tag_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="search by tag"
-            android:id="@+id/search_by_tag_btn"
             android:textColor="@android:color/black"
-            android:textSize="10dp"/>
+            android:textSize="10dp" />
 
         <Button
+            android:id="@+id/search_by_location_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="search by location"
-            android:id="@+id/search_by_location_btn"
             android:textColor="@android:color/black"
             android:textSize="10dp" />
 
         <android.support.v7.widget.RecyclerView
-            android:scrollbars="vertical"
+            android:id="@+id/lv_subscriptions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="true"
-            android:id="@+id/lv_subscriptions" />
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

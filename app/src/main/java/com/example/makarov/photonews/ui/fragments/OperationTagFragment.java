@@ -53,7 +53,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
                 if (!TextUtils.isEmpty(tagSearch)) {
                     PhotoNewsApp.getApp().getTagDbAdapter().open()
-                            .addTag(new Tag(tagSearch, new Date().getTime()));
+                            .add(new Tag(tagSearch, new Date().getTime()));
                 }
             }
             break;
@@ -65,7 +65,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     private void openListPhotoResultTag(String lineTag) {
         Bundle bundle = new Bundle();
-        bundle.putString(ListPhotoResultTagFragment.PHOTO_RESULT_TAG_KEY, lineTag);
+        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, lineTag);
         ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 

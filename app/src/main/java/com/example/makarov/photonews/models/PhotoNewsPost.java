@@ -12,14 +12,6 @@ public class PhotoNewsPost {
         mCountLikes = countLikes;
     }
 
-    public void setCountLikes(int countLikes) {
-        this.mCountLikes = countLikes;
-    }
-
-    public void setAuthor(String author) {
-        this.mAuthor = author;
-    }
-
     public String getAuthor() {
         return mAuthor;
     }

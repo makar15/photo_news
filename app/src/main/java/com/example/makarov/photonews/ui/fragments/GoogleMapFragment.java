@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -113,15 +114,16 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
 
             case R.id.open_photo_btn: {
                 if (mMarker != null) {
-                    openListPhotoResultLocation(initDbModelAddress());
+                    openListPhotoResultLocation(initDbModelLocation());
                 }
             }
             break;
 
             case R.id.add_location_btn: {
+                //TODO see the location on the map
                 if (mMarker != null) {
                     PhotoNewsApp.getApp().getLocationDbAdapter()
-                            .open().addLocation(initDbModelAddress());
+                            .open().add(initDbModelLocation());
                 }
             }
             break;
@@ -151,9 +153,9 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private void openListPhotoResultLocation(com.example.makarov.photonews.models.Address address) {
+    private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, address);
+        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, location);
         ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
     }
 
@@ -187,8 +189,8 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private com.example.makarov.photonews.models.Address initDbModelAddress() {
-        return new com.example.makarov.photonews.models.Address(getInitNameLocation(),
+    private Location initDbModelLocation() {
+        return new Location(getInitNameLocation(),
                 mAddress.getLatitude(), mAddress.getLongitude(), mAddress.getCountryName(),
                 mAddress.getLocality(), mAddress.getThoroughfare(), new Date().getTime());
     }
