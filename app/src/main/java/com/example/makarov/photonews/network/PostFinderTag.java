@@ -13,7 +13,6 @@ public class PostFinderTag implements PostFinder {
 
     private URL mUrlSavePhotosTag;
     private String mLineTag;
-    private boolean mNextLoading = true;
 
     private PhotoNewsImageRequest mPostRequestImage;
     private NextPageUrlSaver mNextPageUrlSaver;
@@ -31,11 +30,12 @@ public class PostFinderTag implements PostFinder {
                 mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
-    public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
+    public boolean nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
 
-        URL nextUrl = mNextPageUrlSaver.getUrl();
+        if (mNextPageUrlSaver.getNextLoading()) {
+            URL nextUrl = mNextPageUrlSaver.getUrl();
 
-        if (nextUrl != null && !mUrlSavePhotosTag.getQuery().equals(nextUrl.getQuery())) {
+            //if (nextUrl != null && !mUrlSavePhotosTag.equals(nextUrl)) {
             mUrlSavePhotosTag = nextUrl;
             mPostRequestImage =
                     new PhotoNewsImageRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
@@ -43,13 +43,10 @@ public class PostFinderTag implements PostFinder {
             PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
                     mPostRequestImage.createCacheKey(),
                     DurationInMillis.ONE_MINUTE, requestListener);
-            return;
+            //}
+            return true;
         }
 
-        mNextLoading = false;
-    }
-
-    public boolean isNextLoading() {
-        return mNextLoading;
+        return false;
     }
 }

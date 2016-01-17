@@ -14,7 +14,6 @@ public class PostFinderLocation implements PostFinder {
 
     private URL mUrlSavePhotosSearch;
     private Location mLocation;
-    private boolean mNextLoading = true;
 
     private PhotoNewsLocationRequest mPostRequestImage;
     private NextPageUrlSaver mNextPageUrlSaver;
@@ -26,31 +25,30 @@ public class PostFinderLocation implements PostFinder {
 
     public void requestPhotos(RequestListener<PhotoNewsList> requestListener) {
         mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mLocation);
-        mPostRequestImage = new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
+        mPostRequestImage = new PhotoNewsLocationRequest
+                (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
 
         PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
                 mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
-    public void nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
+    public boolean nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
 
-        URL nextUrl = mNextPageUrlSaver.getUrl();
+        if (mNextPageUrlSaver.getNextLoading()) {
+            URL nextUrl = mNextPageUrlSaver.getUrl();
 
-        if (nextUrl != null && !mUrlSavePhotosSearch.getQuery().equals(nextUrl.getQuery())) {
+            //if (nextUrl != null && !mUrlSavePhotosSearch.equals(nextUrl)) {
             mUrlSavePhotosSearch = nextUrl;
-            mPostRequestImage =
-                    new PhotoNewsLocationRequest(mUrlSavePhotosSearch, mNextPageUrlSaver);
+            mPostRequestImage = new PhotoNewsLocationRequest
+                    (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
 
             PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
                     mPostRequestImage.createCacheKey(),
                     DurationInMillis.ONE_MINUTE, requestListener);
-            return;
+            //}
+            return true;
         }
 
-        mNextLoading = false;
-    }
-
-    public boolean isNextLoading() {
-        return mNextLoading;
+        return false;
     }
 }

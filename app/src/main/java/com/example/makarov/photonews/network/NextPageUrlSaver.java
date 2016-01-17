@@ -7,4 +7,6 @@ public interface NextPageUrlSaver {
     void setUrl(String url);
 
     URL getUrl();
+
+    boolean getNextLoading();
 }

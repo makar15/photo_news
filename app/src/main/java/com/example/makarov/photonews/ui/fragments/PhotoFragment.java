@@ -51,26 +51,25 @@ public abstract class PhotoFragment extends Fragment {
             }
         });
 
-        int LOAD_PHOTO = 5;
+        int LOAD_PHOTO = 10;
         mSuperRecyclerView.setupMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
 
-                mSuperRecyclerView.hideMoreProgress();
-                if (postFinder.isNextLoading()) {
-                    postFinder.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
+                if (!postFinder.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onRequestSuccess(PhotoNewsList photoNews) {
-                            if (photoNews != null) {
-                                mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
-                            }
+                    @Override
+                    public void onRequestSuccess(PhotoNewsList photoNews) {
+                        if (photoNews != null) {
+                            mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
                         }
-                    });
+                    }
+                })) {
+                    mSuperRecyclerView.hideMoreProgress();
                 }
             }
         }, LOAD_PHOTO);

@@ -10,6 +10,7 @@ public class NextPageUrlSaverLocation implements NextPageUrlSaver {
 
     private String mCreatedTime;
     private Location mLocation;
+    private boolean mNextLoading = false;
 
     public NextPageUrlSaverLocation(Location location) {
         mLocation = location;
@@ -17,6 +18,7 @@ public class NextPageUrlSaverLocation implements NextPageUrlSaver {
 
     public void setUrl(String createdTime) {
         mCreatedTime = createdTime;
+        mNextLoading = true;
     }
 
     public URL getUrl() {
@@ -25,10 +27,15 @@ public class NextPageUrlSaverLocation implements NextPageUrlSaver {
                 + mLocation.getLatitude() + "&lng=" + mLocation.getLongitude() + "&distance=2500" +
                 "&max_timestamp=" + mCreatedTime + "&access_token=" + Constants.ACCESS_TOKEN;
         try {
+            mNextLoading = false;
             return new URL(nextUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public boolean getNextLoading() {
+        return mNextLoading;
     }
 }
