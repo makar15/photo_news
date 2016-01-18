@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.ui.fragments.GoogleMapFragment;
 import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
@@ -20,6 +21,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PhotoNewsApp.getApp().getCreateAppComponent().getComponent().inject(this);
 
         openBaseFragment(new SubscriptionsListFragment());
     }

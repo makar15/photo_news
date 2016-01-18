@@ -1,13 +1,13 @@
 package com.example.makarov.photonews.ui.fragments;
 
+import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.PostFinder;
-import com.example.makarov.photonews.network.PostFinderLocation;
 
 public class PhotoLocationFragment extends PhotoFragment {
 
     @Override
-    protected PostFinder createPostFinder() {
+    protected PostFinder createPostFinder(FactoryPostFinder factoryPostFinder) {
         if (getArguments() == null) {
             return null;
         }
@@ -17,6 +17,6 @@ public class PhotoLocationFragment extends PhotoFragment {
         }
 
         Location location = getArguments().getParcelable(GoogleMapFragment.GOOGLE_MAP_KEY);
-        return new PostFinderLocation(location);
+        return factoryPostFinder.getPostFinderLocation(location);
     }
 }

@@ -1,12 +1,12 @@
 package com.example.makarov.photonews.ui.fragments;
 
+import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.network.PostFinder;
-import com.example.makarov.photonews.network.PostFinderTag;
 
 public class PhotoTagFragment extends PhotoFragment {
 
     @Override
-    protected PostFinder createPostFinder() {
+    protected PostFinder createPostFinder(FactoryPostFinder factoryPostFinder) {
         if (getArguments() == null) {
             return null;
         }
@@ -16,7 +16,7 @@ public class PhotoTagFragment extends PhotoFragment {
         }
 
         String tagName = getArguments().getString(PhotoFragment.PHOTO_RESULT_TAG_KEY);
-        return new PostFinderTag(tagName);
+        return factoryPostFinder.getPostFinderTag(tagName);
     }
 
 }

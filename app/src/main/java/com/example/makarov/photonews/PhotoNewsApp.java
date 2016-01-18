@@ -15,11 +15,14 @@ public class PhotoNewsApp extends MultiDexApplication {
     private TagDbAdapter mTagDbAdapter;
     private LocationDbAdapter mLocationDbAdapter;
     private SpiceManager mSpiceManager;
+    private CreateAppComponent mCreateAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mApp = this;
+
+        mCreateAppComponent = new CreateAppComponent();
         mTagDbAdapter = new TagDbAdapter(this);
         mLocationDbAdapter = new LocationDbAdapter(this);
         mSpiceManager = new SpiceManager(PhotoNewsSpiceService.class);
@@ -47,6 +50,10 @@ public class PhotoNewsApp extends MultiDexApplication {
 
     public SpiceManager getSpiceManager() {
         return mSpiceManager;
+    }
+
+    public CreateAppComponent getCreateAppComponent() {
+        return mCreateAppComponent;
     }
 
 }

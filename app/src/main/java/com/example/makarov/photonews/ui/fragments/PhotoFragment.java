@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.makarov.photonews.FactoryPostFinder;
+import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.models.PhotoNewsPost;
@@ -20,6 +22,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public abstract class PhotoFragment extends Fragment {
 
     public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
@@ -27,15 +31,20 @@ public abstract class PhotoFragment extends Fragment {
     private SuperRecyclerView mSuperRecyclerView;
     private PhotoResultAdapter mPhotoAdapter;
 
-    protected abstract PostFinder createPostFinder();
+    @Inject
+    FactoryPostFinder mFactoryPostFinder;
+
+    protected abstract PostFinder createPostFinder(FactoryPostFinder factoryPostFinder);
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_fragment, null);
 
+        PhotoNewsApp.getApp().getCreateAppComponent().getComponent().inject(this);
+
         mSuperRecyclerView = (SuperRecyclerView) v.findViewById(R.id.lv_photo_result);
         setLayoutManagerForRecyclerView();
 
-        final PostFinder postFinder = createPostFinder();
+        final PostFinder postFinder = createPostFinder(mFactoryPostFinder);
 
         postFinder.requestPhotos(new RequestListener<PhotoNewsList>() {
             @Override
