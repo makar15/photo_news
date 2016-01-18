@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
@@ -29,9 +30,15 @@ public class AdapterSubscriptions
     private FragmentManager mFragmentManager;
     private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
 
-    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager) {
+    private TagDbAdapter mDbAdapter;
+    private LocationDbAdapter mLocationDbAdapter;
+
+    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager,
+                                TagDbAdapter tagDbAdapter, LocationDbAdapter locationDbAdapter) {
         mFragmentManager = manager;
         mSubscriptions = subscriptions;
+        mDbAdapter = tagDbAdapter;
+        mLocationDbAdapter = locationDbAdapter;
     }
 
     @Override
@@ -118,7 +125,7 @@ public class AdapterSubscriptions
         private boolean deleteTag() {
             mSubscriptions.remove(mTag);
             AdapterSubscriptions.this.notifyDataSetChanged();
-            return PhotoNewsApp.getApp().getTagDbAdapter().open().delete(mTag);
+            return mDbAdapter.open().delete(mTag);
         }
 
         @Override
@@ -126,7 +133,7 @@ public class AdapterSubscriptions
             switch (v.getId()) {
                 case R.id.delete_tag_btn: {
                     deleteTag();
-                    PhotoNewsApp.getApp().getTagDbAdapter().close();
+                    mDbAdapter.close();
                 }
                 default:
                     break;
@@ -157,7 +164,7 @@ public class AdapterSubscriptions
         private boolean deleteLocation() {
             mSubscriptions.remove(mLocation);
             AdapterSubscriptions.this.notifyDataSetChanged();
-            return PhotoNewsApp.getApp().getLocationDbAdapter().open().delete(mLocation);
+            return mLocationDbAdapter.open().delete(mLocation);
         }
 
         private void openDialogChangeNameLocation(Location location) {
@@ -171,13 +178,13 @@ public class AdapterSubscriptions
             switch (v.getId()) {
                 case R.id.delete_location_btn: {
                     deleteLocation();
-                    PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                    mLocationDbAdapter.close();
                 }
                 break;
 
                 case R.id.change_name_location_btn: {
                     openDialogChangeNameLocation(mLocation);
-                    PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                    mLocationDbAdapter.close();
                 }
                 break;
 

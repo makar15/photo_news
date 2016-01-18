@@ -10,16 +10,22 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.PhotoNewsApp;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
+import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.models.Location;
+
+import javax.inject.Inject;
 
 public class ChangeNameLocationDialog extends DialogFragment implements View.OnClickListener {
 
     private Location mLocation;
     private EditText mEtNewNameLocation;
     private AdapterSubscriptions mAdapterSubscriptions;
+
+    @Inject
+    LocationDbAdapter mLocationDbAdapter;
 
     public ChangeNameLocationDialog(Location location, AdapterSubscriptions adapter) {
         mLocation = location;
@@ -30,6 +36,8 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
                              Bundle savedInstanceState) {
         getDialog().setTitle("Change name location");
         View v = inflater.inflate(R.layout.change_name_location_dialog, null);
+
+        AppInjector.get().inject(this);
 
         mEtNewNameLocation = (EditText) v.findViewById(R.id.et_new_name_location);
         TextView nameLocation = (TextView) v.findViewById(R.id.tv_name_location);
@@ -55,8 +63,8 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
             case R.id.btn_change: {
                 if (!TextUtils.isEmpty(mNewNameLocation)) {
                     mLocation.setName(mNewNameLocation);
-                    PhotoNewsApp.getApp().getLocationDbAdapter().open().update(mLocation);
-                    PhotoNewsApp.getApp().getLocationDbAdapter().close();
+                    mLocationDbAdapter.open().update(mLocation);
+                    mLocationDbAdapter.close();
                     mAdapterSubscriptions.notifyDataSetChanged();
                     dismiss();
                 }

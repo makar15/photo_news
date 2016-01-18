@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
+import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.database.TagDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
@@ -21,15 +23,24 @@ import com.example.makarov.photonews.utils.FastSort;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class SubscriptionsListFragment extends Fragment implements View.OnClickListener {
 
     public static final String SUBSCRIPTIONS_LIST_KEY = "subscriptions_list";
 
     private RecyclerView mLvSubscriptions;
 
+    @Inject
+    TagDbAdapter mTagDbAdapter;
+    @Inject
+    LocationDbAdapter mLocationDbAdapter;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.subscriptions_list_fragment, null);
+
+        AppInjector.get().inject(this);
 
         v.findViewById(R.id.search_by_tag_btn).setOnClickListener(this);
         v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
@@ -99,7 +110,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
     private void setAdapterForRecyclerView(List<Subscription> subscriptions) {
         AdapterSubscriptions subscriptionsAdapter = new AdapterSubscriptions(subscriptions,
-                getActivity().getFragmentManager());
+                getActivity().getFragmentManager(), mTagDbAdapter, mLocationDbAdapter);
 
         subscriptionsAdapter.setOnClickOpenPhotoNews(new AdapterSubscriptions.OnClickOpenPhotoNews() {
             @Override
@@ -125,8 +136,8 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
 
     private List<Subscription> getSubscriptionsDb() {
         List<Subscription> subscriptions = new ArrayList<>();
-        subscriptions.addAll(PhotoNewsApp.getApp().getTagDbAdapter().open().getAllTags());
-        subscriptions.addAll(PhotoNewsApp.getApp().getLocationDbAdapter().open().getAllLocations());
+        subscriptions.addAll(mTagDbAdapter.open().getAllTags());
+        subscriptions.addAll(mLocationDbAdapter.open().getAllLocations());
         return subscriptions;
     }
 
@@ -138,7 +149,7 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
     public void onDestroy() {
         super.onDestroy();
 
-        PhotoNewsApp.getApp().getTagDbAdapter().close();
-        PhotoNewsApp.getApp().getLocationDbAdapter().close();
+        mTagDbAdapter.close();
+        mLocationDbAdapter.close();
     }
 }

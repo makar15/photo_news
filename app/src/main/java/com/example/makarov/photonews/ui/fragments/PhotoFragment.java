@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.FactoryPostFinder;
-import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.models.PhotoNewsPost;
@@ -34,17 +34,17 @@ public abstract class PhotoFragment extends Fragment {
     @Inject
     FactoryPostFinder mFactoryPostFinder;
 
-    protected abstract PostFinder createPostFinder(FactoryPostFinder factoryPostFinder);
+    protected abstract PostFinder createPostFinder();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_fragment, null);
 
-        PhotoNewsApp.getApp().getCreateAppComponent().getComponent().inject(this);
+        AppInjector.get().inject(this);
 
         mSuperRecyclerView = (SuperRecyclerView) v.findViewById(R.id.lv_photo_result);
         setLayoutManagerForRecyclerView();
 
-        final PostFinder postFinder = createPostFinder(mFactoryPostFinder);
+        final PostFinder postFinder = createPostFinder();
 
         postFinder.requestPhotos(new RequestListener<PhotoNewsList>() {
             @Override

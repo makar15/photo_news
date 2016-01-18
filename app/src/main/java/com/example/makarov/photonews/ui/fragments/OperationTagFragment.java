@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.makarov.photonews.PhotoNewsApp;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
 import java.util.Date;
+
+import javax.inject.Inject;
 
 public class OperationTagFragment extends Fragment implements View.OnClickListener {
 
@@ -23,9 +26,14 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
 
     private EditText mLineTagSearch;
 
+    @Inject
+    TagDbAdapter mTagDbAdapter;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.operation_tag_fragment, null);
+
+        AppInjector.get().inject(this);
 
         mLineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
         v.findViewById(R.id.sign_tag);
@@ -52,8 +60,7 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
             case R.id.add_tag_btn: {
 
                 if (!TextUtils.isEmpty(tagSearch)) {
-                    PhotoNewsApp.getApp().getTagDbAdapter().open()
-                            .add(new Tag(tagSearch, new Date().getTime()));
+                    mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
                 }
             }
             break;

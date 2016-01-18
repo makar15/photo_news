@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.makarov.photonews.PhotoNewsApp;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
+import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class GoogleMapFragment extends Fragment implements View.OnClickListener {
 
     public static final String GOOGLE_MAP_KEY = "google_map";
@@ -42,9 +45,14 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
     private Marker mMarker;
     private Address mAddress;
 
+    @Inject
+    LocationDbAdapter mLocationDbAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
+
+        AppInjector.get().inject(this);
 
         MapsInitializer.initialize(getContext());
 
@@ -122,8 +130,8 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
             case R.id.add_location_btn: {
                 //TODO see the location on the map
                 if (mMarker != null) {
-                    long result = PhotoNewsApp.getApp().getLocationDbAdapter()
-                            .open().add(initDbModelLocation());
+                    long result = mLocationDbAdapter.open().add(initDbModelLocation());
+
                     if (result == -1) {
                         Toast.makeText(getContext(), "location is already in the list",
                                 Toast.LENGTH_LONG).show();
