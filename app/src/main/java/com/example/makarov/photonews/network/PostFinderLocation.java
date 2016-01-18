@@ -37,15 +37,15 @@ public class PostFinderLocation implements PostFinder {
         if (mNextPageUrlSaver.getNextLoading()) {
             URL nextUrl = mNextPageUrlSaver.getUrl();
 
-            //if (nextUrl != null && !mUrlSavePhotosSearch.equals(nextUrl)) {
-            mUrlSavePhotosSearch = nextUrl;
-            mPostRequestImage = new PhotoNewsLocationRequest
-                    (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
+            if (nextUrl != null && !mUrlSavePhotosSearch.equals(nextUrl)) {
+                mUrlSavePhotosSearch = nextUrl;
+                mPostRequestImage = new PhotoNewsLocationRequest
+                        (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
 
-            PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
-                    mPostRequestImage.createCacheKey(),
-                    DurationInMillis.ONE_MINUTE, requestListener);
-            //}
+                PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                        mPostRequestImage.createCacheKey(),
+                        DurationInMillis.ONE_MINUTE, requestListener);
+            }
             return true;
         }
 

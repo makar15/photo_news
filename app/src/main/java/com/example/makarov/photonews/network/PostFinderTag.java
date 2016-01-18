@@ -35,15 +35,15 @@ public class PostFinderTag implements PostFinder {
         if (mNextPageUrlSaver.getNextLoading()) {
             URL nextUrl = mNextPageUrlSaver.getUrl();
 
-            //if (nextUrl != null && !mUrlSavePhotosTag.equals(nextUrl)) {
-            mUrlSavePhotosTag = nextUrl;
-            mPostRequestImage =
-                    new PhotoNewsImageRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
+            if (nextUrl != null && !mUrlSavePhotosTag.equals(nextUrl)) {
+                mUrlSavePhotosTag = nextUrl;
+                mPostRequestImage =
+                        new PhotoNewsImageRequest(mUrlSavePhotosTag, mNextPageUrlSaver);
 
-            PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
-                    mPostRequestImage.createCacheKey(),
-                    DurationInMillis.ONE_MINUTE, requestListener);
-            //}
+                PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
+                        mPostRequestImage.createCacheKey(),
+                        DurationInMillis.ONE_MINUTE, requestListener);
+            }
             return true;
         }
 

@@ -122,8 +122,12 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
             case R.id.add_location_btn: {
                 //TODO see the location on the map
                 if (mMarker != null) {
-                    PhotoNewsApp.getApp().getLocationDbAdapter()
+                    long result = PhotoNewsApp.getApp().getLocationDbAdapter()
                             .open().add(initDbModelLocation());
+                    if (result == -1) {
+                        Toast.makeText(getContext(), "location is already in the list",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
             break;
