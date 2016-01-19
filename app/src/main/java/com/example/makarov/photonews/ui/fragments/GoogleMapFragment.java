@@ -8,12 +8,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -34,12 +35,23 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class GoogleMapFragment extends Fragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class GoogleMapFragment extends Fragment {
 
     public static final String GOOGLE_MAP_KEY = "google_map";
 
-    private EditText mLineNameLocation;
-    private MapView mMapView;
+    @Bind(R.id.line_name_location)
+    EditText mLineNameLocation;
+    @Bind(R.id.map)
+    MapView mMapView;
+    @Bind(R.id.search_location_btn)
+    Button mSearchLocation;
+    @Bind(R.id.open_photo_btn)
+    Button mOpenPhoto;
+    @Bind(R.id.add_location_btn)
+    Button mAddLocation;
 
     private GoogleMap mMap;
     private Marker mMarker;
@@ -51,16 +63,47 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
-
+        ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
         MapsInitializer.initialize(getContext());
 
-        mMapView = (MapView) v.findViewById(R.id.map);
-        mLineNameLocation = (EditText) v.findViewById(R.id.line_name_location);
-        v.findViewById(R.id.search_location_btn).setOnClickListener(this);
-        v.findViewById(R.id.open_photo_btn).setOnClickListener(this);
-        v.findViewById(R.id.add_location_btn).setOnClickListener(this);
+        mSearchLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String location = mLineNameLocation.getText().toString();
+
+                try {
+                    if (!TextUtils.isEmpty(location)) {
+                        findLocation(location);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        mOpenPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMarker != null) {
+                    openListPhotoResultLocation(initDbModelLocation());
+                }
+            }
+        });
+        mAddLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO see the location on the map
+                if (mMarker != null) {
+                    long result = mLocationDbAdapter.open().add(initDbModelLocation());
+
+                    if (result == -1) {
+                        Toast.makeText(getContext(), "location is already in the list",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
 
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();
@@ -101,48 +144,6 @@ public class GoogleMapFragment extends Fragment implements View.OnClickListener 
                 }
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        String location = mLineNameLocation.getText().toString();
-
-        switch (v.getId()) {
-            case R.id.search_location_btn: {
-                try {
-                    if (!TextUtils.isEmpty(location)) {
-                        findLocation(location);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            break;
-
-            case R.id.open_photo_btn: {
-                if (mMarker != null) {
-                    openListPhotoResultLocation(initDbModelLocation());
-                }
-            }
-            break;
-
-            case R.id.add_location_btn: {
-                //TODO see the location on the map
-                if (mMarker != null) {
-                    long result = mLocationDbAdapter.open().add(initDbModelLocation());
-
-                    if (result == -1) {
-                        Toast.makeText(getContext(), "location is already in the list",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            break;
-
-            default:
-                break;
-        }
     }
 
     private void findLocation(String location) throws IOException {

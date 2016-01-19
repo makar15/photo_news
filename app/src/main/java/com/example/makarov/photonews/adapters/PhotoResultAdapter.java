@@ -14,6 +14,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * generates a list of photos, with updating
  */
@@ -57,19 +60,18 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
 
     public static class ResultViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView icon;
-        public ImageView like;
-        public TextView author;
-        public TextView countLikes;
+        @Bind(R.id.icon)
+        ImageView icon;
+        @Bind(R.id.like)
+        ImageView like;
+        @Bind(R.id.author)
+        TextView author;
+        @Bind(R.id.count_likes)
+        TextView countLikes;
 
         public ResultViewHolder(View v) {
             super(v);
-
-            icon = (ImageView) v.findViewById(R.id.icon);
-            like = (ImageView) v.findViewById(R.id.like);
-            author = (TextView) v.findViewById(R.id.author);
-            countLikes = (TextView) v.findViewById(R.id.count_likes);
-
+            ButterKnife.bind(this, v);
         }
     }
 

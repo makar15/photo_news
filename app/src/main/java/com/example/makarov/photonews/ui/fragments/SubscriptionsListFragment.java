@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
@@ -25,11 +26,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class SubscriptionsListFragment extends Fragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class SubscriptionsListFragment extends Fragment {
 
     public static final String SUBSCRIPTIONS_LIST_KEY = "subscriptions_list";
 
-    private RecyclerView mLvSubscriptions;
+    @Bind(R.id.lv_subscriptions)
+    RecyclerView mLvSubscriptions;
+    @Bind(R.id.search_by_tag_btn)
+    Button mSearchByTag;
+    @Bind(R.id.search_by_location_btn)
+    Button mSearchByLocation;
 
     @Inject
     TagDbAdapter mTagDbAdapter;
@@ -39,37 +48,28 @@ public class SubscriptionsListFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.subscriptions_list_fragment, null);
-
+        ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        v.findViewById(R.id.search_by_tag_btn).setOnClickListener(this);
-        v.findViewById(R.id.search_by_location_btn).setOnClickListener(this);
-
-        mLvSubscriptions = (RecyclerView) v.findViewById(R.id.lv_subscriptions);
         setLayoutManagerForRecyclerView();
 
         List<Subscription> subscriptionsDb = getSubscriptionsDb();
         setAdapterForRecyclerView(getSortedSubscriptionsDb(subscriptionsDb));
 
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.search_by_tag_btn: {
+        mSearchByTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 openOperationTag();
             }
-            break;
-
-            case R.id.search_by_location_btn: {
+        });
+        mSearchByLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 openGoogleMap();
             }
-            break;
+        });
 
-            default:
-                break;
-        }
+        return v;
     }
 
     private void openListPhotoResultTag(Tag tag) {

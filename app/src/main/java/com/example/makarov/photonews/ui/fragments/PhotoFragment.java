@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.PhotoNewsPost;
 import com.example.makarov.photonews.network.PostFinder;
 import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
@@ -24,24 +24,28 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public abstract class PhotoFragment extends Fragment {
 
     public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
 
-    private SuperRecyclerView mSuperRecyclerView;
-    private PhotoResultAdapter mPhotoAdapter;
+    @Bind(R.id.lv_photo_result)
+    SuperRecyclerView mSuperRecyclerView;
 
     @Inject
     FactoryPostFinder mFactoryPostFinder;
+
+    private PhotoResultAdapter mPhotoAdapter;
 
     protected abstract PostFinder createPostFinder();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_fragment, null);
-
+        ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        mSuperRecyclerView = (SuperRecyclerView) v.findViewById(R.id.lv_photo_result);
         setLayoutManagerForRecyclerView();
 
         final PostFinder postFinder = createPostFinder();

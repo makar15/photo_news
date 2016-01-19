@@ -7,25 +7,37 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
 import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 
 import javax.inject.Inject;
 
-public class ChangeNameLocationDialog extends DialogFragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-    private Location mLocation;
-    private EditText mEtNewNameLocation;
-    private AdapterSubscriptions mAdapterSubscriptions;
+public class ChangeNameLocationDialog extends DialogFragment {
+
+    @Bind(R.id.et_new_name_location)
+    EditText mEtNewNameLocation;
+    @Bind(R.id.tv_name_location)
+    TextView mTvNameLocation;
+    @Bind(R.id.btn_cancel)
+    Button mCancel;
+    @Bind(R.id.btn_change)
+    Button mChange;
 
     @Inject
     LocationDbAdapter mLocationDbAdapter;
+
+    private Location mLocation;
+    private AdapterSubscriptions mAdapterSubscriptions;
 
     public ChangeNameLocationDialog(Location location, AdapterSubscriptions adapter) {
         mLocation = location;
@@ -36,44 +48,34 @@ public class ChangeNameLocationDialog extends DialogFragment implements View.OnC
                              Bundle savedInstanceState) {
         getDialog().setTitle("Change name location");
         View v = inflater.inflate(R.layout.change_name_location_dialog, null);
-
+        ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        mEtNewNameLocation = (EditText) v.findViewById(R.id.et_new_name_location);
-        TextView nameLocation = (TextView) v.findViewById(R.id.tv_name_location);
-        v.findViewById(R.id.btn_cancel).setOnClickListener(this);
-        v.findViewById(R.id.btn_change).setOnClickListener(this);
-
-        nameLocation.setText(mLocation.getName());
-
-        this.setCancelable(false);
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        String mNewNameLocation = mEtNewNameLocation.getText().toString();
-
-        switch (v.getId()) {
-            case R.id.btn_cancel: {
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dismiss();
             }
-            break;
+        });
+        mChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newNameLocation = mEtNewNameLocation.getText().toString();
 
-            case R.id.btn_change: {
-                if (!TextUtils.isEmpty(mNewNameLocation)) {
-                    mLocation.setName(mNewNameLocation);
+                if (!TextUtils.isEmpty(newNameLocation)) {
+                    mLocation.setName(newNameLocation);
                     mLocationDbAdapter.open().update(mLocation);
                     mLocationDbAdapter.close();
                     mAdapterSubscriptions.notifyDataSetChanged();
                     dismiss();
                 }
             }
-            break;
+        });
 
-            default:
-                break;
-        }
+        mTvNameLocation.setText(mLocation.getName());
+
+        this.setCancelable(false);
+        return v;
     }
 
     public void onDismiss(DialogInterface dialog) {

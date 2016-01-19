@@ -15,7 +15,7 @@ public class PostFinderLocation implements PostFinder {
     private URL mUrlSavePhotosSearch;
     private Location mLocation;
 
-    private PhotoNewsLocationRequest mPostRequestImage;
+    private PhotoNewsLocationRequest mPostRequestLocation;
     private NextPageUrlSaver mNextPageUrlSaver;
 
     public PostFinderLocation(Location location) {
@@ -25,11 +25,11 @@ public class PostFinderLocation implements PostFinder {
 
     public void requestPhotos(RequestListener<PhotoNewsList> requestListener) {
         mUrlSavePhotosSearch = UrlInstaUtils.getUrlPhotosSearch(mLocation);
-        mPostRequestImage = new PhotoNewsLocationRequest
+        mPostRequestLocation = new PhotoNewsLocationRequest
                 (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
 
-        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
-                mPostRequestImage.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
+        PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestLocation,
+                mPostRequestLocation.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
     }
 
     public boolean nextRequestPhotos(RequestListener<PhotoNewsList> requestListener) {
@@ -39,11 +39,11 @@ public class PostFinderLocation implements PostFinder {
 
             if (nextUrl != null && !mUrlSavePhotosSearch.equals(nextUrl)) {
                 mUrlSavePhotosSearch = nextUrl;
-                mPostRequestImage = new PhotoNewsLocationRequest
+                mPostRequestLocation = new PhotoNewsLocationRequest
                         (mUrlSavePhotosSearch, mNextPageUrlSaver, mLocation);
 
-                PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestImage,
-                        mPostRequestImage.createCacheKey(),
+                PhotoNewsApp.getApp().getSpiceManager().execute(mPostRequestLocation,
+                        mPostRequestLocation.createCacheKey(),
                         DurationInMillis.ONE_MINUTE, requestListener);
             }
             return true;

@@ -8,11 +8,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.TagDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
@@ -20,11 +22,21 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-public class OperationTagFragment extends Fragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class OperationTagFragment extends Fragment {
 
     public static final String OPERATION_KEY = "operation";
 
-    private EditText mLineTagSearch;
+    @Bind(R.id.line_tag_search)
+    EditText mLineTagSearch;
+    @Bind(R.id.sign_tag)
+    TextView mSignTag;
+    @Bind(R.id.enter_search_btn)
+    Button mEnterSearch;
+    @Bind(R.id.add_tag_btn)
+    Button mAddTag;
 
     @Inject
     TagDbAdapter mTagDbAdapter;
@@ -32,42 +44,33 @@ public class OperationTagFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.operation_tag_fragment, null);
-
+        ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        mLineTagSearch = (EditText) v.findViewById(R.id.line_tag_search);
-        v.findViewById(R.id.sign_tag);
-        v.findViewById(R.id.enter_search_btn).setOnClickListener(this);
-        v.findViewById(R.id.add_tag_btn).setOnClickListener(this);
+        mEnterSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagSearch = mLineTagSearch.getText().toString();
 
-        mLineTagSearch.addTextChangedListener(textWatcherBanSpace);
-
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        String tagSearch = mLineTagSearch.getText().toString();
-
-        switch (v.getId()) {
-            case R.id.enter_search_btn: {
                 if (!TextUtils.isEmpty(tagSearch)) {
                     openListPhotoResultTag(tagSearch);
                 }
             }
-            break;
-
-            case R.id.add_tag_btn: {
+        });
+        mAddTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagSearch = mLineTagSearch.getText().toString();
 
                 if (!TextUtils.isEmpty(tagSearch)) {
                     mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
                 }
             }
-            break;
+        });
 
-            default:
-                break;
-        }
+        mLineTagSearch.addTextChangedListener(textWatcherBanSpace);
+
+        return v;
     }
 
     private void openListPhotoResultTag(String lineTag) {

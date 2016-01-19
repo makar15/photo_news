@@ -31,6 +31,11 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
         mLocation = location;
     }
 
+    /*
+    method run in the moment:
+    getSpiceManager().execute(mPostRequestLocation,
+                mPostRequestLocation.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
+     */
     @Override
     public PhotoNewsList loadDataFromNetwork() {
 

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.makarov.photonews.R;
@@ -18,6 +19,9 @@ import com.example.makarov.photonews.utils.CreateDialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class AdapterSubscriptions
         extends RecyclerView.Adapter<AdapterSubscriptions.SubscriptionViewHolder> {
@@ -98,21 +102,31 @@ public class AdapterSubscriptions
     public abstract class SubscriptionViewHolder extends RecyclerView.ViewHolder {
         public SubscriptionViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         public abstract void setDataOnView(int position);
     }
 
-    public class TagViewHolder extends SubscriptionViewHolder implements View.OnClickListener {
+    public class TagViewHolder extends SubscriptionViewHolder {
 
-        private TextView mNameTag;
+        @Bind(R.id.name_tag)
+        TextView mNameTag;
+        @Bind(R.id.delete_tag_btn)
+        Button mDeleteTag;
+
         private Tag mTag;
 
         public TagViewHolder(View v) {
             super(v);
 
-            mNameTag = (TextView) v.findViewById(R.id.name_tag);
-            v.findViewById(R.id.delete_tag_btn).setOnClickListener(this);
+            mDeleteTag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteTag();
+                    mDbAdapter.close();
+                }
+            });
         }
 
         @Override
@@ -127,31 +141,36 @@ public class AdapterSubscriptions
             AdapterSubscriptions.this.notifyDataSetChanged();
             return mDbAdapter.open().delete(mTag);
         }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.delete_tag_btn: {
-                    deleteTag();
-                    mDbAdapter.close();
-                }
-                default:
-                    break;
-            }
-        }
     }
 
-    public class LocationViewHolder extends SubscriptionViewHolder implements View.OnClickListener {
+    public class LocationViewHolder extends SubscriptionViewHolder {
 
-        private TextView mNameLocation;
+        @Bind(R.id.name_location)
+        TextView mNameLocation;
+        @Bind(R.id.delete_location_btn)
+        Button mDeleteLocation;
+        @Bind(R.id.change_name_location_btn)
+        Button mChangeNameLocation;
+
         private Location mLocation;
 
         public LocationViewHolder(View v) {
             super(v);
 
-            mNameLocation = (TextView) v.findViewById(R.id.name_location);
-            v.findViewById(R.id.delete_location_btn).setOnClickListener(this);
-            v.findViewById(R.id.change_name_location_btn).setOnClickListener(this);
+            mDeleteLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteLocation();
+                    mLocationDbAdapter.close();
+                }
+            });
+            mChangeNameLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openDialogChangeNameLocation(mLocation);
+                    mLocationDbAdapter.close();
+                }
+            });
         }
 
         @Override
@@ -171,26 +190,6 @@ public class AdapterSubscriptions
             CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
             createDialog.createDialog(new ChangeNameLocationDialog
                     (location, AdapterSubscriptions.this));
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.delete_location_btn: {
-                    deleteLocation();
-                    mLocationDbAdapter.close();
-                }
-                break;
-
-                case R.id.change_name_location_btn: {
-                    openDialogChangeNameLocation(mLocation);
-                    mLocationDbAdapter.close();
-                }
-                break;
-
-                default:
-                    break;
-            }
         }
     }
 
