@@ -75,4 +75,6 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    compile 'org.adw.library:discrete-seekbar:1.0.0'
 }

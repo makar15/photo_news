@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.makarov.photonews.R;
@@ -30,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,6 @@ import butterknife.ButterKnife;
 public class GoogleMapFragment extends Fragment {
 
     public static final String GOOGLE_MAP_KEY = "google_map";
-    private final int DIFFERENCE_FROM_ZERO_BAR = 1000;
 
     @Bind(R.id.line_name_location)
     EditText mLineNameLocation;
@@ -55,7 +55,7 @@ public class GoogleMapFragment extends Fragment {
     @Bind(R.id.add_location_btn)
     Button mAddLocation;
     @Bind(R.id.radius_search_bar)
-    SeekBar mRadiusSearch;
+    DiscreteSeekBar mRadiusSearch;
 
     @Inject
     LocationDbAdapter mLocationDbAdapter;
@@ -63,7 +63,6 @@ public class GoogleMapFragment extends Fragment {
     private GoogleMap mMap;
     private Marker mMarker;
     private Address mAddress;
-    private int mProgressValueBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,27 +108,9 @@ public class GoogleMapFragment extends Fragment {
                 }
             }
         });
-        mRadiusSearch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mProgressValueBar = progress + DIFFERENCE_FROM_ZERO_BAR;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
 
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();
-        mProgressValueBar = mRadiusSearch.getProgress() + DIFFERENCE_FROM_ZERO_BAR;
 
         if (mMap != null) {
             initGoogleMap();
@@ -228,7 +209,7 @@ public class GoogleMapFragment extends Fragment {
     private Location initDbModelLocation() {
         return new Location(getInitNameLocation(), mAddress.getLatitude(), mAddress.getLongitude(),
                 mAddress.getCountryName(), mAddress.getLocality(), mAddress.getThoroughfare(),
-                new Date().getTime(), mProgressValueBar);
+                new Date().getTime(), mRadiusSearch.getProgress());
     }
 
     private String getNullableString(String string) {
