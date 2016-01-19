@@ -11,11 +11,12 @@ public class Location implements Parcelable, Subscription {
     private final String mLocality;
     private final String mThoroughfare;
     private final long mDate;
+    private final int mRadiusSearch;
 
     private String mName;
 
     public Location(String name, double latitude, double longitude, String countryName,
-                    String locality, String thoroughfare, long date) {
+                    String locality, String thoroughfare, long date, int radiusSearch) {
         mName = name;
         mLatitude = latitude;
         mLongitude = longitude;
@@ -23,6 +24,7 @@ public class Location implements Parcelable, Subscription {
         mLocality = locality;
         mThoroughfare = thoroughfare;
         mDate = date;
+        mRadiusSearch = radiusSearch;
     }
 
     protected Location(Parcel in) {
@@ -33,6 +35,7 @@ public class Location implements Parcelable, Subscription {
         mLocality = in.readString();
         mThoroughfare = in.readString();
         mDate = in.readLong();
+        mRadiusSearch = in.readInt();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -79,6 +82,10 @@ public class Location implements Parcelable, Subscription {
         return mDate;
     }
 
+    public int getRadiusSearch() {
+        return mRadiusSearch;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,5 +100,6 @@ public class Location implements Parcelable, Subscription {
         dest.writeString(mLocality);
         dest.writeString(mThoroughfare);
         dest.writeLong(mDate);
+        dest.writeInt(mRadiusSearch);
     }
 }

@@ -23,9 +23,10 @@ public class NextPageUrlSaverLocation implements NextPageUrlSaver {
 
     public URL getUrl() {
 
-        String nextUrl = Constants.VERSION_API_URL + "/media/search?" + "lat="
-                + mLocation.getLatitude() + "&lng=" + mLocation.getLongitude() + "&distance=2500" +
-                "&max_timestamp=" + mCreatedTime + "&access_token=" + Constants.ACCESS_TOKEN;
+        String nextUrl = Constants.VERSION_API_URL + "/media/search?"
+                + "lat=" + mLocation.getLatitude() + "&lng=" + mLocation.getLongitude()
+                + "&distance=" + mLocation.getRadiusSearch() + "&max_timestamp=" + mCreatedTime
+                + "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             mNextLoading = false;
             return new URL(nextUrl);

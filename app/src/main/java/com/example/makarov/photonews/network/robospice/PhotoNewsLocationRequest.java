@@ -77,9 +77,10 @@ public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNew
 
     public URL getInterimUrl(String createdTime) {
 
-        String nextUrl = Constants.VERSION_API_URL + "/media/search?" + "lat="
-                + mLocation.getLatitude() + "&lng=" + mLocation.getLongitude() + "&distance=2500" +
-                "&max_timestamp=" + createdTime + "&access_token=" + Constants.ACCESS_TOKEN;
+        String nextUrl = Constants.VERSION_API_URL + "/media/search?"
+                + "lat=" + mLocation.getLatitude() + "&lng=" + mLocation.getLongitude()
+                + "&distance=" + mLocation.getRadiusSearch() + "&max_timestamp=" + createdTime
+                + "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             return new URL(nextUrl);
         } catch (MalformedURLException e) {

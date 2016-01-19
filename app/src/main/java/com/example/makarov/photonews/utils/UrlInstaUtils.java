@@ -22,9 +22,10 @@ public class UrlInstaUtils {
     public static URL getUrlPhotosSearch(Location location) {
 
         //TODO create control distance variable
-        String url = Constants.VERSION_API_URL + "/media/search?" + "lat="
-                + location.getLatitude() + "&lng=" + location.getLongitude() + "&distance=2500" +
-                "&access_token=" + Constants.ACCESS_TOKEN;
+        String url = Constants.VERSION_API_URL + "/media/search?"
+                + "lat=" + location.getLatitude() + "&lng=" + location.getLongitude()
+                + "&distance=" + location.getRadiusSearch()
+                + "&access_token=" + Constants.ACCESS_TOKEN;
         try {
             return new URL(url);
         } catch (MalformedURLException e) {

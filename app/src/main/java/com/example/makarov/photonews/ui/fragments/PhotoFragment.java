@@ -64,7 +64,7 @@ public abstract class PhotoFragment extends Fragment {
             }
         });
 
-        int LOAD_PHOTO = 10;
+        final int LOAD_PHOTO = 10;
         mSuperRecyclerView.setupMoreListener(new OnMoreListener() {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {

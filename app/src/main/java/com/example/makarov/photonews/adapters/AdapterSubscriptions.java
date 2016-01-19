@@ -14,7 +14,7 @@ import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
-import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
+import com.example.makarov.photonews.ui.dialog.ChangeNameLocationDialog;
 import com.example.makarov.photonews.utils.CreateDialogUtils;
 
 import java.util.ArrayList;

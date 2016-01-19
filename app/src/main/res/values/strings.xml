@@ -7,5 +7,7 @@
     <string name="message_text">Enter your new name</string>
     <string name="change">change</string>
     <string name="cancel">cancel</string>
+    <string name="radius_search">Radius search:</string>
+    <string name="location">Location:</string>
 
 </resources>

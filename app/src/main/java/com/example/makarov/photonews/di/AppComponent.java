@@ -5,7 +5,7 @@ import com.example.makarov.photonews.ui.fragments.GoogleMapFragment;
 import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
 import com.example.makarov.photonews.ui.fragments.PhotoFragment;
 import com.example.makarov.photonews.ui.fragments.SubscriptionsListFragment;
-import com.example.makarov.photonews.ui.fragments.dialog.ChangeNameLocationDialog;
+import com.example.makarov.photonews.ui.dialog.ChangeNameLocationDialog;
 
 import javax.inject.Singleton;
 

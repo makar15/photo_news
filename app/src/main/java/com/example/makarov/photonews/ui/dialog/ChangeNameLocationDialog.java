@@ -1,4 +1,4 @@
-package com.example.makarov.photonews.ui.fragments.dialog;
+package com.example.makarov.photonews.ui.dialog;
 
 import android.app.DialogFragment;
 import android.content.DialogInterface;

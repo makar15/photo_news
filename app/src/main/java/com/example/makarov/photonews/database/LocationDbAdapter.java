@@ -65,7 +65,8 @@ public class LocationDbAdapter {
                         DataBaseHelper.THOROUGHFARE_COLUMN,
                         DataBaseHelper.DATE_ADD_LOCATION_COLUMN,
                         DataBaseHelper.LATITUDE_COLUMN,
-                        DataBaseHelper.LONGITUDE_COLUMN},
+                        DataBaseHelper.LONGITUDE_COLUMN,
+                        DataBaseHelper.RADIUS_SEARCH_COLUMN},
                 null, null, null, null, null);
 
         List<Location> locations = new ArrayList<>();
@@ -96,6 +97,10 @@ public class LocationDbAdapter {
         return cursor.getDouble(cursor.getColumnIndex(columnName));
     }
 
+    private int getInt(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndex(columnName));
+    }
+
     //TODO method public Location getLocation() by name  or name.hashCode??
     private Location restore(Cursor cursor) {
 
@@ -106,9 +111,10 @@ public class LocationDbAdapter {
         long date = getLong(cursor, DataBaseHelper.DATE_ADD_LOCATION_COLUMN);
         double latitude = getDouble(cursor, DataBaseHelper.LATITUDE_COLUMN);
         double longitude = getDouble(cursor, DataBaseHelper.LONGITUDE_COLUMN);
+        int radiusSearch = getInt(cursor, DataBaseHelper.RADIUS_SEARCH_COLUMN);
 
         return new Location(nameLocation, latitude, longitude,
-                countryName, locality, thoroughfare, date);
+                countryName, locality, thoroughfare, date, radiusSearch);
     }
 
     private ContentValues createContentValues(Location location) {
@@ -120,6 +126,7 @@ public class LocationDbAdapter {
         values.put(DataBaseHelper.DATE_ADD_LOCATION_COLUMN, location.getDate());
         values.put(DataBaseHelper.LATITUDE_COLUMN, location.getLatitude());
         values.put(DataBaseHelper.LONGITUDE_COLUMN, location.getLongitude());
+        values.put(DataBaseHelper.RADIUS_SEARCH_COLUMN, location.getRadiusSearch());
 
         return values;
     }

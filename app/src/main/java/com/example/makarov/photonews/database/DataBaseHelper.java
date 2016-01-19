@@ -24,6 +24,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String DATE_ADD_LOCATION_COLUMN = "date_add_location";
     public static final String LATITUDE_COLUMN = "latitude";
     public static final String LONGITUDE_COLUMN = "longitude";
+    public static final String RADIUS_SEARCH_COLUMN = "radius_search";
 
     private static final String DATABASE_CREATE_SCRIPT_TAGS = "create table "
             + TABLE_TAGS + " (" + BaseColumns._ID + " integer primary key autoincrement, "
@@ -38,7 +39,8 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + THOROUGHFARE_COLUMN + " text, "
             + DATE_ADD_LOCATION_COLUMN + " integer,"
             + LATITUDE_COLUMN + " integer not null unique,"
-            + LONGITUDE_COLUMN + " integer not null unique" + ");";
+            + LONGITUDE_COLUMN + " integer not null unique,"
+            + RADIUS_SEARCH_COLUMN + " integer not null" + ");";
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

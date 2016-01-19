@@ -13,8 +13,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:text="Location:"
+            android:id="@+id/location_tv"
+            android:text="@string/location"
             android:textSize="14sp" />
 
         <EditText
@@ -44,6 +44,27 @@
             android:text="add"
             android:id="@+id/add_location_btn" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radius_search_tv"
+            android:text="@string/radius_search"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="4000"
+            android:progress="2000"
+            android:id="@+id/radius_search_bar"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <com.google.android.gms.maps.MapView
