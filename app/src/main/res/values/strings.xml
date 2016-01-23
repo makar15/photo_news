@@ -9,5 +9,9 @@
     <string name="cancel">cancel</string>
     <string name="radius_search">Radius search:</string>
     <string name="location">Location:</string>
+    <string name="tag">tag</string>
+    <string name="err_massage_zero_tag">Enter the Tag</string>
+    <string name="err_massage_zero_marker">Design your marker on the map</string>
+    <string name="err_massage_zero_location">Enter location</string>
 
 </resources>

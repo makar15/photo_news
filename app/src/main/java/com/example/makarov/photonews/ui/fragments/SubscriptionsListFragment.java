@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
@@ -20,6 +19,7 @@ import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.example.makarov.photonews.utils.FastSort;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,9 @@ public class SubscriptionsListFragment extends Fragment {
     @Bind(R.id.lv_subscriptions)
     RecyclerView mLvSubscriptions;
     @Bind(R.id.search_by_tag_btn)
-    Button mSearchByTag;
+    FloatingActionButton mSearchByTag;
     @Bind(R.id.search_by_location_btn)
-    Button mSearchByLocation;
+    FloatingActionButton mSearchByLocation;
 
     @Inject
     TagDbAdapter mTagDbAdapter;
@@ -50,7 +50,6 @@ public class SubscriptionsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.subscriptions_list_fragment, null);
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
-
         setLayoutManagerForRecyclerView();
 
         List<Subscription> subscriptionsDb = getSubscriptionsDb();

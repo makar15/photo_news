@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_subscriptions"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:scrollbars="vertical" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/search_by_location_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="16dp"
+        android:src="@mipmap/ic_marker"
+        android:scaleType="fitCenter"
+        fab:fab_colorNormal="@color/color_normal"
+        fab:fab_colorPressed="@color/color_pressed"
+        fab:fab_colorRipple="@color/color_ripple" />
 
-        <Button
-            android:id="@+id/search_by_tag_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="search by tag"
-            android:textColor="@android:color/black"
-            android:textSize="10dp" />
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/search_by_tag_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="80dp"
+        android:src="@mipmap/ic_hash_tag"
+        android:scaleType="fitCenter"
+        fab:fab_colorNormal="@color/color_normal"
+        fab:fab_colorPressed="@color/color_pressed"
+        fab:fab_colorRipple="@color/color_ripple" />
 
-        <Button
-            android:id="@+id/search_by_location_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="search by location"
-            android:textColor="@android:color/black"
-            android:textSize="10dp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lv_subscriptions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:scrollbars="vertical" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

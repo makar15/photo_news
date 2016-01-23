@@ -2,4 +2,15 @@
 <resources>
     <style name="AppTheme" parent="android:Theme.Material.Light">
     </style>
+
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">#000000</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">#000000</item>
+        <item name="colorControlNormal">#000000</item>
+        <item name="colorControlActivated">#000000</item>
+    </style>
+
 </resources>
