@@ -3,7 +3,6 @@ package com.example.makarov.photonews.ui.fragments;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+import com.github.florent37.materialtextfield.MaterialTextField;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
@@ -46,7 +46,7 @@ public class GoogleMapFragment extends Fragment {
     public static final String GOOGLE_MAP_KEY = "google_map";
 
     @Bind(R.id.input_layout_location)
-    TextInputLayout mLayoutLocation;
+    MaterialTextField mLayoutLocation;
     @Bind(R.id.line_name_location)
     EditText mLineNameLocation;
     @Bind(R.id.map)
@@ -83,8 +83,6 @@ public class GoogleMapFragment extends Fragment {
                 try {
                     if (!TextUtils.isEmpty(location)) {
                         findLocation(location);
-                    } else {
-                        mLayoutLocation.setError(getString(R.string.err_massage_zero_location));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -96,8 +94,6 @@ public class GoogleMapFragment extends Fragment {
             public void onClick(View v) {
                 if (mMarker != null) {
                     openListPhotoResultLocation(initDbModelLocation());
-                } else {
-                    mLayoutLocation.setError(getString(R.string.err_massage_zero_marker));
                 }
             }
         });
@@ -112,8 +108,6 @@ public class GoogleMapFragment extends Fragment {
                         Toast.makeText(getContext(), "location is already in the list",
                                 Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    mLayoutLocation.setError(getString(R.string.err_massage_zero_marker));
                 }
             }
         });

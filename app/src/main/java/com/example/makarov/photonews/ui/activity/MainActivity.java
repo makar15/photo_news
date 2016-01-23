@@ -9,6 +9,7 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.ui.fragments.GoogleMapFragment;
 import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
 import com.example.makarov.photonews.ui.fragments.PhotoLocationFragment;
+import com.example.makarov.photonews.ui.fragments.PhotoNewsFragment;
 import com.example.makarov.photonews.ui.fragments.PhotoTagFragment;
 import com.example.makarov.photonews.ui.fragments.SubscriptionsListFragment;
 
@@ -38,6 +39,12 @@ public class MainActivity extends FragmentActivity {
 
     public void openListPhotoResultLocationFragment(Bundle bundle) {
         Fragment newFragment = new PhotoLocationFragment();
+        newFragment.setArguments(bundle);
+        openFragment(newFragment, true);
+    }
+
+    public void openListPhotoNewsFragment(Bundle bundle) {
+        Fragment newFragment = new PhotoNewsFragment();
         newFragment.setArguments(bundle);
         openFragment(newFragment, true);
     }

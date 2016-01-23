@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.database.PhotoNewsDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
 
 import javax.inject.Singleton;
@@ -44,4 +45,9 @@ public class MainModule {
         return new LocationDbAdapter(mContext);
     }
 
+    @Provides
+    @Singleton
+    PhotoNewsDbAdapter providePhotoNewsDbAdapter() {
+        return new PhotoNewsDbAdapter(mContext);
+    }
 }

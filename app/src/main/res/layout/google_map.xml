@@ -38,19 +38,23 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.github.florent37.materialtextfield.MaterialTextField
             android:id="@+id/input_layout_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/Theme.AppCompat">
+            app:mtf_image="@mipmap/ic_marker"
+            app:mtf_cardColor="@color/color_two_theme"
+            app:mtf_labelColor="@android:color/holo_red_dark">
 
             <EditText
                 android:id="@+id/line_name_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/location" />
+                android:hint="@string/location"
+                android:textColor="@color/color_normal"
+                android:textSize="18sp" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.github.florent37.materialtextfield.MaterialTextField>
 
     </LinearLayout>
 

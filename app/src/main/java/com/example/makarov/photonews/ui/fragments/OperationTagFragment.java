@@ -1,7 +1,6 @@
 package com.example.makarov.photonews.ui.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+import com.github.florent37.materialtextfield.MaterialTextField;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Date;
@@ -32,11 +31,9 @@ public class OperationTagFragment extends Fragment {
     public static final String OPERATION_KEY = "operation";
 
     @Bind(R.id.input_layout_tag)
-    TextInputLayout mLayoutTag;
+    MaterialTextField mLayoutTag;
     @Bind(R.id.line_tag_search)
     EditText mLineTagSearch;
-    @Bind(R.id.sign_tag)
-    TextView mSignTag;
     @Bind(R.id.enter_search_btn)
     Button mEnterSearch;
     @Bind(R.id.add_tag_btn)
@@ -58,8 +55,6 @@ public class OperationTagFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(tagSearch)) {
                     openListPhotoResultTag(tagSearch);
-                } else {
-                    mLayoutTag.setError(getString(R.string.err_massage_zero_tag));
                 }
             }
         });
@@ -70,8 +65,6 @@ public class OperationTagFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(tagSearch)) {
                     mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
-                } else {
-                    mLayoutTag.setError(getString(R.string.err_massage_zero_tag));
                 }
             }
         });

@@ -4,5 +4,6 @@
     <color name="color_normal">#ff4270</color>2be9c4
     <color name="color_pressed">#f74864</color>
     <color name="color_ripple">#ff7d82</color>
+    <color name="color_two_theme">#02e4ff</color>
 
 </resources>
