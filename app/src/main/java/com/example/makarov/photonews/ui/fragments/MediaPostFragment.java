@@ -2,7 +2,7 @@ package com.example.makarov.photonews.ui.fragments;
 
 import com.example.makarov.photonews.network.PostFinder;
 
-public class PhotoNewsFragment extends PhotoFragment {
+public class MediaPostFragment extends PhotoFragment {
 
     @Override
     protected PostFinder createPostFinder() {
@@ -10,12 +10,12 @@ public class PhotoNewsFragment extends PhotoFragment {
             return null;
         }
 
-        if (!getArguments().containsKey(PhotoFragment.PHOTO_RESULT_TAG_KEY)) {
+        if (!getArguments().containsKey(PhotoFragment.MEDIA_POST_RESULT_KEY)) {
             return null;
         }
 
-        String temp = getArguments().getString(PhotoFragment.PHOTO_RESULT_TAG_KEY);
-        return mFactoryPostFinder.getPostFinderPhotoNews();
+        String temp = getArguments().getString(PhotoFragment.MEDIA_POST_RESULT_KEY);
+        return mFactoryPostFinder.getPostFinderMediaPost();
     }
 
 }

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -31,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="horizontal">
 
                 <TextView
@@ -43,6 +44,7 @@
                     android:text=""
                     android:textColor="#af000000"
                     android:textSize="18dp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -51,6 +53,18 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="3"
                 android:orientation="horizontal">
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/media_post_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|right"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_add"
+                    fab:fab_type="mini"
+                    fab:fab_colorNormal="@color/color_normal"
+                    fab:fab_colorPressed="@color/color_pressed"
+                    fab:fab_colorRipple="@color/color_ripple" />
 
                 <ImageView
                     android:id="@+id/like"

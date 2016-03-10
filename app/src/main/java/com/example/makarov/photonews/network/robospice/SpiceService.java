@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-public class PhotoNewsSpiceService extends SpringAndroidSpiceService {
+public class SpiceService extends SpringAndroidSpiceService {
 
     @Override
     public CacheManager createCacheManager(Application application) {

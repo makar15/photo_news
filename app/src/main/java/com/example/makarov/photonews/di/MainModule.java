@@ -4,8 +4,9 @@ import android.content.Context;
 
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.database.LocationDbAdapter;
-import com.example.makarov.photonews.database.PhotoNewsDbAdapter;
+import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
+import com.example.makarov.photonews.network.Parsing;
 
 import javax.inject.Singleton;
 
@@ -15,7 +16,7 @@ import dagger.Provides;
 @Module
 public class MainModule {
 
-    private Context mContext;
+    private final Context mContext;
 
     public MainModule(Context context) {
         mContext = context;
@@ -47,7 +48,13 @@ public class MainModule {
 
     @Provides
     @Singleton
-    PhotoNewsDbAdapter providePhotoNewsDbAdapter() {
-        return new PhotoNewsDbAdapter(mContext);
+    MediaPostDbAdapter provideMediaPostDbAdapter() {
+        return new MediaPostDbAdapter(mContext);
+    }
+
+    @Provides
+    @Singleton
+    Parsing provideParsing() {
+        return new Parsing();
     }
 }

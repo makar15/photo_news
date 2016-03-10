@@ -1,40 +1,40 @@
 package com.example.makarov.photonews.network;
 
-import com.example.makarov.photonews.models.PhotoNewsPost;
-import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.example.makarov.photonews.models.MediaPost;
+import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Parsing {
 
     private final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
 
-    //получить URL картинки из JSON
-    private String getUrlImage(JSONArray jsonArray, int indexImage) throws JSONException {
-        JSONObject imageJsonObject = jsonArray.getJSONObject(indexImage)
-                .getJSONObject("images").getJSONObject(PHOTO_STANDART_RESOLUTION);
-        return imageJsonObject.getString("url");
+    private String getIdMediaPost(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getString("id");
     }
 
-    private String getAuthor(JSONArray jsonArray, int indexImage) throws JSONException {
-        JSONObject authorJSONObject = jsonArray.getJSONObject(indexImage)
-                .getJSONObject("user");
-        return authorJSONObject.getString("username");
+    private String getUrlImage(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getJSONObject("images").
+                getJSONObject(PHOTO_STANDART_RESOLUTION).getString("url");
     }
 
-    private int getCountLikes(JSONArray jsonArray, int indexImage) throws JSONException {
-        JSONObject countLikesJSONObject = jsonArray.getJSONObject(indexImage)
-                .getJSONObject("likes");
-        return countLikesJSONObject.getInt("count");
+    private String getAuthor(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getJSONObject("user").getString("username");
     }
 
-    public PhotoNewsList jsonToPhotoNews(JSONObject json) throws IOException, JSONException {
+    private int getCountLikes(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getJSONObject("likes").getInt("count");
+    }
 
-        PhotoNewsList photoNews = new PhotoNewsList();
+    public MediaPostList jsonToMediaPosts(JSONObject json) throws IOException, JSONException {
+
+        MediaPostList mediaPosts = new MediaPostList();
+        List<MediaPost> posts = mediaPosts.getMediaPosts();
 
         try {
             JSONArray jsonArray = json.getJSONArray("data");
@@ -47,12 +47,16 @@ public class Parsing {
             }
 
             while (count != NUMBER_SINGLE_QUERY) {
-                String urlImage = getUrlImage(jsonArray, count);
-                String author = getAuthor(jsonArray, count);
-                int countLikes = getCountLikes(jsonArray, count);
 
-                PhotoNewsPost photoNewsPost = new PhotoNewsPost(author, urlImage, countLikes);
-                photoNews.getPhotoNewsPosts().add(photoNewsPost);
+                JSONObject jsonObject = jsonArray.getJSONObject(count);
+
+                String idMediaPost = getIdMediaPost(jsonObject);
+                String urlImage = getUrlImage(jsonObject);
+                String author = getAuthor(jsonObject);
+                int countLikes = getCountLikes(jsonObject);
+
+                MediaPost mediaPost = new MediaPost(idMediaPost, author, urlImage, countLikes);
+                posts.add(mediaPost);
 
                 count++;
             }
@@ -60,7 +64,26 @@ public class Parsing {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return photoNews;
+        return mediaPosts;
+    }
+
+    public MediaPost jsonToUpdateMediaPost(JSONObject json) throws IOException, JSONException {
+
+        try {
+            JSONObject jsonObject = json.getJSONObject("data");
+
+            String idMediaPost = getIdMediaPost(jsonObject);
+            String urlImage = getUrlImage(jsonObject);
+            String author = getAuthor(jsonObject);
+            int countLikes = getCountLikes(jsonObject);
+
+            return new MediaPost(idMediaPost, author, urlImage, countLikes);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }

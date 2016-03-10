@@ -11,11 +11,11 @@ public class PhotoLocationFragment extends PhotoFragment {
             return null;
         }
 
-        if (!getArguments().containsKey(GoogleMapFragment.GOOGLE_MAP_KEY)) {
+        if (!getArguments().containsKey(PhotoFragment.PHOTO_RESULT_LOCATION_KEY)) {
             return null;
         }
 
-        Location location = getArguments().getParcelable(GoogleMapFragment.GOOGLE_MAP_KEY);
+        Location location = getArguments().getParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY);
         return mFactoryPostFinder.getPostFinderLocation(location);
     }
 }

@@ -1,5 +1,9 @@
 package com.example.makarov.photonews.di;
 
+import com.example.makarov.photonews.database.LocationDbAdapter;
+import com.example.makarov.photonews.database.MediaPostDbAdapter;
+import com.example.makarov.photonews.database.TagDbAdapter;
+import com.example.makarov.photonews.network.Parsing;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 import com.example.makarov.photonews.ui.fragments.GoogleMapFragment;
 import com.example.makarov.photonews.ui.fragments.OperationTagFragment;
@@ -16,15 +20,14 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(PhotoFragment fragment);
-
     void inject(MainActivity activity);
-
     void inject(OperationTagFragment fragment);
-
     void inject(GoogleMapFragment fragment);
-
     void inject(SubscriptionsListFragment fragment);
-
     void inject(ChangeNameLocationDialog dialog);
 
+    TagDbAdapter getTagDbAdapter();
+    LocationDbAdapter getLocationDbAdapter();
+    MediaPostDbAdapter getMediaPostDbAdapter();
+    Parsing getParsing();
 }

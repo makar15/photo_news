@@ -15,11 +15,12 @@ import java.util.List;
 
 public class TagDbAdapter {
 
-    private Context mContext;
+    private final static String TAG = TagDbAdapter.class.getSimpleName();
+
+    private final Context mContext;
+
     private SQLiteDatabase mDatabase;
     private DataBaseHelper mDbHelper;
-
-    final String TAG = "myLogs";
 
     public TagDbAdapter(Context context) {
         mContext = context;
@@ -57,11 +58,16 @@ public class TagDbAdapter {
     }
 
     public List<Tag> getAllTags() {
-        Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_TAGS, new String[]{BaseColumns._ID,
+        Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_TAGS, new String[]{
+                        BaseColumns._ID,
                         DataBaseHelper.TAG_NAME_COLUMN,
                         DataBaseHelper.DATE_ADD_TAG_COLUMN},
                 null, null, null, null, null);
 
+        return cursorToTags(cursor);
+    }
+
+    private List<Tag> cursorToTags(Cursor cursor) {
         List<Tag> tags = new ArrayList<>();
 
         if (cursor != null) {
@@ -78,18 +84,10 @@ public class TagDbAdapter {
         return tags;
     }
 
-    private String getString(Cursor cursor, String columnName) {
-        return cursor.getString(cursor.getColumnIndex(columnName));
-    }
-
-    private Long getLong(Cursor cursor, String fieldName) {
-        return cursor.getLong(cursor.getColumnIndex(fieldName));
-    }
-
     private Tag restore(Cursor cursor) throws SQLException {
 
-        String tagName = getString(cursor, DataBaseHelper.TAG_NAME_COLUMN);
-        long date = getLong(cursor, DataBaseHelper.DATE_ADD_TAG_COLUMN);
+        String tagName = SQLiteUtils.getString(cursor, DataBaseHelper.TAG_NAME_COLUMN);
+        long date = SQLiteUtils.getLong(cursor, DataBaseHelper.DATE_ADD_TAG_COLUMN);
 
         return new Tag(tagName, date);
     }

@@ -12,9 +12,10 @@ import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.di.AppInjector;
-import com.example.makarov.photonews.models.PhotoNewsPost;
+import com.example.makarov.photonews.models.MediaPost;
 import com.example.makarov.photonews.network.PostFinder;
-import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.example.makarov.photonews.network.robospice.model.MediaPostList;
+
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -30,6 +31,8 @@ import butterknife.ButterKnife;
 public abstract class PhotoFragment extends Fragment {
 
     public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
+    public static final String PHOTO_RESULT_LOCATION_KEY = "photo_result_location";
+    public static final String MEDIA_POST_RESULT_KEY = "media_post_result";
 
     @Bind(R.id.lv_photo_result)
     SuperRecyclerView mSuperRecyclerView;
@@ -46,20 +49,20 @@ public abstract class PhotoFragment extends Fragment {
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        setLayoutManagerForRecyclerView();
+        setLayoutManager();
 
         final PostFinder postFinder = createPostFinder();
 
-        postFinder.requestPhotos(new RequestListener<PhotoNewsList>() {
+        postFinder.requestPhotos(new RequestListener<MediaPostList>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
 
             }
 
             @Override
-            public void onRequestSuccess(PhotoNewsList photoNews) {
+            public void onRequestSuccess(MediaPostList photoNews) {
                 if (photoNews != null) {
-                    setAdapterForRecyclerView(photoNews.getPhotoNewsPosts());
+                    setAdapter(photoNews.getMediaPosts());
                 }
             }
         });
@@ -69,16 +72,16 @@ public abstract class PhotoFragment extends Fragment {
             @Override
             public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
 
-                if (!postFinder.nextRequestPhotos(new RequestListener<PhotoNewsList>() {
+                if (!postFinder.nextRequestPhotos(new RequestListener<MediaPostList>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 
                     }
 
                     @Override
-                    public void onRequestSuccess(PhotoNewsList photoNews) {
+                    public void onRequestSuccess(MediaPostList photoNews) {
                         if (photoNews != null) {
-                            mPhotoAdapter.update(photoNews.getPhotoNewsPosts());
+                            mPhotoAdapter.update(photoNews.getMediaPosts());
                         }
                     }
                 })) {
@@ -90,15 +93,15 @@ public abstract class PhotoFragment extends Fragment {
         return v;
     }
 
-    private void setLayoutManagerForRecyclerView() {
+    private void setLayoutManager() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
         mSuperRecyclerView.setLayoutManager(layoutManager);
     }
 
-    private void setAdapterForRecyclerView(List<PhotoNewsPost> photoNews) {
+    private void setAdapter(List<MediaPost> photoNews) {
         if (photoNews.isEmpty()) {
-            Toast.makeText(getContext(), "not PHOTO",
+            Toast.makeText(getContext(), "not photo",
                     Toast.LENGTH_LONG).show();
         } else {
             //TODO add and save a photo to my basket

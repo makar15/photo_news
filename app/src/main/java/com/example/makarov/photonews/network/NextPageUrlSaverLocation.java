@@ -8,8 +8,9 @@ import java.net.URL;
 
 public class NextPageUrlSaverLocation implements NextPageUrlSaver {
 
+    private final Location mLocation;
+
     private String mCreatedTime;
-    private Location mLocation;
     private boolean mNextLoading = false;
 
     public NextPageUrlSaverLocation(Location location) {

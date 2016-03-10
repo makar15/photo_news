@@ -15,11 +15,12 @@ import java.util.List;
 
 public class LocationDbAdapter {
 
-    private Context mContext;
+    private final static String TAG = LocationDbAdapter.class.getSimpleName();
+
+    private final Context mContext;
+
     private SQLiteDatabase mDatabase;
     private DataBaseHelper mDbHelper;
-
-    final String LOG_TAG = "myLogs";
 
     public LocationDbAdapter(Context context) {
         mContext = context;
@@ -43,7 +44,7 @@ public class LocationDbAdapter {
     }
 
     public boolean update(Location location) {
-        ContentValues updateValues = createContentValues(location);
+        ContentValues updateValues = updateContentValues(location);
 
         return mDatabase.update(DataBaseHelper.TABLE_LOCATIONS, updateValues,
                 DataBaseHelper.DATE_ADD_LOCATION_COLUMN + " = ? ",
@@ -69,6 +70,10 @@ public class LocationDbAdapter {
                         DataBaseHelper.RADIUS_SEARCH_COLUMN},
                 null, null, null, null, null);
 
+        return cursorToLocations(cursor);
+    }
+
+    private List<Location> cursorToLocations(Cursor cursor) {
         List<Location> locations = new ArrayList<>();
 
         if (cursor != null) {
@@ -78,40 +83,23 @@ public class LocationDbAdapter {
 
                 } while (cursor.moveToNext());
             } else {
-                Log.d(LOG_TAG, "0 rows");
+                Log.d(TAG, "0 rows");
             }
             cursor.close();
         }
         return locations;
     }
 
-    private String getString(Cursor cursor, String columnName) {
-        return cursor.getString(cursor.getColumnIndex(columnName));
-    }
-
-    private Long getLong(Cursor cursor, String columnName) {
-        return cursor.getLong(cursor.getColumnIndex(columnName));
-    }
-
-    private Double getDouble(Cursor cursor, String columnName) {
-        return cursor.getDouble(cursor.getColumnIndex(columnName));
-    }
-
-    private int getInt(Cursor cursor, String columnName) {
-        return cursor.getInt(cursor.getColumnIndex(columnName));
-    }
-
-    //TODO method public Location getLocation() by name  or name.hashCode??
     private Location restore(Cursor cursor) {
 
-        String nameLocation = getString(cursor, DataBaseHelper.NAME_LOCATION_COLUMN);
-        String countryName = getString(cursor, DataBaseHelper.COUNTRY_NAME_COLUMN);
-        String locality = getString(cursor, DataBaseHelper.LOCALITY_COLUMN);
-        String thoroughfare = getString(cursor, DataBaseHelper.THOROUGHFARE_COLUMN);
-        long date = getLong(cursor, DataBaseHelper.DATE_ADD_LOCATION_COLUMN);
-        double latitude = getDouble(cursor, DataBaseHelper.LATITUDE_COLUMN);
-        double longitude = getDouble(cursor, DataBaseHelper.LONGITUDE_COLUMN);
-        int radiusSearch = getInt(cursor, DataBaseHelper.RADIUS_SEARCH_COLUMN);
+        String nameLocation = SQLiteUtils.getString(cursor, DataBaseHelper.NAME_LOCATION_COLUMN);
+        String countryName = SQLiteUtils.getString(cursor, DataBaseHelper.COUNTRY_NAME_COLUMN);
+        String locality = SQLiteUtils.getString(cursor, DataBaseHelper.LOCALITY_COLUMN);
+        String thoroughfare = SQLiteUtils.getString(cursor, DataBaseHelper.THOROUGHFARE_COLUMN);
+        long date = SQLiteUtils.getLong(cursor, DataBaseHelper.DATE_ADD_LOCATION_COLUMN);
+        double latitude = SQLiteUtils.getDouble(cursor, DataBaseHelper.LATITUDE_COLUMN);
+        double longitude = SQLiteUtils.getDouble(cursor, DataBaseHelper.LONGITUDE_COLUMN);
+        int radiusSearch = SQLiteUtils.getInt(cursor, DataBaseHelper.RADIUS_SEARCH_COLUMN);
 
         return new Location(nameLocation, latitude, longitude,
                 countryName, locality, thoroughfare, date, radiusSearch);
@@ -127,6 +115,13 @@ public class LocationDbAdapter {
         values.put(DataBaseHelper.LATITUDE_COLUMN, location.getLatitude());
         values.put(DataBaseHelper.LONGITUDE_COLUMN, location.getLongitude());
         values.put(DataBaseHelper.RADIUS_SEARCH_COLUMN, location.getRadiusSearch());
+
+        return values;
+    }
+
+    private ContentValues updateContentValues(Location location) {
+        ContentValues values = new ContentValues();
+        values.put(DataBaseHelper.NAME_LOCATION_COLUMN, location.getName());
 
         return values;
     }

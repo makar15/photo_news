@@ -1,9 +1,9 @@
 package com.example.makarov.photonews.network.robospice;
 
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.NextPageUrlSaver;
-import com.example.makarov.photonews.network.Parsing;
-import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.Constants;
 import com.example.makarov.photonews.utils.JsonUtils;
 import com.example.makarov.photonews.utils.StreamUtils;
@@ -17,33 +17,28 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class PhotoNewsLocationRequest extends SpringAndroidSpiceRequest<PhotoNewsList> {
+public class LocationRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
-    private URL mUrl;
-    private NextPageUrlSaver mNextPageUrlSaver;
-    private Location mLocation;
+    private final URL mUrl;
+    private final NextPageUrlSaver mNextPageUrlSaver;
+    private final Location mLocation;
 
-    public PhotoNewsLocationRequest(URL url, NextPageUrlSaver nextPageUrlSaver, Location location) {
-        super(PhotoNewsList.class);
+    public LocationRequest(URL url, NextPageUrlSaver nextPageUrlSaver, Location location) {
+        super(MediaPostList.class);
 
         mUrl = url;
         mNextPageUrlSaver = nextPageUrlSaver;
         mLocation = location;
     }
 
-    /*
-    method run in the moment:
-    getSpiceManager().execute(mPostRequestLocation,
-                mPostRequestLocation.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
-     */
     @Override
-    public PhotoNewsList loadDataFromNetwork() {
+    public MediaPostList loadDataFromNetwork() {
 
         try {
             JSONObject jsonObject = getJson(mUrl);
 
             saveNextUrl(jsonObject);
-            return new Parsing().jsonToPhotoNews(jsonObject);
+            return AppInjector.get().getParsing().jsonToMediaPosts(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;

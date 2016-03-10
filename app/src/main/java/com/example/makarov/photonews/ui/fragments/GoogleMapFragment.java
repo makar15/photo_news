@@ -17,6 +17,7 @@ import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+
 import com.github.florent37.materialtextfield.MaterialTextField;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -175,7 +176,7 @@ public class GoogleMapFragment extends Fragment {
 
     private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, location);
+        bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
         ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
     }
 
@@ -210,9 +211,14 @@ public class GoogleMapFragment extends Fragment {
     }
 
     private Location initDbModelLocation() {
-        return new Location(getInitNameLocation(), mAddress.getLatitude(), mAddress.getLongitude(),
-                mAddress.getCountryName(), mAddress.getLocality(), mAddress.getThoroughfare(),
-                new Date().getTime(), mRadiusSearch.getProgress());
+        return new Location(getInitNameLocation(),
+                mAddress.getLatitude(),
+                mAddress.getLongitude(),
+                mAddress.getCountryName(),
+                mAddress.getLocality(),
+                mAddress.getThoroughfare(),
+                new Date().getTime(),
+                mRadiusSearch.getProgress());
     }
 
     private String getNullableString(String string) {
@@ -232,14 +238,14 @@ public class GoogleMapFragment extends Fragment {
 
     @Override
     public void onPause() {
-        mMapView.onPause();
         super.onPause();
+        mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
-        mMapView.onDestroy();
         super.onDestroy();
+        mMapView.onDestroy();
     }
 
     @Override

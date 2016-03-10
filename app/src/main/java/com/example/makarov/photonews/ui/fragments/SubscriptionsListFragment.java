@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.AdapterSubscriptions;
@@ -39,6 +40,8 @@ public class SubscriptionsListFragment extends Fragment {
     FloatingActionButton mSearchByTag;
     @Bind(R.id.search_by_location_btn)
     FloatingActionButton mSearchByLocation;
+    @Bind(R.id.open_media_posts_btn)
+    Button mOpenMediaPosts;
 
     @Inject
     TagDbAdapter mTagDbAdapter;
@@ -50,11 +53,17 @@ public class SubscriptionsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.subscriptions_list_fragment, null);
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
-        setLayoutManagerForRecyclerView();
+        setLayoutManager();
 
         List<Subscription> subscriptionsDb = getSubscriptionsDb();
-        setAdapterForRecyclerView(getSortedSubscriptionsDb(subscriptionsDb));
+        setAdapter(getSortedSubscriptionsDb(subscriptionsDb));
 
+        mOpenMediaPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSaveMediaPosts();
+            }
+        });
         mSearchByTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +88,14 @@ public class SubscriptionsListFragment extends Fragment {
 
     private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(GoogleMapFragment.GOOGLE_MAP_KEY, location);
+        bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
         ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
+    }
+
+    private void openSaveMediaPosts() {
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoFragment.MEDIA_POST_RESULT_KEY, null);
+        ((MainActivity) getActivity()).openListSaveMediaPostsFragment(bundle);
     }
 
     private void openOperationTag() {
@@ -91,7 +106,7 @@ public class SubscriptionsListFragment extends Fragment {
 
     private void openGoogleMap() {
         Bundle bundle = new Bundle();
-        bundle.putString(OperationTagFragment.OPERATION_KEY, null);
+        bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, null);
         ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
     }
 
@@ -101,17 +116,17 @@ public class SubscriptionsListFragment extends Fragment {
         initializeHistoryRecyclerView();
     }
 
-    private void setLayoutManagerForRecyclerView() {
+    private void setLayoutManager() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mLvSubscriptions.setLayoutManager(layoutManager);
     }
 
-    private void setAdapterForRecyclerView(List<Subscription> subscriptions) {
+    private void setAdapter(List<Subscription> subscriptions) {
         AdapterSubscriptions subscriptionsAdapter = new AdapterSubscriptions(subscriptions,
-                getActivity().getFragmentManager(), mTagDbAdapter, mLocationDbAdapter);
+                getActivity().getFragmentManager());
 
-        subscriptionsAdapter.setOnClickOpenPhotoNews(new AdapterSubscriptions.OnClickOpenPhotoNews() {
+        subscriptionsAdapter.setOnClickOpenMediaPosts(new AdapterSubscriptions.OnClickOpenMediaPosts() {
             @Override
             public void onClick(Subscription clickSubscription) {
                 openClickInstanceOfSubscription(clickSubscription);
@@ -120,11 +135,11 @@ public class SubscriptionsListFragment extends Fragment {
         mLvSubscriptions.setAdapter(subscriptionsAdapter);
     }
 
-    private void openClickInstanceOfSubscription(Subscription clickSubscription) {
-        if (clickSubscription instanceof Tag) {
-            openListPhotoResultTag(((Tag) clickSubscription));
-        } else if (clickSubscription instanceof Location) {
-            openListPhotoResultLocation((Location) clickSubscription);
+    private void openClickInstanceOfSubscription(Subscription subscription) {
+        if (subscription instanceof Tag) {
+            openListPhotoResultTag(((Tag) subscription));
+        } else if (subscription instanceof Location) {
+            openListPhotoResultLocation((Location) subscription);
         }
     }
 

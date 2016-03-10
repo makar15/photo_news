@@ -11,13 +11,13 @@ import android.widget.TextView;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.models.Subscription;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.dialog.ChangeNameLocationDialog;
 import com.example.makarov.photonews.utils.CreateDialogUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,20 +29,18 @@ public class AdapterSubscriptions
     private final int TYPE_HOLDER_TAG = 0;
     private final int TYPE_HOLDER_LOCATION = 1;
 
-    private List<Subscription> mSubscriptions = new ArrayList<>();
+    private final FragmentManager mFragmentManager;
+    private final List<Subscription> mSubscriptions;
+    private final TagDbAdapter mTagDbAdapter;
+    private final LocationDbAdapter mLocationDbAdapter;
 
-    private FragmentManager mFragmentManager;
-    private OnClickOpenPhotoNews mOnClickOpenPhotoNews;
+    private OnClickOpenMediaPosts mOnClickOpenMediaPosts;
 
-    private TagDbAdapter mDbAdapter;
-    private LocationDbAdapter mLocationDbAdapter;
-
-    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager,
-                                TagDbAdapter tagDbAdapter, LocationDbAdapter locationDbAdapter) {
+    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager) {
         mFragmentManager = manager;
         mSubscriptions = subscriptions;
-        mDbAdapter = tagDbAdapter;
-        mLocationDbAdapter = locationDbAdapter;
+        mTagDbAdapter = AppInjector.get().getTagDbAdapter();
+        mLocationDbAdapter = AppInjector.get().getLocationDbAdapter();
     }
 
     @Override
@@ -77,11 +75,11 @@ public class AdapterSubscriptions
     @Override
     public void onBindViewHolder(SubscriptionViewHolder holder, final int position) {
 
-        holder.setDataOnView(position);
+        holder.createDataOnView(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnClickOpenPhotoNews.onClick(getItem(position));
+                mOnClickOpenMediaPosts.onClick(getItem(position));
             }
         });
     }
@@ -95,8 +93,8 @@ public class AdapterSubscriptions
         return mSubscriptions.get(position);
     }
 
-    public void setOnClickOpenPhotoNews(OnClickOpenPhotoNews onClickOpenPhotoNews) {
-        mOnClickOpenPhotoNews = onClickOpenPhotoNews;
+    public void setOnClickOpenMediaPosts(OnClickOpenMediaPosts onClickOpenMediaPosts) {
+        mOnClickOpenMediaPosts = onClickOpenMediaPosts;
     }
 
     public abstract class SubscriptionViewHolder extends RecyclerView.ViewHolder {
@@ -105,7 +103,7 @@ public class AdapterSubscriptions
             ButterKnife.bind(this, itemView);
         }
 
-        public abstract void setDataOnView(int position);
+        public abstract void createDataOnView(int position);
     }
 
     public class TagViewHolder extends SubscriptionViewHolder {
@@ -124,13 +122,13 @@ public class AdapterSubscriptions
                 @Override
                 public void onClick(View v) {
                     deleteTag();
-                    mDbAdapter.close();
+                    mTagDbAdapter.close();
                 }
             });
         }
 
         @Override
-        public void setDataOnView(int position) {
+        public void createDataOnView(int position) {
             mTag = (Tag) mSubscriptions.get(position);
 
             this.mNameTag.setText(mTag.getName());
@@ -139,7 +137,7 @@ public class AdapterSubscriptions
         private boolean deleteTag() {
             mSubscriptions.remove(mTag);
             AdapterSubscriptions.this.notifyDataSetChanged();
-            return mDbAdapter.open().delete(mTag);
+            return mTagDbAdapter.open().delete(mTag);
         }
     }
 
@@ -174,7 +172,7 @@ public class AdapterSubscriptions
         }
 
         @Override
-        public void setDataOnView(int position) {
+        public void createDataOnView(int position) {
             mLocation = (Location) mSubscriptions.get(position);
 
             this.mNameLocation.setText(mLocation.getName());
@@ -193,7 +191,7 @@ public class AdapterSubscriptions
         }
     }
 
-    public interface OnClickOpenPhotoNews {
+    public interface OnClickOpenMediaPosts {
         void onClick(Subscription tempClickItem);
     }
 

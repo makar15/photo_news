@@ -16,6 +16,7 @@ import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
+
 import com.github.florent37.materialtextfield.MaterialTextField;
 import com.melnykov.fab.FloatingActionButton;
 

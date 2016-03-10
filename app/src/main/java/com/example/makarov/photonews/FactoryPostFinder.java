@@ -2,7 +2,7 @@ package com.example.makarov.photonews;
 
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.PostFinderLocation;
-import com.example.makarov.photonews.network.PostFinderPhotoNews;
+import com.example.makarov.photonews.network.PostFinderMediaPost;
 import com.example.makarov.photonews.network.PostFinderTag;
 
 import javax.inject.Singleton;
@@ -18,7 +18,7 @@ public class FactoryPostFinder {
         return new PostFinderTag(lineTag);
     }
 
-    public PostFinderPhotoNews getPostFinderPhotoNews() {
-        return new PostFinderPhotoNews();
+    public PostFinderMediaPost getPostFinderMediaPost() {
+        return new PostFinderMediaPost();
     }
 }

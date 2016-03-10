@@ -1,8 +1,8 @@
 package com.example.makarov.photonews.network.robospice;
 
+import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.network.NextPageUrlSaver;
-import com.example.makarov.photonews.network.Parsing;
-import com.example.makarov.photonews.network.robospice.model.PhotoNewsList;
+import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.JsonUtils;
 import com.example.makarov.photonews.utils.StreamUtils;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
@@ -13,20 +13,20 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 
-public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsList> {
+public class TagRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
-    private URL mUrl;
-    private NextPageUrlSaver mNextPageUrlSaver;
+    private final URL mUrl;
+    private final NextPageUrlSaver mNextPageUrlSaver;
 
-    public PhotoNewsImageRequest(URL url, NextPageUrlSaver nextPageUrlSaver) {
-        super(PhotoNewsList.class);
+    public TagRequest(URL url, NextPageUrlSaver nextPageUrlSaver) {
+        super(MediaPostList.class);
 
         mUrl = url;
         mNextPageUrlSaver = nextPageUrlSaver;
     }
 
     @Override
-    public PhotoNewsList loadDataFromNetwork() throws JSONException, IOException {
+    public MediaPostList loadDataFromNetwork() throws JSONException, IOException {
 
         try {
             StreamUtils.openHttpUrlConnection(null, mUrl);
@@ -34,7 +34,7 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
             JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
 
             saveNextUrl(jsonObject);
-            return new Parsing().jsonToPhotoNews(jsonObject);
+            return AppInjector.get().getParsing().jsonToMediaPosts(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;
@@ -52,5 +52,4 @@ public class PhotoNewsImageRequest extends SpringAndroidSpiceRequest<PhotoNewsLi
     public String createCacheKey() {
         return "URL: " + mUrl;
     }
-
 }

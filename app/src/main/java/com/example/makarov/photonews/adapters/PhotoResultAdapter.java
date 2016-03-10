@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.models.PhotoNewsPost;
+import com.example.makarov.photonews.database.MediaPostDbAdapter;
+import com.example.makarov.photonews.di.AppInjector;
+import com.example.makarov.photonews.models.MediaPost;
+import com.melnykov.fab.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,31 +25,43 @@ import butterknife.ButterKnife;
  */
 public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.ResultViewHolder> {
 
-    private List<PhotoNewsPost> mPhotoNews = new ArrayList<>();
+    private final int TYPE_HOLDER_MEDIA_POST = 0;
+    private final int TYPE_HOLDER_SAVE_MEDIA_POST = 1;
 
-    public PhotoResultAdapter(List<PhotoNewsPost> urlPhotos) {
-        mPhotoNews.addAll(urlPhotos);
+    private final List<MediaPost> mMediaPosts = new ArrayList<>();
+    private final MediaPostDbAdapter mMediaPostDbAdapter;
+
+    public PhotoResultAdapter(List<MediaPost> mediaPosts) {
+        mMediaPosts.addAll(mediaPosts);
+        mMediaPostDbAdapter = AppInjector.get().getMediaPostDbAdapter();
     }
 
     @Override
     public ResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_photo_tag, parent, false);
+                .inflate(R.layout.item_media_post, parent, false);
 
         return new ResultViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ResultViewHolder holder, int position) {
+    public void onBindViewHolder(ResultViewHolder holder, final int position) {
 
-        String item = mPhotoNews.get(position).getUrlAddress();
+        String item = getItem(position).getUrlAddress();
         Picasso.with(holder.itemView.getContext())
                 .load(item)
                 .into(holder.icon);
 
-        holder.author.setText(mPhotoNews.get(position).getAuthor());
-        holder.countLikes.setText(String.valueOf(mPhotoNews.get(position).getCountLikes()));
+        holder.author.setText(getItem(position).getAuthor());
+        holder.countLikes.setText(String.valueOf(getItem(position).getCountLikes()));
+        holder.operationMediaPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addMediaPost(getItem(position));
+                mMediaPostDbAdapter.close();
+            }
+        });
 /*
         Picasso.with(holder.itemView.getContext())
                 .load(item)
@@ -55,7 +70,11 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
 
     @Override
     public int getItemCount() {
-        return mPhotoNews.size();
+        return mMediaPosts.size();
+    }
+
+    private MediaPost getItem(int position) {
+        return mMediaPosts.get(position);
     }
 
     public static class ResultViewHolder extends RecyclerView.ViewHolder {
@@ -68,6 +87,8 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
         TextView author;
         @Bind(R.id.count_likes)
         TextView countLikes;
+        @Bind(R.id.media_post_btn)
+        FloatingActionButton operationMediaPost;
 
         public ResultViewHolder(View v) {
             super(v);
@@ -75,15 +96,19 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
         }
     }
 
-    public void update(List<PhotoNewsPost> newPhotoNews) {
-        for (PhotoNewsPost tempPhotoItem : newPhotoNews) {
-            addItem(tempPhotoItem);
-        }
-        notifyItemRangeChanged(0, mPhotoNews.size());
+    private void addMediaPost(MediaPost mediaPost) {
+        mMediaPostDbAdapter.open().add(mediaPost);
     }
 
-    public void addItem(PhotoNewsPost photoNewsPost) {
-        mPhotoNews.add(photoNewsPost);
+    public void update(List<MediaPost> newMediaPosts) {
+        for (MediaPost tempPost : newMediaPosts) {
+            addItem(tempPost);
+        }
+        notifyItemRangeChanged(0, mMediaPosts.size());
+    }
+
+    public void addItem(MediaPost mediaPost) {
+        mMediaPosts.add(mediaPost);
     }
 
 }
