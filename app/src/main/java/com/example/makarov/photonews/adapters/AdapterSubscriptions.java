@@ -75,7 +75,7 @@ public class AdapterSubscriptions
     @Override
     public void onBindViewHolder(SubscriptionViewHolder holder, final int position) {
 
-        holder.createDataOnView(position);
+        holder.fillView(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +103,7 @@ public class AdapterSubscriptions
             ButterKnife.bind(this, itemView);
         }
 
-        public abstract void createDataOnView(int position);
+        public abstract void fillView(int position);
     }
 
     public class TagViewHolder extends SubscriptionViewHolder {
@@ -128,10 +128,9 @@ public class AdapterSubscriptions
         }
 
         @Override
-        public void createDataOnView(int position) {
+        public void fillView(int position) {
             mTag = (Tag) mSubscriptions.get(position);
-
-            this.mNameTag.setText(mTag.getName());
+            mNameTag.setText(mTag.getName());
         }
 
         private boolean deleteTag() {
@@ -166,16 +165,14 @@ public class AdapterSubscriptions
                 @Override
                 public void onClick(View v) {
                     openDialogChangeNameLocation(mLocation);
-                    mLocationDbAdapter.close();
                 }
             });
         }
 
         @Override
-        public void createDataOnView(int position) {
+        public void fillView(int position) {
             mLocation = (Location) mSubscriptions.get(position);
-
-            this.mNameLocation.setText(mLocation.getName());
+            mNameLocation.setText(mLocation.getName());
         }
 
         private boolean deleteLocation() {

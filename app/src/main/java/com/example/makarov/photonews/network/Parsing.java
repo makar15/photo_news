@@ -12,26 +12,26 @@ import java.util.List;
 
 public class Parsing {
 
-    private final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
+    private static final String PHOTO_STANDART_RESOLUTION = "standard_resolution";
 
-    private String getIdMediaPost(JSONObject jsonObject) throws JSONException {
+    private static String getIdMediaPost(JSONObject jsonObject) throws JSONException {
         return jsonObject.getString("id");
     }
 
-    private String getUrlImage(JSONObject jsonObject) throws JSONException {
+    private static String getUrlImage(JSONObject jsonObject) throws JSONException {
         return jsonObject.getJSONObject("images").
                 getJSONObject(PHOTO_STANDART_RESOLUTION).getString("url");
     }
 
-    private String getAuthor(JSONObject jsonObject) throws JSONException {
+    private static String getAuthor(JSONObject jsonObject) throws JSONException {
         return jsonObject.getJSONObject("user").getString("username");
     }
 
-    private int getCountLikes(JSONObject jsonObject) throws JSONException {
+    private static int getCountLikes(JSONObject jsonObject) throws JSONException {
         return jsonObject.getJSONObject("likes").getInt("count");
     }
 
-    public MediaPostList jsonToMediaPosts(JSONObject json) throws IOException, JSONException {
+    public static MediaPostList jsonToMediaPosts(JSONObject json) throws IOException, JSONException {
 
         MediaPostList mediaPosts = new MediaPostList();
         List<MediaPost> posts = mediaPosts.getMediaPosts();
@@ -67,23 +67,20 @@ public class Parsing {
         return mediaPosts;
     }
 
-    public MediaPost jsonToUpdateMediaPost(JSONObject json) throws IOException, JSONException {
-
+    public static void jsonToUpdateMediaPost(MediaPost mediaPost, JSONObject json)
+            throws IOException, JSONException {
         try {
             JSONObject jsonObject = json.getJSONObject("data");
 
-            String idMediaPost = getIdMediaPost(jsonObject);
-            String urlImage = getUrlImage(jsonObject);
             String author = getAuthor(jsonObject);
             int countLikes = getCountLikes(jsonObject);
 
-            return new MediaPost(idMediaPost, author, urlImage, countLikes);
+            mediaPost.setAuthor(author);
+            mediaPost.setCountLikes(countLikes);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
 }

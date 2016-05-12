@@ -1,7 +1,7 @@
 package com.example.makarov.photonews.network.robospice;
 
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.network.NextPageUrlSaver;
+import com.example.makarov.photonews.network.Parsing;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.JsonUtils;
 import com.example.makarov.photonews.utils.StreamUtils;
@@ -34,7 +34,7 @@ public class TagRequest extends SpringAndroidSpiceRequest<MediaPostList> {
             JSONObject jsonObject = JsonUtils.getStringToJSONObject(response);
 
             saveNextUrl(jsonObject);
-            return AppInjector.get().getParsing().jsonToMediaPosts(jsonObject);
+            return Parsing.jsonToMediaPosts(jsonObject);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return null;
@@ -47,9 +47,5 @@ public class TagRequest extends SpringAndroidSpiceRequest<MediaPostList> {
             String nextUrl = json.getString("next_url");
             mNextPageUrlSaver.setUrl(nextUrl);
         }
-    }
-
-    public String createCacheKey() {
-        return "URL: " + mUrl;
     }
 }

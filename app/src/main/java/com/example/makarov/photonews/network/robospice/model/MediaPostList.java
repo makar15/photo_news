@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MediaPostList {
 
-    List<MediaPost> mMediaPosts;
+    private final List<MediaPost> mMediaPosts;
 
     public MediaPostList() {
         mMediaPosts = new ArrayList<>();

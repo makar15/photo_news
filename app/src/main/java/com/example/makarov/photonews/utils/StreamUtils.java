@@ -25,27 +25,24 @@ public class StreamUtils {
     }
 
     //преобразовать поток в строку
-    private static String streamToString(InputStream is) throws IOException {
+    private static String streamToString(InputStream inputStream) throws IOException {
         String str = "";
 
-        if (is != null) {
+        if (inputStream != null) {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
-
                 reader.close();
             } finally {
-                is.close();
+                inputStream.close();
             }
-
             str = stringBuilder.toString();
         }
-
         return str;
     }
 

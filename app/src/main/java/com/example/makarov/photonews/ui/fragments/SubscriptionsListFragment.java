@@ -152,6 +152,7 @@ public class SubscriptionsListFragment extends Fragment {
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptions.addAll(mTagDbAdapter.open().getAllTags());
         subscriptions.addAll(mLocationDbAdapter.open().getAllLocations());
+        closeDbAdapters();
         return subscriptions;
     }
 
@@ -159,11 +160,13 @@ public class SubscriptionsListFragment extends Fragment {
         return FastSort.sort(subscriptions, 0, subscriptions.size() - 1);
     }
 
+    private void closeDbAdapters() {
+        mTagDbAdapter.close();
+        mLocationDbAdapter.close();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        mTagDbAdapter.close();
-        mLocationDbAdapter.close();
     }
 }

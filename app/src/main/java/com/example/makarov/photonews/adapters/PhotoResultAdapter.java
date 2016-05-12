@@ -62,10 +62,6 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
                 mMediaPostDbAdapter.close();
             }
         });
-/*
-        Picasso.with(holder.itemView.getContext())
-                .load(item)
-                .into(new ImageTarget(position));*/
     }
 
     @Override

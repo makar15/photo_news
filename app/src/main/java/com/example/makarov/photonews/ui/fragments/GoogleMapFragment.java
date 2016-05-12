@@ -104,6 +104,7 @@ public class GoogleMapFragment extends Fragment {
                 //TODO see the location on the map
                 if (mMarker != null) {
                     long result = mLocationDbAdapter.open().add(initDbModelLocation());
+                    mLocationDbAdapter.close();
 
                     if (result == -1) {
                         Toast.makeText(getContext(), "location is already in the list",

@@ -5,7 +5,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.example.makarov.photonews.di.AppInjector;
-import com.example.makarov.photonews.network.robospice.SpiceService;
+import com.octo.android.robospice.GsonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 
 public class PhotoNewsApp extends MultiDexApplication {
@@ -19,7 +19,7 @@ public class PhotoNewsApp extends MultiDexApplication {
         mApp = this;
 
         AppInjector.buildComponent(this);
-        mSpiceManager = new SpiceManager(SpiceService.class);
+        mSpiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
         mSpiceManager.start(this);
     }
 
@@ -28,7 +28,6 @@ public class PhotoNewsApp extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-
 
     public static PhotoNewsApp getApp() {
         return mApp;

@@ -4,7 +4,6 @@ import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.network.robospice.TagRequest;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.UrlInstaUtils;
-import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.net.URL;
@@ -27,7 +26,7 @@ public class PostFinderTag implements PostFinder {
         mTagRequest = new TagRequest(mUrlTag, mNextPageUrlSaver);
 
         PhotoNewsApp.getApp().getSpiceManager().execute(mTagRequest,
-                mTagRequest.createCacheKey(), DurationInMillis.ONE_MINUTE, requestListener);
+                null, Long.parseLong(null), requestListener);
     }
 
     public boolean nextRequestPhotos(RequestListener<MediaPostList> requestListener) {
@@ -40,12 +39,10 @@ public class PostFinderTag implements PostFinder {
                 mTagRequest = new TagRequest(mUrlTag, mNextPageUrlSaver);
 
                 PhotoNewsApp.getApp().getSpiceManager().execute(mTagRequest,
-                        mTagRequest.createCacheKey(),
-                        DurationInMillis.ONE_MINUTE, requestListener);
+                        null, Long.parseLong(null), requestListener);
             }
             return true;
         }
-
         return false;
     }
 }

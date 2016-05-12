@@ -2,11 +2,11 @@ package com.example.makarov.photonews.di;
 
 import android.content.Context;
 
+import com.example.makarov.photonews.DataManager;
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
-import com.example.makarov.photonews.network.Parsing;
 
 import javax.inject.Singleton;
 
@@ -54,7 +54,7 @@ public class MainModule {
 
     @Provides
     @Singleton
-    Parsing provideParsing() {
-        return new Parsing();
+    DataManager provideDataManager() {
+        return new DataManager();
     }
 }

@@ -15,7 +15,8 @@ import java.util.List;
 
 public class MediaPostDbAdapter {
 
-    private final static String TAG = MediaPostDbAdapter.class.getSimpleName();
+    private static final String TAG = MediaPostDbAdapter.class.getSimpleName();
+    public static final int QUERY_LIMIT = 8;
 
     private final Context mContext;
 
@@ -69,18 +70,26 @@ public class MediaPostDbAdapter {
         return cursorToMediaPosts(cursor);
     }
 
-    //пока что хз как лучше сделать((
-    public List<MediaPost> getMediaPostsById(String ID) {
+    public List<MediaPost> getLimitMediaPosts(int offset) {
+
         Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_MEDIA_POSTS, new String[]{
                         BaseColumns._ID,
                         DataBaseHelper.ID_POST_COLUMN,
                         DataBaseHelper.AUTHOR_COLUMN,
                         DataBaseHelper.URL_ADDRESS_COLUMN,
                         DataBaseHelper.COUNT_LIKES_COLUMN},
-                BaseColumns._ID + " <= ? ", new String[] {ID},
-                null, null, null);
+                null, null, null, null, null,
+                offset + "," + QUERY_LIMIT);
 
         return cursorToMediaPosts(cursor);
+    }
+
+    private int getMediaPostsCount() {
+        String countQuery = "SELECT  * FROM " + DataBaseHelper.TABLE_MEDIA_POSTS;
+        Cursor cursor = mDatabase.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
     }
 
     private List<MediaPost> cursorToMediaPosts(Cursor cursor) {

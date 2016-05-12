@@ -44,7 +44,7 @@
         </activity>
 
         <service
-            android:name=".network.robospice.SpiceService"
+            android:name="com.octo.android.robospice.GsonSpringAndroidSpiceService"
             android:enabled="true"
             android:exported="false" >
         </service>

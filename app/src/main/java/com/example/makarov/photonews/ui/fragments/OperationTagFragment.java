@@ -66,6 +66,7 @@ public class OperationTagFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(tagSearch)) {
                     mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
+                    mTagDbAdapter.close();
                 }
             }
         });
