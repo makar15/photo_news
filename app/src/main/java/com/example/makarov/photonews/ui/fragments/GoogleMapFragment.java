@@ -68,6 +68,70 @@ public class GoogleMapFragment extends Fragment {
     private Marker mMarker;
     private Address mAddress;
 
+    private final View.OnClickListener mOnClickSearchLocationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String location = mLineNameLocation.getText().toString();
+
+            try {
+                if (!TextUtils.isEmpty(location)) {
+                    findLocation(location);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private final View.OnClickListener mOnClickOpenPhotoListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mMarker != null) {
+                openListPhotoResultLocation(initDbModelLocation());
+            }
+        }
+    };
+
+    private final View.OnClickListener mOnClickAddLocationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO see the location on the map
+            if (mMarker != null) {
+                long result = mLocationDbAdapter.open().add(initDbModelLocation());
+                mLocationDbAdapter.close();
+
+                if (result == -1) {
+                    Toast.makeText(getContext(), "location is already in the list",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    };
+
+    private final GoogleMap.OnMapLongClickListener mOnMapLongClickListener =
+            new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    Geocoder geocoder = new Geocoder(getContext());
+                    List<Address> list;
+                    try {
+                        list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    } catch (IOException e) {
+                        return;
+                    }
+
+                    if (!list.isEmpty()) {
+                        mAddress = list.get(0);
+
+                        removeExistingMarker();
+                        initMarker();
+                    } else {
+                        Toast.makeText(getContext(), "address is not found in Google maps",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
@@ -76,43 +140,9 @@ public class GoogleMapFragment extends Fragment {
 
         MapsInitializer.initialize(getContext());
 
-        mSearchLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String location = mLineNameLocation.getText().toString();
-
-                try {
-                    if (!TextUtils.isEmpty(location)) {
-                        findLocation(location);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mOpenPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mMarker != null) {
-                    openListPhotoResultLocation(initDbModelLocation());
-                }
-            }
-        });
-        mAddLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO see the location on the map
-                if (mMarker != null) {
-                    long result = mLocationDbAdapter.open().add(initDbModelLocation());
-                    mLocationDbAdapter.close();
-
-                    if (result == -1) {
-                        Toast.makeText(getContext(), "location is already in the list",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
+        mSearchLocation.setOnClickListener(mOnClickSearchLocationListener);
+        mOpenPhoto.setOnClickListener(mOnClickOpenPhotoListener);
+        mAddLocation.setOnClickListener(mOnClickAddLocationListener);
 
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();
@@ -124,35 +154,12 @@ public class GoogleMapFragment extends Fragment {
     }
 
     private void initGoogleMap() {
-
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
 
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-
-                Geocoder geocoder = new Geocoder(getContext());
-                List<Address> list;
-                try {
-                    list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                } catch (IOException e) {
-                    return;
-                }
-
-                if (!list.isEmpty()) {
-                    mAddress = list.get(0);
-
-                    removeExistingMarker();
-                    initMarker();
-                } else {
-                    Toast.makeText(getContext(), "address is not found in Google maps",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        mMap.setOnMapLongClickListener(mOnMapLongClickListener);
     }
 
     private void findLocation(String location) throws IOException {

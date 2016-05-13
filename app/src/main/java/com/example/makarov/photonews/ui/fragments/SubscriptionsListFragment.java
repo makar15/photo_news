@@ -32,14 +32,14 @@ import butterknife.ButterKnife;
 
 public class SubscriptionsListFragment extends Fragment {
 
-    public static final String SUBSCRIPTIONS_LIST_KEY = "subscriptions_list";
+    public static final String SUBSCRIPTIONS_LIST_KEY = "SubscriptionsListFragment";
 
     @Bind(R.id.lv_subscriptions)
     RecyclerView mLvSubscriptions;
-    @Bind(R.id.search_by_tag_btn)
-    FloatingActionButton mSearchByTag;
     @Bind(R.id.search_by_location_btn)
     FloatingActionButton mSearchByLocation;
+    @Bind(R.id.search_by_tag_btn)
+    FloatingActionButton mSearchByTag;
     @Bind(R.id.open_media_posts_btn)
     Button mOpenMediaPosts;
 
@@ -47,6 +47,36 @@ public class SubscriptionsListFragment extends Fragment {
     TagDbAdapter mTagDbAdapter;
     @Inject
     LocationDbAdapter mLocationDbAdapter;
+
+    private final AdapterSubscriptions.OnClickSubscriptionListener mOnClickSubscriptionListener =
+            new AdapterSubscriptions.OnClickSubscriptionListener() {
+                @Override
+                public void onClick(Subscription subscription) {
+                    openClickInstanceOfSubscription(subscription);
+                }
+            };
+
+    private final View.OnClickListener mOnClickSearchByLocationListener =
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openGoogleMap();
+                }
+            };
+
+    private final View.OnClickListener mOnClickSearchByTagListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            openOperationTag();
+        }
+    };
+
+    private final View.OnClickListener mOnClickOpenPostListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            openSaveMediaPosts();
+        }
+    };
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,24 +88,9 @@ public class SubscriptionsListFragment extends Fragment {
         List<Subscription> subscriptionsDb = getSubscriptionsDb();
         setAdapter(getSortedSubscriptionsDb(subscriptionsDb));
 
-        mOpenMediaPosts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSaveMediaPosts();
-            }
-        });
-        mSearchByTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openOperationTag();
-            }
-        });
-        mSearchByLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGoogleMap();
-            }
-        });
+        mSearchByLocation.setOnClickListener(mOnClickSearchByLocationListener);
+        mSearchByTag.setOnClickListener(mOnClickSearchByTagListener);
+        mOpenMediaPosts.setOnClickListener(mOnClickOpenPostListener);
 
         return v;
     }
@@ -126,12 +141,7 @@ public class SubscriptionsListFragment extends Fragment {
         AdapterSubscriptions subscriptionsAdapter = new AdapterSubscriptions(subscriptions,
                 getActivity().getFragmentManager());
 
-        subscriptionsAdapter.setOnClickOpenMediaPosts(new AdapterSubscriptions.OnClickOpenMediaPosts() {
-            @Override
-            public void onClick(Subscription clickSubscription) {
-                openClickInstanceOfSubscription(clickSubscription);
-            }
-        });
+        subscriptionsAdapter.setOnClickOpenMediaPosts(mOnClickSubscriptionListener);
         mLvSubscriptions.setAdapter(subscriptionsAdapter);
     }
 
@@ -152,17 +162,13 @@ public class SubscriptionsListFragment extends Fragment {
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptions.addAll(mTagDbAdapter.open().getAllTags());
         subscriptions.addAll(mLocationDbAdapter.open().getAllLocations());
-        closeDbAdapters();
+        mTagDbAdapter.close();
+        mLocationDbAdapter.close();
         return subscriptions;
     }
 
     private List<Subscription> getSortedSubscriptionsDb(List<Subscription> subscriptions) {
         return FastSort.sort(subscriptions, 0, subscriptions.size() - 1);
-    }
-
-    private void closeDbAdapters() {
-        mTagDbAdapter.close();
-        mLocationDbAdapter.close();
     }
 
     @Override

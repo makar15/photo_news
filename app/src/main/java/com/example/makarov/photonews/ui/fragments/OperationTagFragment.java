@@ -43,46 +43,30 @@ public class OperationTagFragment extends Fragment {
     @Inject
     TagDbAdapter mTagDbAdapter;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.operation_tag_fragment, null);
-        ButterKnife.bind(this, v);
-        AppInjector.get().inject(this);
+    private final View.OnClickListener mOnClickEnterSearchListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String tagSearch = mLineTagSearch.getText().toString();
 
-        mEnterSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tagSearch = mLineTagSearch.getText().toString();
-
-                if (!TextUtils.isEmpty(tagSearch)) {
-                    openListPhotoResultTag(tagSearch);
-                }
+            if (!TextUtils.isEmpty(tagSearch)) {
+                openListPhotoResultTag(tagSearch);
             }
-        });
-        mAddTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tagSearch = mLineTagSearch.getText().toString();
+        }
+    };
 
-                if (!TextUtils.isEmpty(tagSearch)) {
-                    mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
-                    mTagDbAdapter.close();
-                }
+    private final View.OnClickListener mOnClickAddTagListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String tagSearch = mLineTagSearch.getText().toString();
+
+            if (!TextUtils.isEmpty(tagSearch)) {
+                mTagDbAdapter.open().add(new Tag(tagSearch, new Date().getTime()));
+                mTagDbAdapter.close();
             }
-        });
+        }
+    };
 
-        mLineTagSearch.addTextChangedListener(textWatcherBanSpace);
-
-        return v;
-    }
-
-    private void openListPhotoResultTag(String lineTag) {
-        Bundle bundle = new Bundle();
-        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, lineTag);
-        ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
-    }
-
-    private TextWatcher textWatcherBanSpace = new TextWatcher() {
+    private final TextWatcher mTextWatcherBanSpace = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -95,22 +79,36 @@ public class OperationTagFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            banSpace(s);
-        }
-    };
+            int length = s.length();
 
-    private void banSpace(Editable s) {
-
-        int length = s.length();
-
-        if (length != 0) {
-            String enteredText = s.toString();
-            char[] charArray = enteredText.toCharArray();
-            for (int i = 0; i < length; i++) {
-                if (charArray[i] == ' ') {
-                    s.delete(i, i + 1);
+            if (length != 0) {
+                String enteredText = s.toString();
+                char[] charArray = enteredText.toCharArray();
+                for (int i = 0; i < length; i++) {
+                    if (charArray[i] == ' ') {
+                        s.delete(i, i + 1);
+                    }
                 }
             }
         }
+    };
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.operation_tag_fragment, null);
+        ButterKnife.bind(this, v);
+        AppInjector.get().inject(this);
+
+        mEnterSearch.setOnClickListener(mOnClickEnterSearchListener);
+        mAddTag.setOnClickListener(mOnClickAddTagListener);
+        mLineTagSearch.addTextChangedListener(mTextWatcherBanSpace);
+
+        return v;
+    }
+
+    private void openListPhotoResultTag(String lineTag) {
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, lineTag);
+        ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
     }
 }

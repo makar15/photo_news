@@ -1,6 +1,7 @@
 package com.example.makarov.photonews.adapters;
 
 import android.app.FragmentManager;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.dialog.ChangeNameLocationDialog;
 import com.example.makarov.photonews.utils.CreateDialogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -30,22 +32,38 @@ public class AdapterSubscriptions
     private final int TYPE_HOLDER_LOCATION = 1;
 
     private final FragmentManager mFragmentManager;
-    private final List<Subscription> mSubscriptions;
-    private final TagDbAdapter mTagDbAdapter;
-    private final LocationDbAdapter mLocationDbAdapter;
+    private final List<Subscription> mSubscriptions = new ArrayList<>();
+    private final TagDbAdapter mTagDbAdapter = AppInjector.get().getTagDbAdapter();
+    private final LocationDbAdapter mLocationDbAdapter = AppInjector.get().getLocationDbAdapter();
 
-    private OnClickOpenMediaPosts mOnClickOpenMediaPosts;
+    @Nullable private OnClickSubscriptionListener mOnClickSubscriptionListener;
+
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = (int) v.getTag();
+            if (mOnClickSubscriptionListener != null) {
+                mOnClickSubscriptionListener.onClick(getItem(position));
+            }
+        }
+    };
+
+    public interface OnClickSubscriptionListener {
+        void onClick(Subscription subscription);
+    }
+
+    public AdapterSubscriptions(FragmentManager manager) {
+        mFragmentManager = manager;
+    }
 
     public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager) {
         mFragmentManager = manager;
-        mSubscriptions = subscriptions;
-        mTagDbAdapter = AppInjector.get().getTagDbAdapter();
-        mLocationDbAdapter = AppInjector.get().getLocationDbAdapter();
+        mSubscriptions.addAll(subscriptions);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mSubscriptions.get(position) instanceof Tag) {
+        if (getItem(position) instanceof Tag) {
             return TYPE_HOLDER_TAG;
         } else {
             return TYPE_HOLDER_LOCATION;
@@ -54,7 +72,6 @@ public class AdapterSubscriptions
 
     @Override
     public SubscriptionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view;
 
         switch (viewType) {
@@ -74,14 +91,8 @@ public class AdapterSubscriptions
 
     @Override
     public void onBindViewHolder(SubscriptionViewHolder holder, final int position) {
-
         holder.fillView(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnClickOpenMediaPosts.onClick(getItem(position));
-            }
-        });
+        holder.itemView.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -93,11 +104,18 @@ public class AdapterSubscriptions
         return mSubscriptions.get(position);
     }
 
-    public void setOnClickOpenMediaPosts(OnClickOpenMediaPosts onClickOpenMediaPosts) {
-        mOnClickOpenMediaPosts = onClickOpenMediaPosts;
+    public void setOnClickOpenMediaPosts(OnClickSubscriptionListener listener) {
+        mOnClickSubscriptionListener = listener;
+    }
+
+    public void update(List<Subscription> subscriptions) {
+        mSubscriptions.clear();
+        mSubscriptions.addAll(subscriptions);
+        notifyDataSetChanged();
     }
 
     public abstract class SubscriptionViewHolder extends RecyclerView.ViewHolder {
+
         public SubscriptionViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -115,28 +133,28 @@ public class AdapterSubscriptions
 
         private Tag mTag;
 
+        private final View.OnClickListener mOnClickDeleteTagListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTagDbAdapter.open().delete(mTag)) {
+                    mSubscriptions.remove(mTag);
+                    notifyDataSetChanged();
+                }
+                mTagDbAdapter.close();
+            }
+        };
+
         public TagViewHolder(View v) {
             super(v);
-
-            mDeleteTag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteTag();
-                    mTagDbAdapter.close();
-                }
-            });
+            mDeleteTag.setOnClickListener(mOnClickDeleteTagListener);
         }
 
         @Override
         public void fillView(int position) {
-            mTag = (Tag) mSubscriptions.get(position);
-            mNameTag.setText(mTag.getName());
-        }
+            itemView.setTag(position);
 
-        private boolean deleteTag() {
-            mSubscriptions.remove(mTag);
-            AdapterSubscriptions.this.notifyDataSetChanged();
-            return mTagDbAdapter.open().delete(mTag);
+            mTag = (Tag) getItem(position);
+            mNameTag.setText(mTag.getName());
         }
     }
 
@@ -151,45 +169,40 @@ public class AdapterSubscriptions
 
         private Location mLocation;
 
+        private final View.OnClickListener mOnClickDeleteLocationListener =
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mLocationDbAdapter.open().delete(mLocation)) {
+                            mSubscriptions.remove(mLocation);
+                            notifyDataSetChanged();
+                        }
+                        mLocationDbAdapter.close();
+                    }
+                };
+
+        private final View.OnClickListener mOnClickChangeNameLocationListener =
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
+                        createDialog.createDialog(new ChangeNameLocationDialog
+                                (mLocation, AdapterSubscriptions.this));
+                    }
+                };
+
         public LocationViewHolder(View v) {
             super(v);
-
-            mDeleteLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteLocation();
-                    mLocationDbAdapter.close();
-                }
-            });
-            mChangeNameLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openDialogChangeNameLocation(mLocation);
-                }
-            });
+            mDeleteLocation.setOnClickListener(mOnClickDeleteLocationListener);
+            mChangeNameLocation.setOnClickListener(mOnClickChangeNameLocationListener);
         }
 
         @Override
         public void fillView(int position) {
-            mLocation = (Location) mSubscriptions.get(position);
+            itemView.setTag(position);
+
+            mLocation = (Location) getItem(position);
             mNameLocation.setText(mLocation.getName());
         }
-
-        private boolean deleteLocation() {
-            mSubscriptions.remove(mLocation);
-            AdapterSubscriptions.this.notifyDataSetChanged();
-            return mLocationDbAdapter.open().delete(mLocation);
-        }
-
-        private void openDialogChangeNameLocation(Location location) {
-            CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
-            createDialog.createDialog(new ChangeNameLocationDialog
-                    (location, AdapterSubscriptions.this));
-        }
     }
-
-    public interface OnClickOpenMediaPosts {
-        void onClick(Subscription tempClickItem);
-    }
-
 }
