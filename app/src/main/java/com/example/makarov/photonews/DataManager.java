@@ -2,7 +2,7 @@ package com.example.makarov.photonews;
 
 import com.example.makarov.photonews.models.MediaPost;
 import com.example.makarov.photonews.models.Subscription;
-import com.example.makarov.photonews.network.PostFinder;
+import com.example.makarov.photonews.network.postfinders.PostFinder;
 
 import java.util.List;
 

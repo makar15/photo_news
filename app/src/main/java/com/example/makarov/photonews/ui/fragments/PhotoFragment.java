@@ -13,7 +13,7 @@ import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.MediaPost;
-import com.example.makarov.photonews.network.PostFinder;
+import com.example.makarov.photonews.network.postfinders.PostFinder;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 
 import com.malinskiy.superrecyclerview.OnMoreListener;

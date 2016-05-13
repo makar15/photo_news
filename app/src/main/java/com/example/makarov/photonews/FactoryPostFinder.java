@@ -1,9 +1,9 @@
 package com.example.makarov.photonews;
 
 import com.example.makarov.photonews.models.Location;
-import com.example.makarov.photonews.network.PostFinderLocation;
-import com.example.makarov.photonews.network.PostFinderMediaPost;
-import com.example.makarov.photonews.network.PostFinderTag;
+import com.example.makarov.photonews.network.postfinders.PostFinderLocation;
+import com.example.makarov.photonews.network.postfinders.PostFinderMediaPost;
+import com.example.makarov.photonews.network.postfinders.PostFinderTag;
 
 import javax.inject.Singleton;
 
