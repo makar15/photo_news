@@ -1,21 +1,21 @@
 package com.example.makarov.photonews.ui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+
 import com.example.makarov.photonews.network.postfinders.PostFinder;
 
 public class PhotoTagFragment extends PhotoFragment {
 
+    @Nullable
     @Override
     protected PostFinder createPostFinder() {
-        if (getArguments() == null) {
+        Bundle args = getArguments();
+        if (args == null || !args.containsKey(PhotoFragment.PHOTO_RESULT_TAG_KEY)) {
             return null;
         }
 
-        if (!getArguments().containsKey(PhotoFragment.PHOTO_RESULT_TAG_KEY)) {
-            return null;
-        }
-
-        String tagName = getArguments().getString(PhotoFragment.PHOTO_RESULT_TAG_KEY);
+        String tagName = args.getString(PhotoFragment.PHOTO_RESULT_TAG_KEY);
         return mFactoryPostFinder.getPostFinderTag(tagName);
     }
-
 }

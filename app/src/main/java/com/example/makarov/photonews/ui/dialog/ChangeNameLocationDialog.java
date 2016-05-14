@@ -36,8 +36,30 @@ public class ChangeNameLocationDialog extends DialogFragment {
     @Inject
     LocationDbAdapter mLocationDbAdapter;
 
-    private Location mLocation;
-    private AdapterSubscriptions mAdapterSubscriptions;
+    private final Location mLocation;
+    private final AdapterSubscriptions mAdapterSubscriptions;
+
+    private final View.OnClickListener mOnClickCancelListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dismiss();
+        }
+    };
+
+    private final View.OnClickListener mOnClickChangeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String newNameLocation = mEtNewNameLocation.getText().toString();
+
+            if (!TextUtils.isEmpty(newNameLocation)) {
+                mLocation.setName(newNameLocation);
+                mLocationDbAdapter.open().update(mLocation);
+                mLocationDbAdapter.close();
+                mAdapterSubscriptions.notifyDataSetChanged();
+                dismiss();
+            }
+        }
+    };
 
     public ChangeNameLocationDialog(Location location, AdapterSubscriptions adapter) {
         mLocation = location;
@@ -51,30 +73,12 @@ public class ChangeNameLocationDialog extends DialogFragment {
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        mChange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newNameLocation = mEtNewNameLocation.getText().toString();
-
-                if (!TextUtils.isEmpty(newNameLocation)) {
-                    mLocation.setName(newNameLocation);
-                    mLocationDbAdapter.open().update(mLocation);
-                    mLocationDbAdapter.close();
-                    mAdapterSubscriptions.notifyDataSetChanged();
-                    dismiss();
-                }
-            }
-        });
+        mCancel.setOnClickListener(mOnClickCancelListener);
+        mChange.setOnClickListener(mOnClickChangeListener);
 
         mTvNameLocation.setText(mLocation.getName());
 
-        this.setCancelable(false);
+        setCancelable(false);
         return v;
     }
 

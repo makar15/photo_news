@@ -13,19 +13,23 @@ public class FastSort {
         int j = end;
         int op = i - (i - j) / 2;
 
+        long dateI = subscriptions.get(i).getDate();
+        long dateJ = subscriptions.get(j).getDate();
+        long dateOp = subscriptions.get(op).getDate();
+
         while (i < j) {
-            while ((i < op) && (subscriptions.get(i).getDate() <= subscriptions.get(op).getDate())) {
+            while (i < op && dateI <= dateOp) {
                 i += 1;
             }
-            while ((j > op) && (subscriptions.get(j).getDate() >= subscriptions.get(op).getDate())) {
+            while (j > op && dateJ >= dateOp) {
                 j -= 1;
             }
 
             if (i < j) {
-                Subscription temp = subscriptions.get(i);
+                Subscription subscription = subscriptions.get(i);
 
                 subscriptions.set(i, subscriptions.get(j));
-                subscriptions.set(j, temp);
+                subscriptions.set(j, subscription);
                 if (i == op) {
                     op = j;
                 } else if (j == op) {

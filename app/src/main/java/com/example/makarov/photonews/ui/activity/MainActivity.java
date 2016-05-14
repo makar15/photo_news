@@ -22,49 +22,36 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        openBaseFragment(new SubscriptionsListFragment());
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.layout_activity_main, new SubscriptionsListFragment()).commit();
     }
 
     public void openOperationTagFragment(Bundle bundle) {
-        Fragment newFragment = new OperationTagFragment();
-        newFragment.setArguments(bundle);
-        openFragment(newFragment, true);
+        openFragment(new OperationTagFragment(), bundle, true);
     }
 
-    public void openListPhotoResultTagFragment(Bundle bundle) {
-        Fragment newFragment = new PhotoTagFragment();
-        newFragment.setArguments(bundle);
-        openFragment(newFragment, true);
+    public void openListResultTagFragment(Bundle bundle) {
+        openFragment(new PhotoTagFragment(), bundle, true);
     }
 
-    public void openListPhotoResultLocationFragment(Bundle bundle) {
-        Fragment newFragment = new PhotoLocationFragment();
-        newFragment.setArguments(bundle);
-        openFragment(newFragment, true);
+    public void openListResultLocationFragment(Bundle bundle) {
+        openFragment(new PhotoLocationFragment(), bundle, true);
     }
 
     public void openListSaveMediaPostsFragment(Bundle bundle) {
-        Fragment newFragment = new MediaPostFragment();
-        newFragment.setArguments(bundle);
-        openFragment(newFragment, true);
+        openFragment(new MediaPostFragment(), bundle, true);
     }
 
     public void openGoogleMapFragment(Bundle bundle) {
-        Fragment newFragment = new GoogleMapFragment();
-        newFragment.setArguments(bundle);
-        openFragment(newFragment, true);
+        openFragment(new GoogleMapFragment(), bundle, true);
     }
 
-    private void openFragment(Fragment fragment, boolean saveInBackStack) {
+    private void openFragment(Fragment fragment, Bundle bundle, boolean saveInBackStack) {
+        fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.layout_activity_main, fragment);
         if (saveInBackStack)
             ft.addToBackStack(KEY_ADD_FRAGMENT_TO_BACK_STACK);
         ft.commit();
-    }
-
-    private void openBaseFragment(Fragment fragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.layout_activity_main, fragment).commit();
     }
 }

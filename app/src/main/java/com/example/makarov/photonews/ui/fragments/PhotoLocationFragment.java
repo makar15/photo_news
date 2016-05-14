@@ -1,21 +1,22 @@
 package com.example.makarov.photonews.ui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.postfinders.PostFinder;
 
 public class PhotoLocationFragment extends PhotoFragment {
 
+    @Nullable
     @Override
     protected PostFinder createPostFinder() {
-        if (getArguments() == null) {
+        Bundle args = getArguments();
+        if (args == null || !getArguments().containsKey(PhotoFragment.PHOTO_RESULT_LOCATION_KEY)) {
             return null;
         }
 
-        if (!getArguments().containsKey(PhotoFragment.PHOTO_RESULT_LOCATION_KEY)) {
-            return null;
-        }
-
-        Location location = getArguments().getParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY);
+        Location location = args.getParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY);
         return mFactoryPostFinder.getPostFinderLocation(location);
     }
 }

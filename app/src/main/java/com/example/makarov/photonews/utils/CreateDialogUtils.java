@@ -5,8 +5,9 @@ import android.app.FragmentManager;
 
 public class CreateDialogUtils {
 
-    private final String TAG_DIALOG = "dialog";
-    private FragmentManager mFragmentManager;
+    private static final String TAG_DIALOG = "CreateDialogUtils";
+
+    private final FragmentManager mFragmentManager;
 
     public CreateDialogUtils(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;

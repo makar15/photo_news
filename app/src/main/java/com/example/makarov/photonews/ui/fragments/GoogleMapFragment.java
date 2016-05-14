@@ -186,7 +186,7 @@ public class GoogleMapFragment extends Fragment {
     private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
-        ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
+        ((MainActivity) getActivity()).openListResultLocationFragment(bundle);
     }
 
     @Override

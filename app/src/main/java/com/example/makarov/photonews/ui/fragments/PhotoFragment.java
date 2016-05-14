@@ -1,6 +1,7 @@
 package com.example.makarov.photonews.ui.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -38,7 +39,8 @@ public abstract class PhotoFragment extends Fragment {
     FactoryPostFinder mFactoryPostFinder;
 
     private final PhotoResultAdapter mPhotoAdapter = new PhotoResultAdapter();
-    private PostFinder mPostFinder = createPostFinder();
+
+    private PostFinder mPostFinder;
 
     private final OnMoreListener mOnScrollsListListener = new OnMoreListener() {
         @Override
@@ -50,6 +52,7 @@ public abstract class PhotoFragment extends Fragment {
         }
     };
 
+    @Nullable
     protected abstract PostFinder createPostFinder();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

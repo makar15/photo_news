@@ -98,13 +98,13 @@ public class SubscriptionsListFragment extends Fragment {
     private void openListPhotoResultTag(Tag tag) {
         Bundle bundle = new Bundle();
         bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
-        ((MainActivity) getActivity()).openListPhotoResultTagFragment(bundle);
+        ((MainActivity) getActivity()).openListResultTagFragment(bundle);
     }
 
     private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
-        ((MainActivity) getActivity()).openListPhotoResultLocationFragment(bundle);
+        ((MainActivity) getActivity()).openListResultLocationFragment(bundle);
     }
 
     private void openSaveMediaPosts() {
