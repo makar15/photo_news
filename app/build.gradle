@@ -61,7 +61,7 @@ dependencies {
     // API
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
-    // GSON
+    // Parse
     compile 'com.google.code.gson:gson:2.6.1'
 
     // Google maps

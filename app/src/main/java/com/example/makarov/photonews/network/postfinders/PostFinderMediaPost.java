@@ -1,6 +1,5 @@
 package com.example.makarov.photonews.network.postfinders;
 
-import com.example.makarov.photonews.PhotoNewsApp;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.network.robospice.requests.MediaPostRequest;
 import com.octo.android.robospice.SpiceManager;
@@ -9,9 +8,13 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public class PostFinderMediaPost implements PostFinder {
 
-    private final SpiceManager mSpiceManager = PhotoNewsApp.getApp().getSpiceManager();
+    private final SpiceManager mSpiceManager;
 
     private int mNumberRequest = 0;
+
+    public PostFinderMediaPost(SpiceManager spiceManager) {
+        mSpiceManager = spiceManager;
+    }
 
     public boolean requestPhotos(RequestListener<MediaPostList> requestListener) {
         request(requestListener);

@@ -5,22 +5,16 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.example.makarov.photonews.di.AppInjector;
-import com.octo.android.robospice.GsonSpringAndroidSpiceService;
-import com.octo.android.robospice.SpiceManager;
 
 public class PhotoNewsApp extends MultiDexApplication {
 
     private static PhotoNewsApp mApp;
-    private SpiceManager mSpiceManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mApp = this;
-
         AppInjector.buildComponent(this);
-        mSpiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
-        mSpiceManager.start(this);
     }
 
     @Override
@@ -32,9 +26,4 @@ public class PhotoNewsApp extends MultiDexApplication {
     public static PhotoNewsApp getApp() {
         return mApp;
     }
-
-    public SpiceManager getSpiceManager() {
-        return mSpiceManager;
-    }
-
 }

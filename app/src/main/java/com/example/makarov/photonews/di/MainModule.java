@@ -7,6 +7,8 @@ import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
+import com.octo.android.robospice.GsonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
 
 import javax.inject.Singleton;
 
@@ -30,8 +32,16 @@ public class MainModule {
 
     @Provides
     @Singleton
-    FactoryPostFinder provideFactoryPostFinder() {
-        return new FactoryPostFinder();
+    SpiceManager provideSpiceManager() {
+        SpiceManager spiceManager = new SpiceManager(GsonSpringAndroidSpiceService.class);
+        spiceManager.start(mContext);
+        return spiceManager;
+    }
+
+    @Provides
+    @Singleton
+    FactoryPostFinder provideFactoryPostFinder(SpiceManager spiceManager) {
+        return new FactoryPostFinder(spiceManager);
     }
 
     @Provides

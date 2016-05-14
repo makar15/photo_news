@@ -1,10 +1,9 @@
 package com.example.makarov.photonews.network.postfinders;
 
-import com.example.makarov.photonews.PhotoNewsApp;
+import com.example.makarov.photonews.network.robospice.model.MediaPostList;
+import com.example.makarov.photonews.network.robospice.requests.TagRequest;
 import com.example.makarov.photonews.network.savers.NextPageUrlSaver;
 import com.example.makarov.photonews.network.savers.NextPageUrlSaverTag;
-import com.example.makarov.photonews.network.robospice.requests.TagRequest;
-import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.UrlInstaUtils;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -12,14 +11,15 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public class PostFinderTag implements PostFinder {
 
-    private final SpiceManager mSpiceManager = PhotoNewsApp.getApp().getSpiceManager();
+    private final SpiceManager mSpiceManager;
     private final NextPageUrlSaver mUrlSaver;
     private final String mLineTag;
 
     private String mUrl;
 
-    public PostFinderTag(String lineTag) {
+    public PostFinderTag(String lineTag, SpiceManager spiceManager) {
         mLineTag = lineTag;
+        mSpiceManager = spiceManager;
         mUrlSaver = new NextPageUrlSaverTag();
     }
 
