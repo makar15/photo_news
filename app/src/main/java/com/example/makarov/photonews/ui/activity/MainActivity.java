@@ -15,7 +15,7 @@ import com.example.makarov.photonews.ui.fragments.SubscriptionsListFragment;
 
 public class MainActivity extends FragmentActivity {
 
-    private static final String KEY_ADD_FRAGMENT_TO_BACK_STACK = "key_add_fragment_to_back_stack";
+    private static final String KEY_ADD_FRAGMENT_TO_BACK_STACK = "KeyAddFragmentToBackStack";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

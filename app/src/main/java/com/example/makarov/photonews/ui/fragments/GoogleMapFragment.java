@@ -133,7 +133,8 @@ public class GoogleMapFragment extends Fragment {
             };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.google_map, null);
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);

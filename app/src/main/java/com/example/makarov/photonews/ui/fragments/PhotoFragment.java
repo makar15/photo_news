@@ -6,22 +6,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.adapters.PhotoResultAdapter;
 import com.example.makarov.photonews.di.AppInjector;
-import com.example.makarov.photonews.models.MediaPost;
 import com.example.makarov.photonews.network.postfinders.PostFinder;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
-
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,9 +25,11 @@ import butterknife.ButterKnife;
 
 public abstract class PhotoFragment extends Fragment {
 
-    public static final String PHOTO_RESULT_TAG_KEY = "photo_result_tag";
-    public static final String PHOTO_RESULT_LOCATION_KEY = "photo_result_location";
-    public static final String MEDIA_POST_RESULT_KEY = "media_post_result";
+    private static final int PHOTO_LOADING_PORTION = 10;
+
+    public static final String PHOTO_RESULT_TAG_KEY = "PhotoResultTag";
+    public static final String PHOTO_RESULT_LOCATION_KEY = "PhotoResultLocation";
+    public static final String MEDIA_POST_RESULT_KEY = "MediaPostResult";
 
     @Bind(R.id.lv_photo_result)
     SuperRecyclerView mSuperRecyclerView;
@@ -40,55 +37,32 @@ public abstract class PhotoFragment extends Fragment {
     @Inject
     FactoryPostFinder mFactoryPostFinder;
 
-    private PhotoResultAdapter mPhotoAdapter;
+    private final PhotoResultAdapter mPhotoAdapter = new PhotoResultAdapter();
+    private PostFinder mPostFinder = createPostFinder();
+
+    private final OnMoreListener mOnScrollsListListener = new OnMoreListener() {
+        @Override
+        public void onMoreAsked(int overallItemsCount,
+                                int itemsBeforeMore, int maxLastVisiblePosition) {
+            if (!mPostFinder.nextRequestPhotos(new MediaPostsRequestListener(mPhotoAdapter))) {
+                mSuperRecyclerView.hideMoreProgress();
+            }
+        }
+    };
 
     protected abstract PostFinder createPostFinder();
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_photo_result_fragment, null);
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
-
         setLayoutManager();
+        mSuperRecyclerView.setAdapter(mPhotoAdapter);
+        mPostFinder = createPostFinder();
 
-        final PostFinder postFinder = createPostFinder();
-
-        postFinder.requestPhotos(new RequestListener<MediaPostList>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-
-            }
-
-            @Override
-            public void onRequestSuccess(MediaPostList photoNews) {
-                if (photoNews != null) {
-                    setAdapter(photoNews.getMediaPosts());
-                }
-            }
-        });
-
-        final int LOAD_PHOTO = 10;
-        mSuperRecyclerView.setupMoreListener(new OnMoreListener() {
-            @Override
-            public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-
-                if (!postFinder.nextRequestPhotos(new RequestListener<MediaPostList>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-
-                    }
-
-                    @Override
-                    public void onRequestSuccess(MediaPostList photoNews) {
-                        if (photoNews != null) {
-                            mPhotoAdapter.update(photoNews.getMediaPosts());
-                        }
-                    }
-                })) {
-                    mSuperRecyclerView.hideMoreProgress();
-                }
-            }
-        }, LOAD_PHOTO);
+        mPostFinder.requestPhotos(new MediaPostsRequestListener(mPhotoAdapter));
+        mSuperRecyclerView.setupMoreListener(mOnScrollsListListener, PHOTO_LOADING_PORTION);
 
         return v;
     }
@@ -99,15 +73,24 @@ public abstract class PhotoFragment extends Fragment {
         mSuperRecyclerView.setLayoutManager(layoutManager);
     }
 
-    private void setAdapter(List<MediaPost> photoNews) {
-        if (photoNews.isEmpty()) {
-            Toast.makeText(getContext(), "not photo",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            //TODO add and save a photo to my basket
-            mPhotoAdapter = new PhotoResultAdapter(photoNews);
-            mSuperRecyclerView.setAdapter(mPhotoAdapter);
+    public static class MediaPostsRequestListener implements RequestListener<MediaPostList> {
+
+        private final PhotoResultAdapter mPhotoAdapter;
+
+        public MediaPostsRequestListener(PhotoResultAdapter adapter) {
+            mPhotoAdapter = adapter;
+        }
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+
+        }
+
+        @Override
+        public void onRequestSuccess(MediaPostList mediaPostList) {
+            if (mediaPostList != null && !mediaPostList.getMediaPosts().isEmpty()) {
+                mPhotoAdapter.update(mediaPostList.getMediaPosts());
+            }
         }
     }
-
 }

@@ -29,39 +29,27 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
     private final int TYPE_HOLDER_SAVE_MEDIA_POST = 1;
 
     private final List<MediaPost> mMediaPosts = new ArrayList<>();
-    private final MediaPostDbAdapter mMediaPostDbAdapter;
+    private final MediaPostDbAdapter mMediaPostDbAdapter = AppInjector.get().getMediaPostDbAdapter();
+
+    public PhotoResultAdapter() {
+
+    }
 
     public PhotoResultAdapter(List<MediaPost> mediaPosts) {
         mMediaPosts.addAll(mediaPosts);
-        mMediaPostDbAdapter = AppInjector.get().getMediaPostDbAdapter();
     }
 
     @Override
     public ResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_media_post, parent, false);
 
-        return new ResultViewHolder(view);
+        return new ResultViewHolder(view, mMediaPostDbAdapter);
     }
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, final int position) {
-
-        String item = getItem(position).getUrlAddress();
-        Picasso.with(holder.itemView.getContext())
-                .load(item)
-                .into(holder.icon);
-
-        holder.author.setText(getItem(position).getAuthor());
-        holder.countLikes.setText(String.valueOf(getItem(position).getCountLikes()));
-        holder.operationMediaPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addMediaPost(getItem(position));
-                mMediaPostDbAdapter.close();
-            }
-        });
+        holder.fillView(getItem(position));
     }
 
     @Override
@@ -73,38 +61,60 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
         return mMediaPosts.get(position);
     }
 
-    public static class ResultViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.icon)
-        ImageView icon;
-        @Bind(R.id.like)
-        ImageView like;
-        @Bind(R.id.author)
-        TextView author;
-        @Bind(R.id.count_likes)
-        TextView countLikes;
-        @Bind(R.id.media_post_btn)
-        FloatingActionButton operationMediaPost;
-
-        public ResultViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
-    }
-
-    private void addMediaPost(MediaPost mediaPost) {
-        mMediaPostDbAdapter.open().add(mediaPost);
-    }
-
     public void update(List<MediaPost> newMediaPosts) {
-        for (MediaPost tempPost : newMediaPosts) {
-            addItem(tempPost);
+        for (MediaPost post : newMediaPosts) {
+            addItem(post);
         }
-        notifyItemRangeChanged(0, mMediaPosts.size());
+        notifyDataSetChanged();
     }
 
     public void addItem(MediaPost mediaPost) {
         mMediaPosts.add(mediaPost);
+    }
+
+    public static class ResultViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.icon)
+        ImageView mIcon;
+        @Bind(R.id.like)
+        ImageView mLike;
+        @Bind(R.id.author)
+        TextView mAuthor;
+        @Bind(R.id.count_likes)
+        TextView mCountLikes;
+        @Bind(R.id.media_post_btn)
+        FloatingActionButton mOperationMediaPost;
+
+        private final MediaPostDbAdapter mMediaPostDbAdapter;
+
+        private MediaPost mMediaPost;
+
+        private final View.OnClickListener mOnClickOperationMediaPostListener =
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMediaPostDbAdapter.open().add(mMediaPost);
+                        mMediaPostDbAdapter.close();
+                    }
+                };
+
+        public ResultViewHolder(View v, MediaPostDbAdapter mediaPostDbAdapter) {
+            super(v);
+            ButterKnife.bind(this, v);
+            mMediaPostDbAdapter = mediaPostDbAdapter;
+        }
+
+        public void fillView(final MediaPost post) {
+            mMediaPost = post;
+            String url = mMediaPost.getUrlAddress();
+            Picasso.with(itemView.getContext())
+                    .load(url)
+                    .into(mIcon);
+
+            mAuthor.setText(mMediaPost.getAuthor());
+            mCountLikes.setText(String.valueOf(mMediaPost.getCountLikes()));
+            mOperationMediaPost.setOnClickListener(mOnClickOperationMediaPostListener);
+        }
     }
 
 }
