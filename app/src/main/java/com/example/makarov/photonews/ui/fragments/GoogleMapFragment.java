@@ -44,8 +44,6 @@ import butterknife.ButterKnife;
 
 public class GoogleMapFragment extends Fragment {
 
-    public static final String GOOGLE_MAP_KEY = "GoogleMapFragment";
-
     @Bind(R.id.input_layout_location)
     MaterialTextField mLayoutLocation;
     @Bind(R.id.line_name_location)

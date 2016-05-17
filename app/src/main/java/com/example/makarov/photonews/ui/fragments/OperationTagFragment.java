@@ -29,8 +29,6 @@ import butterknife.ButterKnife;
 
 public class OperationTagFragment extends Fragment {
 
-    public static final String OPERATION_KEY = "OperationTagFragment";
-
     @Bind(R.id.input_layout_tag)
     MaterialTextField mLayoutTag;
     @Bind(R.id.line_tag_search)

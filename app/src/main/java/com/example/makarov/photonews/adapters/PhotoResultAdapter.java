@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.makarov.photonews.PicassoBigCache;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.MediaPost;
 import com.melnykov.fab.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,9 +106,9 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
 
         public void fillView(final MediaPost post) {
             mMediaPost = post;
-            String url = mMediaPost.getUrlAddress();
-            Picasso.with(itemView.getContext())
-                    .load(url)
+
+            PicassoBigCache.INSTANCE.getPicassoBigCache(itemView.getContext())
+                    .load(mMediaPost.getUrlAddress())
                     .into(mIcon);
 
             mAuthor.setText(mMediaPost.getAuthor());

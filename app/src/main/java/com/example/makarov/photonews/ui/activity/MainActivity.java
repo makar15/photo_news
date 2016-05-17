@@ -22,8 +22,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.layout_activity_main, new SubscriptionsListFragment()).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.layout_activity_main, new SubscriptionsListFragment()).commit();
     }
 
     public void openOperationTagFragment(Bundle bundle) {
@@ -47,11 +47,13 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void openFragment(Fragment fragment, Bundle bundle, boolean saveInBackStack) {
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.layout_activity_main, fragment);
+        if(bundle != null) {
+            fragment.setArguments(bundle);
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.layout_activity_main, fragment);
         if (saveInBackStack)
-            ft.addToBackStack(KEY_ADD_FRAGMENT_TO_BACK_STACK);
-        ft.commit();
+            transaction.addToBackStack(KEY_ADD_FRAGMENT_TO_BACK_STACK);
+        transaction.commit();
     }
 }

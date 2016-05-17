@@ -32,8 +32,6 @@ import butterknife.ButterKnife;
 
 public class SubscriptionsListFragment extends Fragment {
 
-    public static final String SUBSCRIPTIONS_LIST_KEY = "SubscriptionsListFragment";
-
     @Bind(R.id.lv_subscriptions)
     RecyclerView mLvSubscriptions;
     @Bind(R.id.search_by_location_btn)
@@ -60,21 +58,21 @@ public class SubscriptionsListFragment extends Fragment {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openGoogleMap();
+                    ((MainActivity) getActivity()).openGoogleMapFragment(null);
                 }
             };
 
     private final View.OnClickListener mOnClickSearchByTagListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            openOperationTag();
+            ((MainActivity) getActivity()).openOperationTagFragment(null);
         }
     };
 
     private final View.OnClickListener mOnClickOpenPostListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            openSaveMediaPosts();
+            ((MainActivity) getActivity()).openListSaveMediaPostsFragment(null);
         }
     };
 
@@ -84,9 +82,7 @@ public class SubscriptionsListFragment extends Fragment {
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
         setLayoutManager();
-
-        List<Subscription> subscriptionsDb = getSubscriptionsDb();
-        setAdapter(getSortedSubscriptionsDb(subscriptionsDb));
+        setAdapter(getSortedSubscriptionsDb(getSubscriptionsDb()));
 
         mSearchByLocation.setOnClickListener(mOnClickSearchByLocationListener);
         mSearchByTag.setOnClickListener(mOnClickSearchByTagListener);
@@ -95,40 +91,13 @@ public class SubscriptionsListFragment extends Fragment {
         return v;
     }
 
-    private void openListPhotoResultTag(Tag tag) {
-        Bundle bundle = new Bundle();
-        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
-        ((MainActivity) getActivity()).openListResultTagFragment(bundle);
-    }
-
-    private void openListPhotoResultLocation(Location location) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
-        ((MainActivity) getActivity()).openListResultLocationFragment(bundle);
-    }
-
-    private void openSaveMediaPosts() {
-        Bundle bundle = new Bundle();
-        bundle.putString(PhotoFragment.MEDIA_POST_RESULT_KEY, null);
-        ((MainActivity) getActivity()).openListSaveMediaPostsFragment(bundle);
-    }
-
-    private void openOperationTag() {
-        Bundle bundle = new Bundle();
-        bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, null);
-        ((MainActivity) getActivity()).openOperationTagFragment(bundle);
-    }
-
-    private void openGoogleMap() {
-        Bundle bundle = new Bundle();
-        bundle.putString(SubscriptionsListFragment.SUBSCRIPTIONS_LIST_KEY, null);
-        ((MainActivity) getActivity()).openGoogleMapFragment(bundle);
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initializeHistoryRecyclerView();
+
+        //initializeHistoryRecyclerView
+        mLvSubscriptions.setHasFixedSize(false);
+        mLvSubscriptions.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void setLayoutManager() {
@@ -147,15 +116,22 @@ public class SubscriptionsListFragment extends Fragment {
 
     private void openClickInstanceOfSubscription(Subscription subscription) {
         if (subscription instanceof Tag) {
-            openListPhotoResultTag(((Tag) subscription));
+            openListPhotoResultTag((Tag) subscription);
         } else if (subscription instanceof Location) {
             openListPhotoResultLocation((Location) subscription);
         }
     }
 
-    private void initializeHistoryRecyclerView() {
-        mLvSubscriptions.setHasFixedSize(false);
-        mLvSubscriptions.setItemAnimator(new DefaultItemAnimator());
+    private void openListPhotoResultTag(Tag tag) {
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
+        ((MainActivity) getActivity()).openListResultTagFragment(bundle);
+    }
+
+    private void openListPhotoResultLocation(Location location) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
+        ((MainActivity) getActivity()).openListResultLocationFragment(bundle);
     }
 
     private List<Subscription> getSubscriptionsDb() {
