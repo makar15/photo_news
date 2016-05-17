@@ -70,22 +70,23 @@ public class TagDbAdapter {
     private List<Tag> cursorToTags(Cursor cursor) {
         List<Tag> tags = new ArrayList<>();
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    tags.add(restore(cursor));
-
-                } while (cursor.moveToNext());
-            } else {
-                Log.d(TAG, "0 rows");
-            }
-            cursor.close();
+        if (cursor == null) {
+            return tags;
         }
+        if (cursor.moveToFirst()) {
+            Log.d(TAG, "0 rows");
+            cursor.close();
+            return tags;
+        }
+        do {
+            tags.add(restore(cursor));
+        } while (cursor.moveToNext());
+
+        cursor.close();
         return tags;
     }
 
     private Tag restore(Cursor cursor) throws SQLException {
-
         String tagName = SQLiteUtils.getString(cursor, DataBaseHelper.TAG_NAME_COLUMN);
         long date = SQLiteUtils.getLong(cursor, DataBaseHelper.DATE_ADD_TAG_COLUMN);
 

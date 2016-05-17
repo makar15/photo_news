@@ -95,22 +95,23 @@ public class MediaPostDbAdapter {
     private List<MediaPost> cursorToMediaPosts(Cursor cursor) {
         List<MediaPost> mediaPosts = new ArrayList<>();
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    mediaPosts.add(restore(cursor));
-
-                } while (cursor.moveToNext());
-            } else {
-                Log.d(TAG, "0 rows");
-            }
-            cursor.close();
+        if (cursor == null) {
+            return mediaPosts;
         }
+        if (cursor.moveToFirst()) {
+            Log.d(TAG, "0 rows");
+            cursor.close();
+            return mediaPosts;
+        }
+        do {
+            mediaPosts.add(restore(cursor));
+        } while (cursor.moveToNext());
+
+        cursor.close();
         return mediaPosts;
     }
 
     private MediaPost restore(Cursor cursor) throws SQLException {
-
         String idMediaPost = SQLiteUtils.getString(cursor, DataBaseHelper.ID_POST_COLUMN);
         String author = SQLiteUtils.getString(cursor, DataBaseHelper.AUTHOR_COLUMN);
         String urlAddress = SQLiteUtils.getString(cursor, DataBaseHelper.URL_ADDRESS_COLUMN);

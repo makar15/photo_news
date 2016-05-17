@@ -76,22 +76,23 @@ public class LocationDbAdapter {
     private List<Location> cursorToLocations(Cursor cursor) {
         List<Location> locations = new ArrayList<>();
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    locations.add(restore(cursor));
-
-                } while (cursor.moveToNext());
-            } else {
-                Log.d(TAG, "0 rows");
-            }
-            cursor.close();
+        if (cursor == null) {
+            return locations;
         }
+        if (!cursor.moveToFirst()) {
+            Log.d(TAG, "0 rows");
+            cursor.close();
+            return locations;
+        }
+        do {
+            locations.add(restore(cursor));
+        } while (cursor.moveToNext());
+
+        cursor.close();
         return locations;
     }
 
     private Location restore(Cursor cursor) {
-
         String nameLocation = SQLiteUtils.getString(cursor, DataBaseHelper.NAME_LOCATION_COLUMN);
         String countryName = SQLiteUtils.getString(cursor, DataBaseHelper.COUNTRY_NAME_COLUMN);
         String locality = SQLiteUtils.getString(cursor, DataBaseHelper.LOCALITY_COLUMN);
