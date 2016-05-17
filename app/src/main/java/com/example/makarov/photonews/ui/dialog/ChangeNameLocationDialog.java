@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.AdapterSubscriptions;
+import com.example.makarov.photonews.adapters.SubscriptionsAdapter;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
@@ -37,7 +37,7 @@ public class ChangeNameLocationDialog extends DialogFragment {
     LocationDbAdapter mLocationDbAdapter;
 
     private final Location mLocation;
-    private final AdapterSubscriptions mAdapterSubscriptions;
+    private final SubscriptionsAdapter mSubscriptionsAdapter;
 
     private final View.OnClickListener mOnClickCancelListener = new View.OnClickListener() {
         @Override
@@ -55,15 +55,15 @@ public class ChangeNameLocationDialog extends DialogFragment {
                 mLocation.setName(newNameLocation);
                 mLocationDbAdapter.open().update(mLocation);
                 mLocationDbAdapter.close();
-                mAdapterSubscriptions.notifyDataSetChanged();
+                mSubscriptionsAdapter.notifyDataSetChanged();
                 dismiss();
             }
         }
     };
 
-    public ChangeNameLocationDialog(Location location, AdapterSubscriptions adapter) {
+    public ChangeNameLocationDialog(Location location, SubscriptionsAdapter adapter) {
         mLocation = location;
-        mAdapterSubscriptions = adapter;
+        mSubscriptionsAdapter = adapter;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

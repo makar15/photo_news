@@ -3,7 +3,7 @@ package com.example.makarov.photonews.network.robospice.requests;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.MediaPost;
-import com.example.makarov.photonews.network.Parsing;
+import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.okhttp.API;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.utils.UrlInstaUtils;
@@ -19,10 +19,13 @@ import java.util.List;
 
 public class MediaPostRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
+    private final MediaPostParser mMediaPostParser;
     private final int mNumberRequest;
 
-    public MediaPostRequest(int numberRequest) {
+    public MediaPostRequest(MediaPostParser mediaPostParser, int numberRequest) {
         super(MediaPostList.class);
+
+        mMediaPostParser = mediaPostParser;
         mNumberRequest = numberRequest;
     }
 
@@ -42,12 +45,8 @@ public class MediaPostRequest extends SpringAndroidSpiceRequest<MediaPostList> {
             JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
 
             if (jsonObject != null) {
-                try {
-                    Parsing.jsonToUpdateMediaPost(posts.get(i), jsonObject);
-                    mediaPostDbAdapter.update(posts.get(i));
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
+                mMediaPostParser.update(posts.get(i), jsonObject);
+                mediaPostDbAdapter.update(posts.get(i));
             } else {
                 positionsFakeMediaPosts.add(i);
             }

@@ -25,8 +25,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class AdapterSubscriptions
-        extends RecyclerView.Adapter<AdapterSubscriptions.SubscriptionViewHolder> {
+public class SubscriptionsAdapter
+        extends RecyclerView.Adapter<SubscriptionsAdapter.SubscriptionViewHolder> {
 
     private final int TYPE_HOLDER_TAG = 0;
     private final int TYPE_HOLDER_LOCATION = 1;
@@ -52,11 +52,11 @@ public class AdapterSubscriptions
         void onClick(Subscription subscription);
     }
 
-    public AdapterSubscriptions(FragmentManager manager) {
+    public SubscriptionsAdapter(FragmentManager manager) {
         mFragmentManager = manager;
     }
 
-    public AdapterSubscriptions(List<Subscription> subscriptions, FragmentManager manager) {
+    public SubscriptionsAdapter(List<Subscription> subscriptions, FragmentManager manager) {
         mFragmentManager = manager;
         mSubscriptions.addAll(subscriptions);
     }
@@ -187,7 +187,7 @@ public class AdapterSubscriptions
                     public void onClick(View v) {
                         CreateDialogUtils createDialog = new CreateDialogUtils(mFragmentManager);
                         createDialog.createDialog(new ChangeNameLocationDialog
-                                (mLocation, AdapterSubscriptions.this));
+                                (mLocation, SubscriptionsAdapter.this));
                     }
                 };
 

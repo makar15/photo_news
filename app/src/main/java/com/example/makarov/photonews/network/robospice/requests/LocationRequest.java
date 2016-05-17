@@ -1,7 +1,7 @@
 package com.example.makarov.photonews.network.robospice.requests;
 
 import com.example.makarov.photonews.models.Location;
-import com.example.makarov.photonews.network.Parsing;
+import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.okhttp.API;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.network.savers.NextPageUrlSaver;
@@ -17,12 +17,16 @@ import java.io.IOException;
 
 public class LocationRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
+    private final MediaPostParser mMediaPostParser;
     private final String mUrl;
     private final NextPageUrlSaver mUrlSaver;
     private final Location mLocation;
 
-    public LocationRequest(String url, NextPageUrlSaver urlSaver, Location location) {
+    public LocationRequest(MediaPostParser mediaPostParser, String url, NextPageUrlSaver urlSaver,
+                           Location location) {
         super(MediaPostList.class);
+
+        mMediaPostParser = mediaPostParser;
         mUrl = url;
         mUrlSaver = urlSaver;
         mLocation = location;
@@ -33,7 +37,7 @@ public class LocationRequest extends SpringAndroidSpiceRequest<MediaPostList> {
         JSONObject jsonObject = getJson(mUrl);
         saveNextUrl(jsonObject);
 
-        return Parsing.jsonToMediaPosts(jsonObject);
+        return mMediaPostParser.parse(jsonObject);
     }
 
     private void saveNextUrl(JSONObject jsonObject) throws IOException, JSONException {

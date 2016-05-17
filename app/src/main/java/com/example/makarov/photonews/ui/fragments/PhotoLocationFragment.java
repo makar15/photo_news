@@ -12,11 +12,11 @@ public class PhotoLocationFragment extends PhotoFragment {
     @Override
     protected PostFinder createPostFinder() {
         Bundle args = getArguments();
-        if (args == null || !getArguments().containsKey(PhotoFragment.PHOTO_RESULT_LOCATION_KEY)) {
+        if (args == null || !getArguments().containsKey(PhotoFragment.LOCATION_KEY)) {
             return null;
         }
 
-        Location location = args.getParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY);
+        Location location = args.getParcelable(PhotoFragment.LOCATION_KEY);
         return mFactoryPostFinder.getPostFinderLocation(location);
     }
 }

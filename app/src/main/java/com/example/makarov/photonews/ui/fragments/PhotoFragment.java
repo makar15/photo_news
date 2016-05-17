@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.makarov.photonews.FactoryPostFinder;
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.PhotoResultAdapter;
+import com.example.makarov.photonews.adapters.MediaPostsAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.network.postfinders.PostFinder;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
@@ -28,9 +28,9 @@ public abstract class PhotoFragment extends Fragment {
 
     private static final int PHOTO_LOADING_PORTION = 10;
 
-    public static final String PHOTO_RESULT_TAG_KEY = "PhotoResultTag";
-    public static final String PHOTO_RESULT_LOCATION_KEY = "PhotoResultLocation";
-    public static final String MEDIA_POST_RESULT_KEY = "MediaPostResult";
+    public static final String TAG_KEY = "PhotoResultTag";
+    public static final String LOCATION_KEY = "PhotoResultLocation";
+    public static final String MEDIA_POST_KEY = "MediaPostResult";
 
     @Bind(R.id.lv_photo_result)
     SuperRecyclerView mSuperRecyclerView;
@@ -38,7 +38,7 @@ public abstract class PhotoFragment extends Fragment {
     @Inject
     FactoryPostFinder mFactoryPostFinder;
 
-    private final PhotoResultAdapter mPhotoAdapter = new PhotoResultAdapter();
+    private final MediaPostsAdapter mMediaPostsAdapter = new MediaPostsAdapter();
 
     private PostFinder mPostFinder;
 
@@ -46,7 +46,7 @@ public abstract class PhotoFragment extends Fragment {
         @Override
         public void onMoreAsked(int overallItemsCount,
                                 int itemsBeforeMore, int maxLastVisiblePosition) {
-            if (!mPostFinder.nextRequestPhotos(new MediaPostsRequestListener(mPhotoAdapter))) {
+            if (!mPostFinder.nextRequestPhotos(new MediaPostsRequestListener(mMediaPostsAdapter))) {
                 mSuperRecyclerView.hideMoreProgress();
             }
         }
@@ -61,10 +61,10 @@ public abstract class PhotoFragment extends Fragment {
         ButterKnife.bind(this, v);
         AppInjector.get().inject(this);
         setLayoutManager();
-        mSuperRecyclerView.setAdapter(mPhotoAdapter);
+        mSuperRecyclerView.setAdapter(mMediaPostsAdapter);
         mPostFinder = createPostFinder();
 
-        mPostFinder.requestPhotos(new MediaPostsRequestListener(mPhotoAdapter));
+        mPostFinder.requestPhotos(new MediaPostsRequestListener(mMediaPostsAdapter));
         mSuperRecyclerView.setupMoreListener(mOnScrollsListListener, PHOTO_LOADING_PORTION);
 
         return v;
@@ -78,10 +78,10 @@ public abstract class PhotoFragment extends Fragment {
 
     public static class MediaPostsRequestListener implements RequestListener<MediaPostList> {
 
-        private final PhotoResultAdapter mPhotoAdapter;
+        private final MediaPostsAdapter mMediaPostsAdapter;
 
-        public MediaPostsRequestListener(PhotoResultAdapter adapter) {
-            mPhotoAdapter = adapter;
+        public MediaPostsRequestListener(MediaPostsAdapter adapter) {
+            mMediaPostsAdapter = adapter;
         }
 
         @Override
@@ -92,7 +92,7 @@ public abstract class PhotoFragment extends Fragment {
         @Override
         public void onRequestSuccess(MediaPostList mediaPostList) {
             if (mediaPostList != null && !mediaPostList.getMediaPosts().isEmpty()) {
-                mPhotoAdapter.update(mediaPostList.getMediaPosts());
+                mMediaPostsAdapter.update(mediaPostList.getMediaPosts());
             }
         }
     }

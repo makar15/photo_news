@@ -11,11 +11,11 @@ public class PhotoTagFragment extends PhotoFragment {
     @Override
     protected PostFinder createPostFinder() {
         Bundle args = getArguments();
-        if (args == null || !args.containsKey(PhotoFragment.PHOTO_RESULT_TAG_KEY)) {
+        if (args == null || !args.containsKey(PhotoFragment.TAG_KEY)) {
             return null;
         }
 
-        String tagName = args.getString(PhotoFragment.PHOTO_RESULT_TAG_KEY);
+        String tagName = args.getString(PhotoFragment.TAG_KEY);
         return mFactoryPostFinder.getPostFinderTag(tagName);
     }
 }

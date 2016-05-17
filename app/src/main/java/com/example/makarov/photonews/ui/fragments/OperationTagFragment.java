@@ -106,7 +106,7 @@ public class OperationTagFragment extends Fragment {
 
     private void openListPhotoResultTag(String lineTag) {
         Bundle bundle = new Bundle();
-        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, lineTag);
+        bundle.putString(PhotoFragment.TAG_KEY, lineTag);
         ((MainActivity) getActivity()).openListResultTagFragment(bundle);
     }
 }

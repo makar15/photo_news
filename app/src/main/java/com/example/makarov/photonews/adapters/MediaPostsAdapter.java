@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * generates a list of photos, with updating
  */
-public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.ResultViewHolder> {
+public class MediaPostsAdapter extends RecyclerView.Adapter<MediaPostsAdapter.ResultViewHolder> {
 
     private final int TYPE_HOLDER_MEDIA_POST = 0;
     private final int TYPE_HOLDER_SAVE_MEDIA_POST = 1;
@@ -31,11 +31,11 @@ public class PhotoResultAdapter extends RecyclerView.Adapter<PhotoResultAdapter.
     private final List<MediaPost> mMediaPosts = new ArrayList<>();
     private final MediaPostDbAdapter mMediaPostDbAdapter = AppInjector.get().getMediaPostDbAdapter();
 
-    public PhotoResultAdapter() {
+    public MediaPostsAdapter() {
 
     }
 
-    public PhotoResultAdapter(List<MediaPost> mediaPosts) {
+    public MediaPostsAdapter(List<MediaPost> mediaPosts) {
         mMediaPosts.addAll(mediaPosts);
     }
 

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.makarov.photonews.R;
-import com.example.makarov.photonews.adapters.AdapterSubscriptions;
+import com.example.makarov.photonews.adapters.SubscriptionsAdapter;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.database.TagDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
@@ -46,8 +46,8 @@ public class SubscriptionsListFragment extends Fragment {
     @Inject
     LocationDbAdapter mLocationDbAdapter;
 
-    private final AdapterSubscriptions.OnClickSubscriptionListener mOnClickSubscriptionListener =
-            new AdapterSubscriptions.OnClickSubscriptionListener() {
+    private final SubscriptionsAdapter.OnClickSubscriptionListener mOnClickSubscriptionListener =
+            new SubscriptionsAdapter.OnClickSubscriptionListener() {
                 @Override
                 public void onClick(Subscription subscription) {
                     openClickInstanceOfSubscription(subscription);
@@ -107,7 +107,7 @@ public class SubscriptionsListFragment extends Fragment {
     }
 
     private void setAdapter(List<Subscription> subscriptions) {
-        AdapterSubscriptions subscriptionsAdapter = new AdapterSubscriptions(subscriptions,
+        SubscriptionsAdapter subscriptionsAdapter = new SubscriptionsAdapter(subscriptions,
                 getActivity().getFragmentManager());
 
         subscriptionsAdapter.setOnClickOpenMediaPosts(mOnClickSubscriptionListener);
@@ -124,13 +124,13 @@ public class SubscriptionsListFragment extends Fragment {
 
     private void openListPhotoResultTag(Tag tag) {
         Bundle bundle = new Bundle();
-        bundle.putString(PhotoFragment.PHOTO_RESULT_TAG_KEY, tag.getName());
+        bundle.putString(PhotoFragment.TAG_KEY, tag.getName());
         ((MainActivity) getActivity()).openListResultTagFragment(bundle);
     }
 
     private void openListPhotoResultLocation(Location location) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PhotoFragment.PHOTO_RESULT_LOCATION_KEY, location);
+        bundle.putParcelable(PhotoFragment.LOCATION_KEY, location);
         ((MainActivity) getActivity()).openListResultLocationFragment(bundle);
     }
 

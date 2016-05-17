@@ -58,7 +58,7 @@ dependencies {
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
 
-    // API
+    // API, it is used by the library robospice
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
     // Parse

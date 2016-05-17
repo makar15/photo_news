@@ -1,9 +1,9 @@
 package com.example.makarov.photonews.network.robospice.requests;
 
-import com.example.makarov.photonews.network.savers.NextPageUrlSaver;
-import com.example.makarov.photonews.network.Parsing;
+import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.okhttp.API;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
+import com.example.makarov.photonews.network.savers.NextPageUrlSaver;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.json.JSONException;
@@ -14,11 +14,14 @@ import java.io.IOException;
 
 public class TagRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
+    private final MediaPostParser mMediaPostParser;
     private final String mUrl;
     private final NextPageUrlSaver mUrlSaver;
 
-    public TagRequest(String url, NextPageUrlSaver urlSaver) {
+    public TagRequest(MediaPostParser mediaPostParser, String url, NextPageUrlSaver urlSaver) {
         super(MediaPostList.class);
+
+        mMediaPostParser = mediaPostParser;
         mUrl = url;
         mUrlSaver = urlSaver;
     }
@@ -27,16 +30,14 @@ public class TagRequest extends SpringAndroidSpiceRequest<MediaPostList> {
     public MediaPostList loadDataFromNetwork() throws IOException, JSONException {
         String response = API.getResponse(mUrl);
         JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
-        saveNextUrl(jsonObject);
 
-        return Parsing.jsonToMediaPosts(jsonObject);
-    }
-
-    private void saveNextUrl(JSONObject jsonObject) throws JSONException {
+        //save next url
         JSONObject json = jsonObject.getJSONObject("pagination");
         if (json.has("next_url")) {
             String nextUrl = json.getString("next_url");
             mUrlSaver.setUrl(nextUrl);
         }
+
+        return mMediaPostParser.parse(jsonObject);
     }
 }
