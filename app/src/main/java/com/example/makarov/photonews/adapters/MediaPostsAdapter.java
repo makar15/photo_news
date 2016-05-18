@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.PicassoBigCache;
+import com.example.makarov.photonews.utils.PicassoBigCache;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;

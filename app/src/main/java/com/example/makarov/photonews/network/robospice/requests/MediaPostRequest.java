@@ -1,7 +1,6 @@
 package com.example.makarov.photonews.network.robospice.requests;
 
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
-import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.MediaPost;
 import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.okhttp.API;
@@ -20,20 +19,22 @@ import java.util.List;
 public class MediaPostRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
     private final MediaPostParser mMediaPostParser;
+    private final MediaPostDbAdapter mMediaPostDbAdapter;
     private final int mNumberRequest;
 
-    public MediaPostRequest(MediaPostParser mediaPostParser, int numberRequest) {
+    public MediaPostRequest(MediaPostParser mediaPostParser, MediaPostDbAdapter mediaPostDbAdapter,
+                            int numberRequest) {
         super(MediaPostList.class);
 
         mMediaPostParser = mediaPostParser;
+        mMediaPostDbAdapter = mediaPostDbAdapter;
         mNumberRequest = numberRequest;
     }
 
     @Override
     public MediaPostList loadDataFromNetwork() throws IOException, JSONException {
 
-        MediaPostDbAdapter mediaPostDbAdapter = AppInjector.get().getMediaPostDbAdapter();
-        List<MediaPost> posts = mediaPostDbAdapter.open()
+        List<MediaPost> posts = mMediaPostDbAdapter.open()
                 .getLimitMediaPosts(mNumberRequest * MediaPostDbAdapter.QUERY_LIMIT);
 
         List<Integer> positionsFakeMediaPosts = new ArrayList<>();
@@ -46,7 +47,7 @@ public class MediaPostRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
             if (jsonObject != null) {
                 mMediaPostParser.update(posts.get(i), jsonObject);
-                mediaPostDbAdapter.update(posts.get(i));
+                mMediaPostDbAdapter.update(posts.get(i));
             } else {
                 positionsFakeMediaPosts.add(i);
             }
@@ -54,14 +55,14 @@ public class MediaPostRequest extends SpringAndroidSpiceRequest<MediaPostList> {
 
         if (positionsFakeMediaPosts.size() != 0) {
             for (Integer position : positionsFakeMediaPosts) {
-                mediaPostDbAdapter.delete(posts.get(position));
+                mMediaPostDbAdapter.delete(posts.get(position));
                 posts.remove(position.intValue());
             }
         }
 
         MediaPostList mediaPosts = new MediaPostList();
         mediaPosts.getMediaPosts().addAll(posts);
-        mediaPostDbAdapter.close();
+        mMediaPostDbAdapter.close();
 
         return mediaPosts;
     }

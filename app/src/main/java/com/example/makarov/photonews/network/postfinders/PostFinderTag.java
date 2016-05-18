@@ -28,26 +28,27 @@ public class PostFinderTag implements PostFinder {
         mUrlSaver = new NextPageUrlSaverTag();
     }
 
-    public boolean requestPhotos(RequestListener<MediaPostList> requestListener) {
+    public boolean requestPosts(RequestListener<MediaPostList> requestListener) {
         mUrl = UrlInstaUtils.getUrlPhotosTag(mLineTag);
-        TagRequest request = new TagRequest(mMediaPostParser, mUrl, mUrlSaver);
-
-        mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
+        startNetworkRequest(requestListener);
         return true;
     }
 
-    public boolean nextRequestPhotos(RequestListener<MediaPostList> requestListener) {
+    public boolean nextRequestPosts(RequestListener<MediaPostList> requestListener) {
         if (!mUrlSaver.isNextLoading()) {
             return false;
         }
-
         String nextUrl = mUrlSaver.getUrl();
-        if (nextUrl != null && !mUrl.equals(nextUrl)) {
-            mUrl = nextUrl;
-            TagRequest request = new TagRequest(mMediaPostParser, mUrl, mUrlSaver);
-
-            mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
+        if (nextUrl == null || mUrl.equals(nextUrl)) {
+            return true;
         }
+        mUrl = nextUrl;
+        startNetworkRequest(requestListener);
         return true;
+    }
+
+    private void startNetworkRequest(RequestListener<MediaPostList> requestListener) {
+        TagRequest request = new TagRequest(mMediaPostParser, mUrl, mUrlSaver);
+        mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
     }
 }

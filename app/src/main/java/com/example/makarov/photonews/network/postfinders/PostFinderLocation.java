@@ -18,7 +18,7 @@ public class PostFinderLocation implements PostFinder {
     private final NextPageUrlSaver mUrlSaver;
     private final Location mLocation;
 
-    private String mUrlLocation;
+    private String mUrl;
 
     public PostFinderLocation(Location location, SpiceManager spiceManager,
                               MediaPostParser mediaPostParser) {
@@ -29,28 +29,28 @@ public class PostFinderLocation implements PostFinder {
         mUrlSaver = new NextPageUrlSaverLocation(mLocation);
     }
 
-    public boolean requestPhotos(RequestListener<MediaPostList> requestListener) {
-        mUrlLocation = UrlInstaUtils.getUrlPhotosLocation(mLocation);
-        LocationRequest request = new LocationRequest(mMediaPostParser, mUrlLocation, mUrlSaver,
-                mLocation);
-
-        mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
+    public boolean requestPosts(RequestListener<MediaPostList> requestListener) {
+        mUrl = UrlInstaUtils.getUrlPhotosLocation(mLocation);
+        startNetworkRequest(requestListener);
         return true;
     }
 
-    public boolean nextRequestPhotos(RequestListener<MediaPostList> requestListener) {
+    public boolean nextRequestPosts(RequestListener<MediaPostList> requestListener) {
         if (!mUrlSaver.isNextLoading()) {
             return false;
         }
-
         String nextUrl = mUrlSaver.getUrl();
-        if (nextUrl != null && !mUrlLocation.equals(nextUrl)) {
-            mUrlLocation = nextUrl;
-            LocationRequest request = new LocationRequest(mMediaPostParser, mUrlLocation,
-                    mUrlSaver, mLocation);
-
-            mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
+        if (nextUrl == null || mUrl.equals(nextUrl)) {
+            return true;
         }
+        mUrl = nextUrl;
+        startNetworkRequest(requestListener);
         return true;
+    }
+
+    private void startNetworkRequest(RequestListener<MediaPostList> requestListener) {
+        LocationRequest request = new LocationRequest(mMediaPostParser, mUrl, mUrlSaver,
+                mLocation);
+        mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
     }
 }

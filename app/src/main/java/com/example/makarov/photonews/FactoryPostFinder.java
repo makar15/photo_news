@@ -1,5 +1,6 @@
 package com.example.makarov.photonews;
 
+import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.postfinders.PostFinderLocation;
@@ -14,10 +15,13 @@ public class FactoryPostFinder {
 
     private final SpiceManager mSpiceManager;
     private final MediaPostParser mMediaPostParser;
+    private final MediaPostDbAdapter mMediaPostDbAdapter;
 
-    public FactoryPostFinder(SpiceManager spiceManager, MediaPostParser mediaPostParser) {
+    public FactoryPostFinder(SpiceManager spiceManager, MediaPostParser mediaPostParser,
+                             MediaPostDbAdapter mediaPostDbAdapter) {
         mSpiceManager = spiceManager;
         mMediaPostParser = mediaPostParser;
+        mMediaPostDbAdapter = mediaPostDbAdapter;
     }
 
     public PostFinderLocation getPostFinderLocation(Location location) {
@@ -29,6 +33,6 @@ public class FactoryPostFinder {
     }
 
     public PostFinderMediaPost getPostFinderMediaPost() {
-        return new PostFinderMediaPost(mSpiceManager, mMediaPostParser);
+        return new PostFinderMediaPost(mSpiceManager, mMediaPostParser, mMediaPostDbAdapter);
     }
 }

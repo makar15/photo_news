@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationDbAdapter {
-
-    private final static String TAG = LocationDbAdapter.class.getSimpleName();
+    private final static String TAG = "LocationDbAdapter";
 
     private final Context mContext;
 

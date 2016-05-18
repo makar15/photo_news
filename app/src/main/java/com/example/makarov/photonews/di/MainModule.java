@@ -48,8 +48,9 @@ public class MainModule {
     @Provides
     @Singleton
     FactoryPostFinder provideFactoryPostFinder(SpiceManager spiceManager,
-                                               MediaPostParser mediaPostParser) {
-        return new FactoryPostFinder(spiceManager, mediaPostParser);
+                                               MediaPostParser mediaPostParser,
+                                               MediaPostDbAdapter mediaPostDbAdapter) {
+        return new FactoryPostFinder(spiceManager, mediaPostParser, mediaPostDbAdapter);
     }
 
     @Provides

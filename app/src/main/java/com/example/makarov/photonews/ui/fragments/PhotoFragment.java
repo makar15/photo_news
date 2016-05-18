@@ -46,7 +46,7 @@ public abstract class PhotoFragment extends Fragment {
         @Override
         public void onMoreAsked(int overallItemsCount,
                                 int itemsBeforeMore, int maxLastVisiblePosition) {
-            if (!mPostFinder.nextRequestPhotos(new MediaPostsRequestListener(mMediaPostsAdapter))) {
+            if (!mPostFinder.nextRequestPosts(new MediaPostsRequestListener(mMediaPostsAdapter))) {
                 mSuperRecyclerView.hideMoreProgress();
             }
         }
@@ -64,7 +64,7 @@ public abstract class PhotoFragment extends Fragment {
         mSuperRecyclerView.setAdapter(mMediaPostsAdapter);
         mPostFinder = createPostFinder();
 
-        mPostFinder.requestPhotos(new MediaPostsRequestListener(mMediaPostsAdapter));
+        mPostFinder.requestPosts(new MediaPostsRequestListener(mMediaPostsAdapter));
         mSuperRecyclerView.setupMoreListener(mOnScrollsListListener, PHOTO_LOADING_PORTION);
 
         return v;

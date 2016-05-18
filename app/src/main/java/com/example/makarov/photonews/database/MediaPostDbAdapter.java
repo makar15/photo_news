@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaPostDbAdapter {
-
-    private static final String TAG = MediaPostDbAdapter.class.getSimpleName();
+    private static final String TAG = "MediaPostDbAdapter";
     public static final int QUERY_LIMIT = 8;
 
     private final Context mContext;
@@ -71,7 +70,6 @@ public class MediaPostDbAdapter {
     }
 
     public List<MediaPost> getLimitMediaPosts(int offset) {
-
         Cursor cursor = mDatabase.query(DataBaseHelper.TABLE_MEDIA_POSTS, new String[]{
                         BaseColumns._ID,
                         DataBaseHelper.ID_POST_COLUMN,
@@ -98,7 +96,7 @@ public class MediaPostDbAdapter {
         if (cursor == null) {
             return mediaPosts;
         }
-        if (cursor.moveToFirst()) {
+        if (!cursor.moveToFirst()) {
             Log.d(TAG, "0 rows");
             cursor.close();
             return mediaPosts;

@@ -5,8 +5,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public interface PostFinder {
 
-    boolean requestPhotos(RequestListener<MediaPostList> requestListener);
+    boolean requestPosts(RequestListener<MediaPostList> requestListener);
 
-    boolean nextRequestPhotos(RequestListener<MediaPostList> requestListener);
+    boolean nextRequestPosts(RequestListener<MediaPostList> requestListener);
 
 }

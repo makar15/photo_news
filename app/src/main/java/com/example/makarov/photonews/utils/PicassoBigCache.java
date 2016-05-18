@@ -1,4 +1,4 @@
-package com.example.makarov.photonews;
+package com.example.makarov.photonews.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

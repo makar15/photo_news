@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagDbAdapter {
-
-    private final static String TAG = TagDbAdapter.class.getSimpleName();
+    private final static String TAG = "TagDbAdapter";
 
     private final Context mContext;
 
@@ -73,7 +72,7 @@ public class TagDbAdapter {
         if (cursor == null) {
             return tags;
         }
-        if (cursor.moveToFirst()) {
+        if (!cursor.moveToFirst()) {
             Log.d(TAG, "0 rows");
             cursor.close();
             return tags;

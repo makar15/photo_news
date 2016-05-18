@@ -10,14 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.LocationDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Location;
 import com.example.makarov.photonews.ui.activity.MainActivity;
-
+import com.example.makarov.photonews.utils.SystemUtils;
 import com.github.florent37.materialtextfield.MaterialTextField;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -99,8 +98,7 @@ public class GoogleMapFragment extends Fragment {
                 mLocationDbAdapter.close();
 
                 if (result == -1) {
-                    Toast.makeText(getContext(), "location is already in the list",
-                            Toast.LENGTH_LONG).show();
+                    showMassage("location is already in the list");
                 }
             }
         }
@@ -117,16 +115,14 @@ public class GoogleMapFragment extends Fragment {
                     } catch (IOException e) {
                         return;
                     }
-
-                    if (!list.isEmpty()) {
-                        mAddress = list.get(0);
-
-                        removeExistingMarker();
-                        initMarker();
-                    } else {
-                        Toast.makeText(getContext(), "address is not found in Google maps",
-                                Toast.LENGTH_LONG).show();
+                    if (list.isEmpty()) {
+                        showMassage("address is not found in Google maps");
+                        return;
                     }
+                    mAddress = list.get(0);
+
+                    removeExistingMarker();
+                    initMarker();
                 }
             };
 
@@ -162,23 +158,21 @@ public class GoogleMapFragment extends Fragment {
     }
 
     private void findLocation(String location) throws IOException {
-
         Geocoder geocoder = new Geocoder(getContext());
         List<Address> list = geocoder.getFromLocationName(location, 1);
 
-        if (!list.isEmpty()) {
-            mAddress = list.get(0);
-
-            LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 12);
-            mMap.moveCamera(update);
-
-            removeExistingMarker();
-            initMarker();
-        } else {
-            Toast.makeText(getContext(), "address is not found in Google maps",
-                    Toast.LENGTH_LONG).show();
+        if (list.isEmpty()) {
+            showMassage("address is not found in Google maps");
+            return;
         }
+        mAddress = list.get(0);
+
+        LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 12);
+        mMap.moveCamera(update);
+
+        removeExistingMarker();
+        initMarker();
     }
 
     private void openListPhotoResultLocation(Location location) {
@@ -195,12 +189,15 @@ public class GoogleMapFragment extends Fragment {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
 
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(getContext(), "isGooglePlayServicesAvailable SUCCESS",
-                    Toast.LENGTH_LONG).show();
+            showMassage("isGooglePlayServicesAvailable SUCCESS");
         } else {
             final int RQS_GooglePlayServices = 1;
             GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), RQS_GooglePlayServices);
         }
+    }
+
+    private void showMassage(String massage) {
+        SystemUtils.toastMassage(getContext(), massage);
     }
 
     private void initMarker() {
