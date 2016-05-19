@@ -7,6 +7,4 @@ public interface PostFinder {
 
     boolean requestPosts(RequestListener<MediaPostList> requestListener);
 
-    boolean nextRequestPosts(RequestListener<MediaPostList> requestListener);
-
 }

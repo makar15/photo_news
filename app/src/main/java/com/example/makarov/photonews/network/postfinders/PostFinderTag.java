@@ -1,5 +1,7 @@
 package com.example.makarov.photonews.network.postfinders;
 
+import android.support.annotation.Nullable;
+
 import com.example.makarov.photonews.network.MediaPostParser;
 import com.example.makarov.photonews.network.robospice.model.MediaPostList;
 import com.example.makarov.photonews.network.robospice.requests.TagRequest;
@@ -17,7 +19,7 @@ public class PostFinderTag implements PostFinder {
     private final NextPageUrlSaver mUrlSaver;
     private final String mLineTag;
 
-    private String mUrl;
+    @Nullable private String mUrl = null;
 
     public PostFinderTag(String lineTag, SpiceManager spiceManager,
                          MediaPostParser mediaPostParser) {
@@ -29,12 +31,11 @@ public class PostFinderTag implements PostFinder {
     }
 
     public boolean requestPosts(RequestListener<MediaPostList> requestListener) {
-        mUrl = UrlInstaUtils.getUrlPhotosTag(mLineTag);
-        startNetworkRequest(requestListener);
-        return true;
-    }
-
-    public boolean nextRequestPosts(RequestListener<MediaPostList> requestListener) {
+        if(mUrl == null) {
+            mUrl = UrlInstaUtils.getUrlPhotosTag(mLineTag);
+            startNetworkRequest(requestListener);
+            return true;
+        }
         if (!mUrlSaver.isNextLoading()) {
             return false;
         }

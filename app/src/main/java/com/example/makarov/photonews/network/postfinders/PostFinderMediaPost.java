@@ -28,11 +28,6 @@ public class PostFinderMediaPost implements PostFinder {
         return true;
     }
 
-    public boolean nextRequestPosts(RequestListener<MediaPostList> requestListener) {
-        request(requestListener);
-        return true;
-    }
-
     private void request(RequestListener<MediaPostList> requestListener) {
         MediaPostRequest request = new MediaPostRequest(mMediaPostParser, mMediaPostDbAdapter,
                 mNumberRequest);
