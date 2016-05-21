@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.makarov.photonews.utils.PicassoBigCache;
 import com.example.makarov.photonews.R;
 import com.example.makarov.photonews.database.MediaPostDbAdapter;
 import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.MediaPost;
+import com.example.makarov.photonews.utils.PicassoBigCache;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -74,6 +75,8 @@ public class MediaPostsAdapter extends RecyclerView.Adapter<MediaPostsAdapter.Re
 
     public static class ResultViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.profile_picture)
+        RoundedImageView mProfilePicture;
         @Bind(R.id.icon)
         ImageView mIcon;
         @Bind(R.id.like)
@@ -107,6 +110,9 @@ public class MediaPostsAdapter extends RecyclerView.Adapter<MediaPostsAdapter.Re
         public void fillView(final MediaPost post) {
             mMediaPost = post;
 
+            PicassoBigCache.INSTANCE.getPicassoBigCache(itemView.getContext())
+                    .load(mMediaPost.getProfilePicture())
+                    .into(mProfilePicture);
             PicassoBigCache.INSTANCE.getPicassoBigCache(itemView.getContext())
                     .load(mMediaPost.getUrlAddress())
                     .into(mIcon);

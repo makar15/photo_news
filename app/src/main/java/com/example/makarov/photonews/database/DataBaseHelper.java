@@ -27,6 +27,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
     protected static final String TABLE_MEDIA_POSTS = "media_posts";
     protected static final String ID_POST_COLUMN = "id_post";
     protected static final String AUTHOR_COLUMN = "author";
+    protected static final String URL_PROFILE_PICTURE_COLUMN = "profile_picture";
     protected static final String URL_ADDRESS_COLUMN = "url_address";
     protected static final String COUNT_LIKES_COLUMN = "count_likes";
 
@@ -50,6 +51,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + TABLE_MEDIA_POSTS + " (" + BaseColumns._ID + " integer primary key autoincrement, "
             + ID_POST_COLUMN + " text not null unique, "
             + AUTHOR_COLUMN + " text not null, "
+            + URL_PROFILE_PICTURE_COLUMN + " text not null unique, "
             + URL_ADDRESS_COLUMN + " text not null unique, "
             + COUNT_LIKES_COLUMN + " integer" + ");";
 

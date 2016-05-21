@@ -33,7 +33,7 @@ public class PostFinderTag implements PostFinder {
     public boolean requestPosts(RequestListener<MediaPostList> requestListener) {
         if(mUrl == null) {
             mUrl = UrlInstaUtils.getUrlPhotosTag(mLineTag);
-            startNetworkRequest(requestListener);
+            request(requestListener);
             return true;
         }
         if (!mUrlSaver.isNextLoading()) {
@@ -44,11 +44,11 @@ public class PostFinderTag implements PostFinder {
             return true;
         }
         mUrl = nextUrl;
-        startNetworkRequest(requestListener);
+        request(requestListener);
         return true;
     }
 
-    private void startNetworkRequest(RequestListener<MediaPostList> requestListener) {
+    private void request(RequestListener<MediaPostList> requestListener) {
         TagRequest request = new TagRequest(mMediaPostParser, mUrl, mUrlSaver);
         mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);
     }

@@ -17,9 +17,11 @@ public class DataManager {
     @Inject
     FactoryPostFinder mFactoryPostFinder;
 
-    public interface OnMediaPostCallback {
+    public interface OnLoadMediaPostCallback {
 
-        void dataMediaPost(List<MediaPost> list);
+        void onLoadFailedMediaPosts(Exception e);
+
+        void onLoadSuccessMediaPosts(List<MediaPost> list);
     }
 
     public DataManager() {

@@ -62,6 +62,7 @@ public class MediaPostDbAdapter {
                         BaseColumns._ID,
                         DataBaseHelper.ID_POST_COLUMN,
                         DataBaseHelper.AUTHOR_COLUMN,
+                        DataBaseHelper.URL_PROFILE_PICTURE_COLUMN,
                         DataBaseHelper.URL_ADDRESS_COLUMN,
                         DataBaseHelper.COUNT_LIKES_COLUMN},
                 null, null, null, null, null);
@@ -74,6 +75,7 @@ public class MediaPostDbAdapter {
                         BaseColumns._ID,
                         DataBaseHelper.ID_POST_COLUMN,
                         DataBaseHelper.AUTHOR_COLUMN,
+                        DataBaseHelper.URL_PROFILE_PICTURE_COLUMN,
                         DataBaseHelper.URL_ADDRESS_COLUMN,
                         DataBaseHelper.COUNT_LIKES_COLUMN},
                 null, null, null, null, null,
@@ -112,16 +114,18 @@ public class MediaPostDbAdapter {
     private MediaPost restore(Cursor cursor) throws SQLException {
         String idMediaPost = SQLiteUtils.getString(cursor, DataBaseHelper.ID_POST_COLUMN);
         String author = SQLiteUtils.getString(cursor, DataBaseHelper.AUTHOR_COLUMN);
+        String profilePicture = SQLiteUtils.getString(cursor, DataBaseHelper.URL_PROFILE_PICTURE_COLUMN);
         String urlAddress = SQLiteUtils.getString(cursor, DataBaseHelper.URL_ADDRESS_COLUMN);
         int countLikes = SQLiteUtils.getInt(cursor, DataBaseHelper.COUNT_LIKES_COLUMN);
 
-        return new MediaPost(idMediaPost, author, urlAddress, countLikes);
+        return new MediaPost(idMediaPost, author, profilePicture, urlAddress, countLikes);
     }
 
     private ContentValues createContentValues(MediaPost mediaPost) {
         ContentValues values = new ContentValues();
         values.put(DataBaseHelper.ID_POST_COLUMN, mediaPost.getId());
         values.put(DataBaseHelper.AUTHOR_COLUMN, mediaPost.getAuthor());
+        values.put(DataBaseHelper.URL_PROFILE_PICTURE_COLUMN, mediaPost.getProfilePicture());
         values.put(DataBaseHelper.URL_ADDRESS_COLUMN, mediaPost.getUrlAddress());
         values.put(DataBaseHelper.COUNT_LIKES_COLUMN, mediaPost.getCountLikes());
 
@@ -131,6 +135,7 @@ public class MediaPostDbAdapter {
     private ContentValues updateContentValues(MediaPost mediaPost) {
         ContentValues values = new ContentValues();
         values.put(DataBaseHelper.AUTHOR_COLUMN, mediaPost.getAuthor());
+        values.put(DataBaseHelper.URL_PROFILE_PICTURE_COLUMN, mediaPost.getProfilePicture());
         values.put(DataBaseHelper.COUNT_LIKES_COLUMN, mediaPost.getCountLikes());
 
         return values;

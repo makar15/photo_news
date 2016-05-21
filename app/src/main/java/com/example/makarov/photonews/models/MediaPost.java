@@ -6,17 +6,23 @@ public class MediaPost {
     private final String mUrlAddress;
 
     private String mAuthor;
+    private String mProfilePicture;
     private int mCountLikes;
 
-    public MediaPost(String id, String author, String urlAddress, int countLikes) {
+    public MediaPost(String id, String author, String profilePicture, String urlAddress, int countLikes) {
         mId = id;
         mUrlAddress = urlAddress;
         mAuthor = author;
+        mProfilePicture = profilePicture;
         mCountLikes = countLikes;
     }
 
     public void setAuthor(String author) {
         mAuthor = author;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        mProfilePicture = profilePicture;
     }
 
     public void setCountLikes(int countLikes) {
@@ -33,6 +39,10 @@ public class MediaPost {
 
     public String getAuthor() {
         return mAuthor;
+    }
+
+    public String getProfilePicture() {
+        return mProfilePicture;
     }
 
     public int getCountLikes() {

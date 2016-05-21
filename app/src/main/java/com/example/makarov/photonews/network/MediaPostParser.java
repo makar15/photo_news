@@ -29,9 +29,11 @@ public class MediaPostParser {
             String idMediaPost = getIdMediaPost(json);
             String urlImage = getUrlImage(json);
             String author = getAuthor(json);
+            String profilePicture = getProfilePicture(json);
             int countLikes = getCountLikes(json);
 
-            MediaPost mediaPost = new MediaPost(idMediaPost, author, urlImage, countLikes);
+            MediaPost mediaPost = new MediaPost(idMediaPost, author, profilePicture,
+                    urlImage, countLikes);
             posts.add(mediaPost);
             counter++;
         }
@@ -40,13 +42,11 @@ public class MediaPostParser {
 
     public void update(MediaPost mediaPost, JSONObject jsonObject)
             throws IOException, JSONException {
-            JSONObject json = jsonObject.getJSONObject("data");
+        JSONObject json = jsonObject.getJSONObject("data");
 
-            String author = getAuthor(json);
-            int countLikes = getCountLikes(json);
-
-            mediaPost.setAuthor(author);
-            mediaPost.setCountLikes(countLikes);
+        mediaPost.setAuthor(getAuthor(json));
+        mediaPost.setProfilePicture(getProfilePicture(json));
+        mediaPost.setCountLikes(getCountLikes(json));
     }
 
     private static String getIdMediaPost(JSONObject jsonObject) throws JSONException {
@@ -60,6 +60,10 @@ public class MediaPostParser {
 
     private static String getAuthor(JSONObject jsonObject) throws JSONException {
         return jsonObject.getJSONObject("user").getString("username");
+    }
+
+    private static String getProfilePicture(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getJSONObject("user").getString("profile_picture");
     }
 
     private static int getCountLikes(JSONObject jsonObject) throws JSONException {

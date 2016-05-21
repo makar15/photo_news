@@ -14,4 +14,6 @@
     <string name="err_massage_zero_marker">Design your marker on the map</string>
     <string name="err_massage_zero_location">Enter location</string>
 
+    <string name="profile_photo_content_desc">Profile photo</string>
+
 </resources>

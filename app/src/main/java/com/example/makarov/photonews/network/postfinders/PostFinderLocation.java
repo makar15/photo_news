@@ -34,7 +34,7 @@ public class PostFinderLocation implements PostFinder {
     public boolean requestPosts(RequestListener<MediaPostList> requestListener) {
         if(mUrl == null) {
             mUrl = UrlInstaUtils.getUrlPhotosLocation(mLocation);
-            startNetworkRequest(requestListener);
+            request(requestListener);
             return true;
         }
         if (!mUrlSaver.isNextLoading()) {
@@ -45,11 +45,11 @@ public class PostFinderLocation implements PostFinder {
             return true;
         }
         mUrl = nextUrl;
-        startNetworkRequest(requestListener);
+        request(requestListener);
         return true;
     }
 
-    private void startNetworkRequest(RequestListener<MediaPostList> requestListener) {
+    private void request(RequestListener<MediaPostList> requestListener) {
         LocationRequest request = new LocationRequest(mMediaPostParser, mUrl, mUrlSaver,
                 mLocation);
         mSpiceManager.execute(request, null, DurationInMillis.ONE_MINUTE, requestListener);

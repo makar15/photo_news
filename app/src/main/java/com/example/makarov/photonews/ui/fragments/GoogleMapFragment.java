@@ -3,6 +3,7 @@ package com.example.makarov.photonews.ui.fragments;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -62,7 +63,7 @@ public class GoogleMapFragment extends Fragment {
     LocationDbAdapter mLocationDbAdapter;
 
     private GoogleMap mMap;
-    private Marker mMarker;
+    @Nullable private Marker mMarker;
     private Address mAddress;
 
     private final View.OnClickListener mOnClickSearchLocationListener = new View.OnClickListener() {
