@@ -44,6 +44,12 @@ import butterknife.ButterKnife;
 
 public class GoogleMapFragment extends Fragment {
 
+    private static final float SETUP_MAPS_ZOOM = 12;
+    private static final int MAX_RESULT_SEARCH = 3;
+    private static final int INDEX_REMOVE_THE_POINT = 2;
+    private static final int RQS_GOOGLE_PLAY_SERVICES = 1;
+    private static final int ERR_ADD_LOCATION = -1;
+
     @Bind(R.id.input_layout_location)
     MaterialTextField mLayoutLocation;
     @Bind(R.id.line_name_location)
@@ -98,8 +104,8 @@ public class GoogleMapFragment extends Fragment {
                 long result = mLocationDbAdapter.open().add(initDbModelLocation());
                 mLocationDbAdapter.close();
 
-                if (result == -1) {
-                    showMassage("location is already in the list");
+                if (result == ERR_ADD_LOCATION) {
+                    showMassage(getString(R.string.err_add_location));
                 }
             }
         }
@@ -112,12 +118,15 @@ public class GoogleMapFragment extends Fragment {
                     Geocoder geocoder = new Geocoder(getContext());
                     List<Address> list;
                     try {
-                        list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                        list = geocoder.getFromLocation(latLng.latitude,
+                                latLng.longitude, MAX_RESULT_SEARCH);
                     } catch (IOException e) {
+                        e.printStackTrace();
                         return;
                     }
+
                     if (list.isEmpty()) {
-                        showMassage("address is not found in Google maps");
+                        showMassage(getString(R.string.err_search_location));
                         return;
                     }
                     mAddress = list.get(0);
@@ -160,16 +169,16 @@ public class GoogleMapFragment extends Fragment {
 
     private void findLocation(String location) throws IOException {
         Geocoder geocoder = new Geocoder(getContext());
-        List<Address> list = geocoder.getFromLocationName(location, 1);
+        List<Address> list = geocoder.getFromLocationName(location, MAX_RESULT_SEARCH);
 
         if (list.isEmpty()) {
-            showMassage("address is not found in Google maps");
+            showMassage(getString(R.string.err_search_location));
             return;
         }
         mAddress = list.get(0);
 
         LatLng latLng = new LatLng(mAddress.getLatitude(), mAddress.getLongitude());
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 12);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, SETUP_MAPS_ZOOM);
         mMap.moveCamera(update);
 
         removeExistingMarker();
@@ -188,13 +197,11 @@ public class GoogleMapFragment extends Fragment {
         mMapView.onResume();
 
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
-
         if (resultCode == ConnectionResult.SUCCESS) {
-            showMassage("isGooglePlayServicesAvailable SUCCESS");
-        } else {
-            final int RQS_GooglePlayServices = 1;
-            GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), RQS_GooglePlayServices);
+            showMassage(getString(R.string.success_google_service));
+            return;
         }
+        GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), RQS_GOOGLE_PLAY_SERVICES);
     }
 
     private void showMassage(String massage) {
@@ -238,7 +245,7 @@ public class GoogleMapFragment extends Fragment {
         thoroughfare = getNullableString(mAddress.getThoroughfare());
 
         String result = countryName + locality + thoroughfare;
-        return result.substring(0, result.length() - 2);
+        return result.substring(0, result.length() - INDEX_REMOVE_THE_POINT);
     }
 
     @Override

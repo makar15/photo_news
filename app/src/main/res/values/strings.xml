@@ -1,4 +1,7 @@
 <resources>
+    <!--
+        main
+    !-->
     <string name="app_name">PhotoNews</string>
 
     <string name="hello_world">Hello world!</string>
@@ -7,13 +10,21 @@
     <string name="message_text">Enter your new name</string>
     <string name="change">change</string>
     <string name="cancel">cancel</string>
-    <string name="radius_search">Radius search:</string>
     <string name="location">location</string>
     <string name="tag">tag</string>
     <string name="err_massage_zero_tag">Enter the Tag</string>
-    <string name="err_massage_zero_marker">Design your marker on the map</string>
-    <string name="err_massage_zero_location">Enter location</string>
+    <string name="err_network_request">Failed to get the data, please try again, otherwise restart the application</string>
 
     <string name="profile_photo_content_desc">Profile photo</string>
+
+    <!--
+        google maps strings
+    !-->
+    <string name="radius_search_location">Radius search:</string>
+    <string name="err_add_location">location is already in the list</string>
+    <string name="err_search_location">address is not found in Google maps</string>
+    <string name="err_massage_zero_marker">Design your marker on the map</string>
+    <string name="err_massage_zero_location">Enter location</string>
+    <string name="success_google_service">isGooglePlayServicesAvailable SUCCESS</string>
 
 </resources>

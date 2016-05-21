@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.text.Editable;
 import android.widget.Toast;
 
 public class SystemUtils {
@@ -46,5 +47,19 @@ public class SystemUtils {
 
     public static void toastMassage(Context context, String massage) {
         Toast.makeText(context, massage, Toast.LENGTH_LONG).show();
+    }
+
+    public static void banSpaceTextView(Editable s) {
+        int length = s.length();
+
+        if (length != 0) {
+            String enteredText = s.toString();
+            char[] charArray = enteredText.toCharArray();
+            for (int i = 0; i < length; i++) {
+                if (charArray[i] == ' ') {
+                    s.delete(i, i + 1);
+                }
+            }
+        }
     }
 }

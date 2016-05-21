@@ -67,7 +67,7 @@
             android:id="@+id/radius_search_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/radius_search"
+            android:text="@string/radius_search_location"
             android:textSize="14sp" />
 
         <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar

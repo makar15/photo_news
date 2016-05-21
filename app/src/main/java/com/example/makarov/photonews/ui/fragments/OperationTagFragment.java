@@ -17,6 +17,7 @@ import com.example.makarov.photonews.di.AppInjector;
 import com.example.makarov.photonews.models.Tag;
 import com.example.makarov.photonews.ui.activity.MainActivity;
 
+import com.example.makarov.photonews.utils.SystemUtils;
 import com.github.florent37.materialtextfield.MaterialTextField;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -77,17 +78,7 @@ public class OperationTagFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            int length = s.length();
-
-            if (length != 0) {
-                String enteredText = s.toString();
-                char[] charArray = enteredText.toCharArray();
-                for (int i = 0; i < length; i++) {
-                    if (charArray[i] == ' ') {
-                        s.delete(i, i + 1);
-                    }
-                }
-            }
+            SystemUtils.banSpaceTextView(s);
         }
     };
 

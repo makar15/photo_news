@@ -46,7 +46,7 @@ public abstract class PhotoFragment extends Fragment {
         public void onMoreAsked(int overallItemsCount, int itemsBeforeMore,
                                 int maxLastVisiblePosition) {
             if(mPostFinder == null) {
-                showMassage("Failed to get the data, please try again, otherwise restart the application");
+                showMassage(getString(R.string.err_network_request));
                 return;
             }
             if (!mPostFinder.requestPosts(new MediaPostsRequestListener(mMediaPostsAdapter))) {
@@ -67,7 +67,7 @@ public abstract class PhotoFragment extends Fragment {
         mPostFinder = createPostFinder();
 
         if(mPostFinder == null) {
-            showMassage("Failed to get the data, please try again, otherwise restart the application");
+            showMassage(getString(R.string.err_network_request));
             return v;
         }
         mPostFinder.requestPosts(new MediaPostsRequestListener(mMediaPostsAdapter));

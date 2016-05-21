@@ -144,7 +144,8 @@ public class SubscriptionsListFragment extends Fragment {
     }
 
     private List<Subscription> getSortedSubscriptionsDb(List<Subscription> subscriptions) {
-        return FastSort.sort(subscriptions, 0, subscriptions.size() - 1);
+        int endSubscriptions = subscriptions.size() - 1;
+        return FastSort.sort(subscriptions, 0, endSubscriptions);
     }
 
     @Override
